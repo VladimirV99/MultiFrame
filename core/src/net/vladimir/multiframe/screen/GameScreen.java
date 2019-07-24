@@ -3,12 +3,12 @@ package net.vladimir.multiframe.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,22 +17,28 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.vladimir.multiframe.MultiFrame;
-import net.vladimir.multiframe.entity.EntityObstacle;
+import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.entity.EntityObstaclePair;
 import net.vladimir.multiframe.entity.EntityPlayerLeft;
 import net.vladimir.multiframe.entity.EntityPlayerRight;
 import net.vladimir.multiframe.references.Settings;
-import net.vladimir.multiframe.references.TextureManager;
 
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
+    private MultiFrame game;
+    private AssetManager assetManager;
+    private SpriteBatch batch;
+
     private Skin skin;
-    private TextureAtlas atlas;
+    private BitmapFont font;
+    private Texture wallTexture;
+    private Texture selectorTexture;
+    private Texture playerTexture;
+
     private Stage stage;
     private Group gameOverMenu;
     private Group pauseMenu;
@@ -46,8 +52,6 @@ public class GameScreen implements Screen {
 
     private int score = 0;
 
-    private BitmapFont font;
-
     private EntityPlayerLeft playerLeft;
     private EntityPlayerRight playerRight;
 
@@ -57,11 +61,9 @@ public class GameScreen implements Screen {
 
     private int nX = MathUtils.random(0, 1)==1 ? -640 : 0;
 
-    private MultiFrame game;
-    private SpriteBatch batch;
-
     public GameScreen(MultiFrame game) {
         this.game = game;
+        this.assetManager = game.getAssetManager();
         this.batch = game.getBatch();
     }
 
@@ -80,12 +82,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        atlas = new TextureAtlas("ui/menuskin.pack");
-        skin = new Skin(Gdx.files.internal("ui/menuskin.json"), atlas);
+        skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
-        font = new BitmapFont(Gdx.files.internal("Arial.fnt"));
+        font = assetManager.get(AssetDescriptors.UI_FONT);
         font.setColor(Color.BLACK);
         font.getData().setScale(2);
+
+        wallTexture = assetManager.get(AssetDescriptors.WALL);
+        selectorTexture = assetManager.get(AssetDescriptors.SELECTOR);
+        playerTexture = assetManager.get(AssetDescriptors.PLAYER);
 
         stage = new Stage(new FitViewport(1280, 720));
         stage.getCamera().translate(-640, -360, 0);
@@ -94,7 +99,7 @@ public class GameScreen implements Screen {
 
         gameOverMenu = new Group();
 
-        Image backgroundGameOver = new Image(TextureManager.PLAYER);
+        Image backgroundGameOver = new Image(playerTexture);
         backgroundGameOver.setBounds(-150, -200, 300, 400);
 
         lHighScoreGameOver = new Label("high: " + String.valueOf(Settings.HIGH_SCORE), skin, "white");
@@ -153,7 +158,7 @@ public class GameScreen implements Screen {
 
         pauseMenu = new Group();
 
-        Image backgroundPause = new Image(TextureManager.PLAYER);
+        Image backgroundPause = new Image(playerTexture);
         backgroundPause.setBounds(-150, -300, 300, 500);
 
         lScorePause = new Label("0", skin, "white");
@@ -291,12 +296,12 @@ public class GameScreen implements Screen {
 
         batch.begin();
 
-        batch.draw(TextureManager.WALL, -(Settings.SCREEN_WIDTH/2), -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        batch.draw(TextureManager.WALL, -Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        batch.draw(wallTexture, -(Settings.SCREEN_WIDTH/2), -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        batch.draw(wallTexture, -Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
         playerLeft.render(batch);
 
-        batch.draw(TextureManager.WALL, 0, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        batch.draw(TextureManager.WALL, (Settings.SCREEN_WIDTH/2)-Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        batch.draw(wallTexture, 0, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        batch.draw(wallTexture, (Settings.SCREEN_WIDTH/2)-Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
         playerRight.render(batch);
 
 
@@ -306,7 +311,7 @@ public class GameScreen implements Screen {
 
         font.draw(batch, score+"", -320, 280);
 
-        batch.draw(TextureManager.SELECTOR, selectorX, Settings.SCREEN_HEIGHT/2-20);
+        batch.draw(selectorTexture, selectorX, Settings.SCREEN_HEIGHT/2-20);
 
         batch.end();
 
@@ -321,7 +326,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        atlas.dispose();
         skin.dispose();
         font.dispose();
     }
@@ -390,11 +394,11 @@ public class GameScreen implements Screen {
         nX = MathUtils.random(0, 1)==1 ? -640 : 0;
         selectorX = -(Settings.SCREEN_WIDTH/2);
         score = 0;
-        playerLeft = new EntityPlayerLeft(new Vector2(-345, Settings.PLAYER_Y), 50, 50, new Vector2(0, 0), stage.getCamera());
-        playerRight = new EntityPlayerRight(new Vector2(295, Settings.PLAYER_Y), 50, 50, new Vector2(0, 0), stage.getCamera());
+        playerLeft = new EntityPlayerLeft(assetManager, new Vector2(-345, Settings.PLAYER_Y), 50, 50, new Vector2(0, 0), stage.getCamera());
+        playerRight = new EntityPlayerRight(assetManager, new Vector2(295, Settings.PLAYER_Y), 50, 50, new Vector2(0, 0), stage.getCamera());
 
         for(int i = 0; i<Settings.OBSTACLE_COUNT; i++){
-            obstacles.add(new EntityObstaclePair(i, i, this));
+            obstacles.add(new EntityObstaclePair(assetManager, i, i, this));
         }
     }
 

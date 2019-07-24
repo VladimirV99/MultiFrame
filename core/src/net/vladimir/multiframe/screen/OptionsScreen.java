@@ -2,9 +2,9 @@ package net.vladimir.multiframe.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import net.vladimir.multiframe.MultiFrame;
+import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.references.EnumSettings;
 import net.vladimir.multiframe.references.Settings;
 
@@ -20,26 +21,26 @@ import java.util.Map;
 
 public class OptionsScreen implements Screen {
 
-    private MultiFrame game;
-    private SpriteBatch batch;
+    private final MultiFrame game;
+    private final AssetManager assetManager;
+    private final SpriteBatch batch;
 
     private Stage stage;
     private Skin skin;
-    private TextureAtlas atlas;
 
     private HashMap<EnumSettings, TextField> options = new HashMap<EnumSettings, TextField>();
 
     public OptionsScreen(MultiFrame game) {
         this.game = game;
+        this.assetManager = game.getAssetManager();
         this.batch = game.getBatch();
     }
 
     @Override
     public void show() {
-        atlas = new TextureAtlas("ui/menuskin.pack");
 
-        stage = new Stage(new FitViewport(Settings.SCREEN_WIDTH,  Settings.SCREEN_HEIGHT));
-        skin = new Skin(Gdx.files.internal("ui/menuskin.json"), atlas);
+        stage = new Stage(new FitViewport(Settings.SCREEN_WIDTH,  Settings.SCREEN_HEIGHT), batch);
+        skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
         options.clear();
 
@@ -108,7 +109,6 @@ public class OptionsScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        atlas.dispose();
     }
 
     @Override

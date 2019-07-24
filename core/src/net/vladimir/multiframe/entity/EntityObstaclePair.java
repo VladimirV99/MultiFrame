@@ -1,5 +1,6 @@
 package net.vladimir.multiframe.entity;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -17,10 +18,10 @@ public class EntityObstaclePair {
 
     private GameScreen gameScreen;
 
-    public EntityObstaclePair(int count, int delay, GameScreen screen){
+    public EntityObstaclePair(AssetManager assetManager, int count, int delay, GameScreen screen){
         this.gameScreen = screen;
-        left = new EntityObstacle(new Vector2(0,0));
-        right = new EntityObstacle(new Vector2(0,0));
+        left = new EntityObstacle(assetManager, new Vector2(0,0));
+        right = new EntityObstacle(assetManager, new Vector2(0,0));
         setPos(count, delay);
     }
 

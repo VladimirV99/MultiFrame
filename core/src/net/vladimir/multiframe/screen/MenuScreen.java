@@ -2,6 +2,7 @@ package net.vladimir.multiframe.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,16 +18,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import net.vladimir.multiframe.MultiFrame;
+import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.references.Settings;
 
 public class MenuScreen implements Screen {
 
     private MultiFrame game;
+    private AssetManager assetManager;
     private SpriteBatch batch;
 
     private Stage stage;
     private Skin skin;
-    private TextureAtlas atlas;
     private Label lVersion;
     private TextButton bPlay;
     private TextButton bOptions;
@@ -34,16 +36,15 @@ public class MenuScreen implements Screen {
 
     public MenuScreen(MultiFrame game) {
         this.game = game;
+        this.assetManager = game.getAssetManager();
         this.batch = game.getBatch();
     }
 
     @Override
     public void show() {
 
-        atlas = new TextureAtlas("ui/menuskin.pack");
-
         stage = new Stage(new FitViewport(Settings.SCREEN_WIDTH,  Settings.SCREEN_HEIGHT), batch);
-        skin = new Skin(Gdx.files.internal("ui/menuskin.json"), atlas);
+        skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
         lVersion = new Label(Settings.VERSION, skin, "default");
         lVersion.setFontScale(1.1F);
@@ -113,7 +114,6 @@ public class MenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        atlas.dispose();
     }
 
     @Override

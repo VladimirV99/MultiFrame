@@ -2,12 +2,14 @@ package net.vladimir.multiframe.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.references.Settings;
-import net.vladimir.multiframe.references.TextureManager;
 
 public class EntityPlayerLeft extends Entity {
 
@@ -16,8 +18,8 @@ public class EntityPlayerLeft extends Entity {
     private int mult = 1;
     private Camera camera;
 
-    public EntityPlayerLeft(Vector2 pos, int width, int height, Vector2 direction, Camera camera) {
-        super(TextureManager.PLAYER, pos, direction);
+    public EntityPlayerLeft(AssetManager assetManager, Vector2 pos, int width, int height, Vector2 direction, Camera camera) {
+        super(assetManager.get(AssetDescriptors.PLAYER), pos, direction);
         this.width = width;
         this.height = height;
         this.camera = camera;
