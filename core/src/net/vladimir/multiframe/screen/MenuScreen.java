@@ -1,7 +1,9 @@
 package net.vladimir.multiframe.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,7 +19,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.references.Settings;
 
-public class MenuScreen extends Screen {
+public class MenuScreen implements Screen {
+
+    private MultiFrame game;
+    private SpriteBatch batch;
 
     private Stage stage;
     private Skin skin;
@@ -27,12 +32,17 @@ public class MenuScreen extends Screen {
     private TextButton bOptions;
     private TextButton bExit;
 
+    public MenuScreen(MultiFrame game) {
+        this.game = game;
+        this.batch = game.getBatch();
+    }
+
     @Override
-    public void create() {
+    public void show() {
 
         atlas = new TextureAtlas("ui/menuskin.pack");
 
-        stage = new Stage(new FitViewport(Settings.SCREEN_WIDTH,  Settings.SCREEN_HEIGHT));
+        stage = new Stage(new FitViewport(Settings.SCREEN_WIDTH,  Settings.SCREEN_HEIGHT), batch);
         skin = new Skin(Gdx.files.internal("ui/menuskin.json"), atlas);
 
         lVersion = new Label(Settings.VERSION, skin, "default");
@@ -46,7 +56,7 @@ public class MenuScreen extends Screen {
         bPlay.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.setScreen(new GameScreen());
+                game.setScreen(new GameScreen(game));
             }
         });
 
@@ -57,7 +67,7 @@ public class MenuScreen extends Screen {
         bOptions.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ScreenManager.setScreen(new OptionsScreen());
+                game.setScreen(new OptionsScreen(game));
             }
         });
 
@@ -83,13 +93,15 @@ public class MenuScreen extends Screen {
     }
 
     @Override
-    public void update() {
-        stage.act(Gdx.graphics.getDeltaTime());
+    public void render(float delta) {
+        update();
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.draw();
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        stage.draw();
+    private void update() {
+        stage.act(Gdx.graphics.getDeltaTime());
     }
 
     @Override
@@ -111,6 +123,11 @@ public class MenuScreen extends Screen {
 
     @Override
     public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
 
     }
 }

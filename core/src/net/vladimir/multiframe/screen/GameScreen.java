@@ -2,7 +2,9 @@ package net.vladimir.multiframe.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.entity.EntityObstaclePair;
 import net.vladimir.multiframe.entity.EntityPlayerLeft;
@@ -25,7 +29,7 @@ import net.vladimir.multiframe.references.TextureManager;
 
 import java.util.ArrayList;
 
-public class GameScreen extends Screen {
+public class GameScreen implements Screen {
 
     private Skin skin;
     private TextureAtlas atlas;
@@ -53,6 +57,14 @@ public class GameScreen extends Screen {
 
     private int nX = MathUtils.random(0, 1)==1 ? -640 : 0;
 
+    private MultiFrame game;
+    private SpriteBatch batch;
+
+    public GameScreen(MultiFrame game) {
+        this.game = game;
+        this.batch = game.getBatch();
+    }
+
     public int nextX(int pass){
         if(Settings.OBSTACLE_SWITCH==-1){
             if(MathUtils.random(0, 1)==1){
@@ -67,7 +79,7 @@ public class GameScreen extends Screen {
     }
 
     @Override
-    public void create() {
+    public void show() {
         atlas = new TextureAtlas("ui/menuskin.pack");
         skin = new Skin(Gdx.files.internal("ui/menuskin.json"), atlas);
 
@@ -115,7 +127,7 @@ public class GameScreen extends Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 run = false;
                 gameOverMenu.setVisible(false);
-                ScreenManager.setScreen(new MenuScreen());
+                game.setScreen(new MenuScreen(game));
             }
         });
 
@@ -182,7 +194,7 @@ public class GameScreen extends Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 run = false;
                 pauseMenu.setVisible(false);
-                ScreenManager.setScreen(new MenuScreen());
+                game.setScreen(new MenuScreen(game));
             }
         });
 
@@ -231,8 +243,7 @@ public class GameScreen extends Screen {
         run = true;
     }
 
-    @Override
-    public void update() {
+    private void update() {
 
         stage.act(Gdx.graphics.getDeltaTime());
 
@@ -272,29 +283,32 @@ public class GameScreen extends Screen {
     }
 
     @Override
-    public void render(SpriteBatch sb) {
-        sb.setProjectionMatrix(stage.getCamera().combined);
+    public void render(float delta) {
+        update();
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.setProjectionMatrix(stage.getCamera().combined);
 
-        sb.begin();
+        batch.begin();
 
-        sb.draw(TextureManager.WALL, -(Settings.SCREEN_WIDTH/2), -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        sb.draw(TextureManager.WALL, -Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        playerLeft.render(sb);
+        batch.draw(TextureManager.WALL, -(Settings.SCREEN_WIDTH/2), -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        batch.draw(TextureManager.WALL, -Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        playerLeft.render(batch);
 
-        sb.draw(TextureManager.WALL, 0, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        sb.draw(TextureManager.WALL, (Settings.SCREEN_WIDTH/2)-Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        playerRight.render(sb);
+        batch.draw(TextureManager.WALL, 0, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        batch.draw(TextureManager.WALL, (Settings.SCREEN_WIDTH/2)-Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        playerRight.render(batch);
 
 
         for(EntityObstaclePair obstacle : obstacles){
-            obstacle.render(sb);
+            obstacle.render(batch);
         }
 
-        font.draw(sb, score+"", -320, 280);
+        font.draw(batch, score+"", -320, 280);
 
-        sb.draw(TextureManager.SELECTOR, selectorX, Settings.SCREEN_HEIGHT/2-20);
+        batch.draw(TextureManager.SELECTOR, selectorX, Settings.SCREEN_HEIGHT/2-20);
 
-        sb.end();
+        batch.end();
 
         stage.draw();
     }
@@ -319,6 +333,11 @@ public class GameScreen extends Screen {
 
     @Override
     public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
 
     }
 
