@@ -16,7 +16,13 @@ public class MultiFrame extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		assetManager = new AssetManager();
+		loadAssets();
 
+		Settings.init();
+		setScreen(new MenuScreen(this));
+	}
+
+	private void loadAssets() {
 		assetManager.load(AssetDescriptors.UI_SKIN);
 		assetManager.load(AssetDescriptors.UI_FONT);
 		assetManager.load(AssetDescriptors.PLAYER);
@@ -25,9 +31,6 @@ public class MultiFrame extends Game {
 		assetManager.load(AssetDescriptors.WALL);
 
 		assetManager.finishLoading();
-
-		Settings.init();
-		setScreen(new MenuScreen(this));
 	}
 
 	@Override
@@ -39,6 +42,7 @@ public class MultiFrame extends Game {
 	public void dispose () {
 		super.dispose();
 		batch.dispose();
+		assetManager.dispose();
 	}
 
 	@Override

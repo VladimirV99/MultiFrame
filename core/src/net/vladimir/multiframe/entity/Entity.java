@@ -9,7 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Entity {
 
     protected Texture texture;
-    protected Vector2 pos, direction;
+    protected Vector2 pos;
+    protected Vector2 direction;
 
     public Entity(Texture texture, Vector2 pos, Vector2 direction) {
         this.texture = texture;

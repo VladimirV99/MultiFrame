@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,6 +23,7 @@ import net.vladimir.multiframe.entity.EntityObstaclePair;
 import net.vladimir.multiframe.entity.EntityPlayerLeft;
 import net.vladimir.multiframe.entity.EntityPlayerRight;
 import net.vladimir.multiframe.references.Settings;
+import net.vladimir.multiframe.utils.RenderUtils;
 
 import java.util.ArrayList;
 
@@ -248,6 +248,37 @@ public class GameScreen implements Screen {
         run = true;
     }
 
+    @Override
+    public void render(float delta) {
+        update();
+
+        RenderUtils.clearScreen();
+        batch.setProjectionMatrix(stage.getCamera().combined);
+
+        batch.begin();
+
+        batch.draw(wallTexture, -(Settings.SCREEN_WIDTH/2), -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        batch.draw(wallTexture, -Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        playerLeft.render(batch);
+
+        batch.draw(wallTexture, 0, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        batch.draw(wallTexture, (Settings.SCREEN_WIDTH/2)-Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
+        playerRight.render(batch);
+
+
+        for(EntityObstaclePair obstacle : obstacles){
+            obstacle.render(batch);
+        }
+
+        font.draw(batch, score+"", -320, 280);
+
+        batch.draw(selectorTexture, selectorX, Settings.SCREEN_HEIGHT/2-20);
+
+        batch.end();
+
+        stage.draw();
+    }
+
     private void update() {
 
         stage.act(Gdx.graphics.getDeltaTime());
@@ -288,46 +319,8 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
-        update();
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(stage.getCamera().combined);
-
-        batch.begin();
-
-        batch.draw(wallTexture, -(Settings.SCREEN_WIDTH/2), -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        batch.draw(wallTexture, -Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        playerLeft.render(batch);
-
-        batch.draw(wallTexture, 0, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        batch.draw(wallTexture, (Settings.SCREEN_WIDTH/2)-Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        playerRight.render(batch);
-
-
-        for(EntityObstaclePair obstacle : obstacles){
-            obstacle.render(batch);
-        }
-
-        font.draw(batch, score+"", -320, 280);
-
-        batch.draw(selectorTexture, selectorX, Settings.SCREEN_HEIGHT/2-20);
-
-        batch.end();
-
-        stage.draw();
-    }
-
-    @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-        skin.dispose();
-        font.dispose();
     }
 
     @Override
@@ -400,6 +393,13 @@ public class GameScreen implements Screen {
         for(int i = 0; i<Settings.OBSTACLE_COUNT; i++){
             obstacles.add(new EntityObstaclePair(assetManager, i, i, this));
         }
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
+        font.dispose();
     }
 
 }
