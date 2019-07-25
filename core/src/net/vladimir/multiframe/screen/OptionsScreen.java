@@ -38,30 +38,32 @@ public class OptionsScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(Settings.SCREEN_WIDTH,  Settings.SCREEN_HEIGHT), batch);
+        stage = new Stage(new FitViewport(Settings.MENU_WIDTH,  Settings.MENU_HEIGHT), batch);
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
         options.clear();
 
         Table table = new Table();
-        //table.setDebug(true);
-        table.center();
-        addNumberOption(table, EnumSettings.PLAYER_SWITCH, Settings.PLAYER_SWITCH);
-        addNumberOption(table, EnumSettings.PLAYER_SPEED, Settings.PLAYER_SPEED);
-        addNumberOption(table, EnumSettings.PLAYER_Y, Settings.PLAYER_Y);
-        addNumberOption(table, EnumSettings.OBSTACLE_SWITCH, Settings.OBSTACLE_SWITCH);
-        addNumberOption(table, EnumSettings.OBSTACLE_HEIGHT, Settings.OBSTACLE_HEIGHT);
-        addNumberOption(table, EnumSettings.OBSTACLE_GAP, Settings.OBSTACLE_GAP);
-        addNumberOption(table, EnumSettings.OBSTACLE_DISTANCE, Settings.OBSTACLE_DISTANCE);
-        addNumberOption(table, EnumSettings.OBSTACLE_SPEED, Settings.OBSTACLE_SPEED);
-        addNumberOption(table, EnumSettings.WALL_WIDTH, Settings.WALL_WIDTH);
+        Table optionsTable = new Table();
 
-        ScrollPane pane = new ScrollPane(table, skin, "default");
-        //pane.setBounds(Settings.SCREEN_WIDTH/2-400, Settings.SCREEN_HEIGHT/2-400, 800, 800);
-        pane.setBounds(0, 60, Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT-60);
+//        table.setDebug(true);
+//        optionsTable.setDebug(true);
+
+        addNumberOption(optionsTable, EnumSettings.PLAYER_SWITCH, Settings.PLAYER_SWITCH);
+        addNumberOption(optionsTable, EnumSettings.PLAYER_SPEED, Settings.PLAYER_SPEED);
+        addNumberOption(optionsTable, EnumSettings.PLAYER_Y, Settings.PLAYER_Y);
+        addNumberOption(optionsTable, EnumSettings.OBSTACLE_SWITCH, Settings.OBSTACLE_SWITCH);
+        addNumberOption(optionsTable, EnumSettings.OBSTACLE_HEIGHT, Settings.OBSTACLE_HEIGHT);
+        addNumberOption(optionsTable, EnumSettings.OBSTACLE_GAP, Settings.OBSTACLE_GAP);
+        addNumberOption(optionsTable, EnumSettings.OBSTACLE_DISTANCE, Settings.OBSTACLE_DISTANCE);
+        addNumberOption(optionsTable, EnumSettings.OBSTACLE_SPEED, Settings.OBSTACLE_SPEED);
+        addNumberOption(optionsTable, EnumSettings.WALL_WIDTH, Settings.WALL_WIDTH);
+
+        ScrollPane pane = new ScrollPane(optionsTable, skin, "default");
+        pane.setBounds(0, 60, Settings.MENU_WIDTH, Settings.MENU_HEIGHT-60);
 
         TextButton bMenu = new TextButton("Return To Menu", skin, "default");
-        bMenu.setBounds(Settings.SCREEN_WIDTH/2-380, Settings.SCREEN_HEIGHT/2-340, 360, bMenu.getPrefHeight());
+        bMenu.setBounds(Settings.MENU_WIDTH/2-380, Settings.MENU_HEIGHT/2-340, 360, bMenu.getPrefHeight());
         bMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -70,7 +72,7 @@ public class OptionsScreen implements Screen {
         });
 
         TextButton bReset = new TextButton("Reset Defaults", skin, "default");
-        bReset.setBounds(Settings.SCREEN_WIDTH/2+20, Settings.SCREEN_HEIGHT/2-340, 360, bReset.getPrefHeight());
+        bReset.setBounds(Settings.MENU_WIDTH/2+20, Settings.MENU_HEIGHT/2-340, 360, bReset.getPrefHeight());
         bReset.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -80,9 +82,16 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        stage.addActor(pane);
-        stage.addActor(bMenu);
-        stage.addActor(bReset);
+        optionsTable.pack();
+
+        table.add(optionsTable).expandY().fillY().colspan(2).row();
+        table.add(bMenu).size(400, 60).pad(10).expandX();
+        table.add(bReset).size(400, 60).pad(10).expandX();
+
+        table.setFillParent(true);
+        table.pack();
+
+        stage.addActor(table);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -120,7 +129,7 @@ public class OptionsScreen implements Screen {
     }
 
     private void addNumberOption(Table table, final EnumSettings setting, final int value){
-        final Label lText = new Label(setting.getName(), skin, "white");
+        final Label lText = new Label(setting.getName(), skin, "default");
 
         final TextField fValue = new TextField(String.valueOf(value), skin);
         fValue.setAlignment(1);
@@ -155,11 +164,11 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        table.add(lText).width(500);
-        table.add(bDecrease).width(60).height(60).pad(5, 10, 5, 10);
-        table.add(fValue).width(120);
-        table.add(bIncrease).width(60).height(60).pad(5, 10, 5, 10);
-        table.add(bReset).width(100);
+        table.add(lText).width(450).expandX();
+        table.add(bDecrease).size(50, 50).pad(5, 10, 5, 10);
+        table.add(fValue).size(120, 60).pad(5, 0, 5, 0);
+        table.add(bIncrease).size(50, 50).pad(5, 10, 5, 10);
+        table.add(bReset).size(140, 60).pad(5);
         table.row();
 
         options.put(setting, fValue);
@@ -191,7 +200,6 @@ public class OptionsScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
     }
 
 }

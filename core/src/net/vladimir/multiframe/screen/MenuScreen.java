@@ -1,22 +1,24 @@
 package net.vladimir.multiframe.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
 
-public class MenuScreen implements Screen {
+public class MenuScreen extends ScreenAdapter {
 
     private MultiFrame game;
     private AssetManager assetManager;
@@ -24,10 +26,6 @@ public class MenuScreen implements Screen {
 
     private Stage stage;
     private Skin skin;
-    private Label lVersion;
-    private TextButton bPlay;
-    private TextButton bOptions;
-    private TextButton bExit;
 
     public MenuScreen(MultiFrame game) {
         this.game = game;
@@ -37,17 +35,18 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(Settings.SCREEN_WIDTH,  Settings.SCREEN_HEIGHT), batch);
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
-        lVersion = new Label(Settings.VERSION, skin, "default");
-        lVersion.setFontScale(1.1F);
-        lVersion.setBounds(Settings.SCREEN_WIDTH - 50 - lVersion.getPrefWidth(), 50, lVersion.getPrefWidth(), lVersion.getPrefHeight());
+        stage = new Stage(new FitViewport(Settings.MENU_WIDTH, Settings.MENU_HEIGHT), batch);
 
-        bPlay = new TextButton("Play", skin, "default");
-        bPlay.setWidth(800);
-        bPlay.setHeight(70);
-        bPlay.setPosition(Settings.SCREEN_WIDTH/2-400, Settings.SCREEN_HEIGHT/2-35);
+        Table table = new Table();
+
+        Table buttonTable = new Table();
+
+//        table.setDebug(true);
+//        buttonTable.setDebug(true);
+
+        TextButton bPlay = new TextButton("Play", skin, "default");
         bPlay.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -55,10 +54,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        bOptions = new TextButton("Options", skin, "default");
-        bOptions.setWidth(800);
-        bOptions.setHeight(70);
-        bOptions.setPosition(Settings.SCREEN_WIDTH/2-400, Settings.SCREEN_HEIGHT/2-115);
+        TextButton bOptions = new TextButton("Options", skin, "default");
         bOptions.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -66,10 +62,7 @@ public class MenuScreen implements Screen {
             }
         });
 
-        bExit = new TextButton("Exit", skin, "default");
-        bExit.setWidth(800);
-        bExit.setHeight(70);
-        bExit.setPosition(Settings.SCREEN_WIDTH/2-400, Settings.SCREEN_HEIGHT/2-195);
+        TextButton bExit = new TextButton("Exit", skin, "default");
         bExit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -77,26 +70,35 @@ public class MenuScreen implements Screen {
             }
         });
 
+        buttonTable.defaults().pad(15, 100, 15, 100);
+        buttonTable.add(bPlay).height(70).expandX().fill().row();
+        buttonTable.add(bOptions).height(70).fill().row();
+        buttonTable.add(bExit).height(70).fill().row();
 
-        stage.addActor(bPlay);
-        stage.addActor(bOptions);
-        stage.addActor(bExit);
+        Label lVersion = new Label(Settings.VERSION, skin, "default");
+        lVersion.setFontScale(1.2f);
 
-        stage.addActor(lVersion);
+        table.add(buttonTable).expand().fill().row();
+        table.add(lVersion).pad(30).align(Align.bottomRight);
+
+        table.setFillParent(true);
+        table.pack();
+
+        stage.addActor(table);
 
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
-        update();
+        update(delta);
 
         RenderUtils.clearScreen();
         stage.draw();
     }
 
-    private void update() {
-        stage.act(Gdx.graphics.getDeltaTime());
+    private void update(float delta) {
+        stage.act(delta);
     }
 
     @Override
@@ -105,23 +107,8 @@ public class MenuScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
     }
+
 }

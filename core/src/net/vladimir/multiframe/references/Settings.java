@@ -2,7 +2,6 @@ package net.vladimir.multiframe.references;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.math.MathUtils;
 import net.vladimir.multiframe.screen.OptionsScreen;
 
 public class Settings {
@@ -11,6 +10,9 @@ public class Settings {
     private static Preferences settings;
 
     public static final String VERSION = "Alpha 4";
+
+    public static final float MENU_WIDTH = 1280;
+    public static final float MENU_HEIGHT = 720;
 
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
