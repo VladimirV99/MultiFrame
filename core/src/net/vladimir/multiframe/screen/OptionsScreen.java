@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import net.vladimir.multiframe.MultiFrame;
@@ -59,11 +60,7 @@ public class OptionsScreen implements Screen {
         addNumberOption(optionsTable, EnumSettings.OBSTACLE_SPEED, Settings.OBSTACLE_SPEED);
         addNumberOption(optionsTable, EnumSettings.WALL_WIDTH, Settings.WALL_WIDTH);
 
-        ScrollPane pane = new ScrollPane(optionsTable, skin, "default");
-        pane.setBounds(0, 60, Settings.MENU_WIDTH, Settings.MENU_HEIGHT-60);
-
         TextButton bMenu = new TextButton("Return To Menu", skin, "default");
-        bMenu.setBounds(Settings.MENU_WIDTH/2-380, Settings.MENU_HEIGHT/2-340, 360, bMenu.getPrefHeight());
         bMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -72,7 +69,6 @@ public class OptionsScreen implements Screen {
         });
 
         TextButton bReset = new TextButton("Reset Defaults", skin, "default");
-        bReset.setBounds(Settings.MENU_WIDTH/2+20, Settings.MENU_HEIGHT/2-340, 360, bReset.getPrefHeight());
         bReset.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -132,7 +128,7 @@ public class OptionsScreen implements Screen {
         final Label lText = new Label(setting.getName(), skin, "default");
 
         final TextField fValue = new TextField(String.valueOf(value), skin);
-        fValue.setAlignment(1);
+        fValue.setAlignment(Align.center);
         fValue.setTextFieldFilter(new TextField.TextFieldFilter() {
             @Override
             public boolean acceptChar(TextField textField, char c) {

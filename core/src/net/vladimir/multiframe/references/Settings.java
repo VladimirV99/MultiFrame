@@ -9,13 +9,13 @@ public class Settings {
     private static Preferences data;
     private static Preferences settings;
 
-    public static final String VERSION = "Alpha 4";
+    public static final String VERSION = "Alpha 5";
 
     public static final float MENU_WIDTH = 1280;
     public static final float MENU_HEIGHT = 720;
 
-    public static final int SCREEN_WIDTH = 1280;
-    public static final int SCREEN_HEIGHT = 720;
+    public static final float SCREEN_WIDTH = 1280;
+    public static final float SCREEN_HEIGHT = 720;
 
     public static final int DEFAULT_PLAYER_SWITCH = 1;
     public static final int DEFAULT_PLAYER_SPEED = 800;

@@ -28,7 +28,7 @@ public class EntityObstaclePair {
     private void setPos(int count, int delay){
         this.x = gameScreen.nextX(count);
 
-        int mid = MathUtils.random(Settings.OBSTACLE_GAP/2, Settings.SCREEN_WIDTH/2-Settings.WALL_WIDTH*2-Settings.OBSTACLE_GAP/2);
+        float mid = MathUtils.random(Settings.OBSTACLE_GAP/2, Settings.SCREEN_WIDTH/2-Settings.WALL_WIDTH*2-Settings.OBSTACLE_GAP/2);
 
         left.setPos(new Vector2(Settings.WALL_WIDTH+x, Settings.SCREEN_HEIGHT/2-Settings.OBSTACLE_COUNT*Settings.OBSTACLE_DISTANCE-(Settings.OBSTACLE_COUNT)*Settings.OBSTACLE_HEIGHT-(Settings.OBSTACLE_DISTANCE+Settings.OBSTACLE_HEIGHT)*delay));
         left.setDest(new Vector2(mid-Settings.OBSTACLE_GAP/2, Settings.OBSTACLE_HEIGHT));

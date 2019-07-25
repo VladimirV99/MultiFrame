@@ -15,7 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
@@ -39,9 +41,12 @@ public class GameScreen implements Screen {
     private Texture selectorTexture;
     private Texture playerTexture;
 
+    private Viewport viewport;
+    private Viewport uiViewport;
+
     private Stage stage;
-    private Group gameOverMenu;
-    private Group pauseMenu;
+    private Table gameOverPanel;
+    private Table pausePanel;
 
     private Label lHighScoreGameOver;
     private Label lScoreGameOver;
@@ -55,7 +60,7 @@ public class GameScreen implements Screen {
     private EntityPlayerLeft playerLeft;
     private EntityPlayerRight playerRight;
 
-    private int selectorX = -(Settings.SCREEN_WIDTH/2);
+    private float selectorX = -(Settings.SCREEN_WIDTH/2);
 
     private ArrayList<EntityObstaclePair> obstacles = new ArrayList<EntityObstaclePair>();
 
@@ -92,27 +97,24 @@ public class GameScreen implements Screen {
         selectorTexture = assetManager.get(AssetDescriptors.SELECTOR);
         playerTexture = assetManager.get(AssetDescriptors.PLAYER);
 
-        stage = new Stage(new FitViewport(1280, 720));
-        stage.getCamera().translate(-640, -360, 0);
+        viewport = new FitViewport(Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
+        uiViewport = new FitViewport(Settings.MENU_WIDTH, Settings.MENU_HEIGHT);
+
+        stage = new Stage(uiViewport);
 
         initObjects();
 
-        gameOverMenu = new Group();
+        gameOverPanel = new Table();
 
-        Image backgroundGameOver = new Image(playerTexture);
-        backgroundGameOver.setBounds(-150, -200, 300, 400);
+        final Table gameOverMenu = new Table();
+        gameOverMenu.background(new TextureRegionDrawable(playerTexture));
 
-        lHighScoreGameOver = new Label("high: " + String.valueOf(Settings.HIGH_SCORE), skin, "white");
-        lHighScoreGameOver.setPosition(-lHighScoreGameOver.getPrefWidth()/2, 150);
+        lHighScoreGameOver = new Label("high: " + Settings.HIGH_SCORE, skin, "white");
 
         lScoreGameOver = new Label("0", skin, "white");
         lScoreGameOver.setFontScale(2);
-        lScoreGameOver.setPosition(-lScoreGameOver.getPrefWidth()/2, 100);
 
         TextButton bRetryGameOver = new TextButton("Retry", skin, "default");
-        bRetryGameOver.setWidth(150);
-        bRetryGameOver.setHeight(70);
-        bRetryGameOver.setPosition(-bRetryGameOver.getWidth()/2, 0);
         bRetryGameOver.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -124,9 +126,6 @@ public class GameScreen implements Screen {
         });
 
         TextButton bMenuGameOver = new TextButton("Menu", skin, "default");
-        bMenuGameOver.setWidth(150);
-        bMenuGameOver.setHeight(70);
-        bMenuGameOver.setPosition(-bMenuGameOver.getWidth()/2, -20-bMenuGameOver.getHeight());
         bMenuGameOver.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -137,9 +136,6 @@ public class GameScreen implements Screen {
         });
 
         TextButton bExitGameOver = new TextButton("Exit", skin, "default");
-        bExitGameOver.setWidth(150);
-        bExitGameOver.setHeight(70);
-        bExitGameOver.setPosition(-bExitGameOver.getWidth()/2, -40-bMenuGameOver.getHeight()-bExitGameOver.getHeight());
         bExitGameOver.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -149,26 +145,31 @@ public class GameScreen implements Screen {
             }
         });
 
-        gameOverMenu.addActor(backgroundGameOver);
-        gameOverMenu.addActor(lHighScoreGameOver);
-        gameOverMenu.addActor(lScoreGameOver);
-        gameOverMenu.addActor(bRetryGameOver);
-        gameOverMenu.addActor(bMenuGameOver);
-        gameOverMenu.addActor(bExitGameOver);
+        gameOverMenu.defaults().pad(10, 20, 10, 20);
 
-        pauseMenu = new Group();
+        gameOverMenu.add(lHighScoreGameOver).row();
+        gameOverMenu.add(lScoreGameOver).row();
+        gameOverMenu.add(bRetryGameOver).size(180, 50).row();
+        gameOverMenu.add(bMenuGameOver).size(180, 50).row();
+        gameOverMenu.add(bExitGameOver).size(180, 50);
 
-        Image backgroundPause = new Image(playerTexture);
-        backgroundPause.setBounds(-150, -300, 300, 500);
+        gameOverMenu.pack();
+
+        gameOverPanel.add(gameOverMenu).center();
+        gameOverPanel.setFillParent(true);
+        gameOverPanel.pack();
+
+
+
+        pausePanel = new Table();
+
+        final Table pauseMenu = new Table();
+        pauseMenu.background(new TextureRegionDrawable(playerTexture));
 
         lScorePause = new Label("0", skin, "white");
         lScorePause.setFontScale(2);
-        lScorePause.setPosition(-lScorePause.getPrefWidth()/2, 100);
 
         TextButton bResumePause = new TextButton("Resume", skin, "default");
-        bResumePause.setWidth(150);
-        bResumePause.setHeight(70);
-        bResumePause.setPosition(-bResumePause.getWidth()/2, 0);
         bResumePause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -177,9 +178,6 @@ public class GameScreen implements Screen {
         });
 
         TextButton bRetryPause = new TextButton("Retry", skin, "default");
-        bRetryPause.setWidth(150);
-        bRetryPause.setHeight(70);
-        bRetryPause.setPosition(-bRetryPause.getWidth()/2, -20-bResumePause.getHeight());
         bRetryPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -191,9 +189,6 @@ public class GameScreen implements Screen {
         });
 
         TextButton bMenuPause = new TextButton("Menu", skin, "default");
-        bMenuPause.setWidth(150);
-        bMenuPause.setHeight(70);
-        bMenuPause.setPosition(-bMenuPause.getWidth()/2, -40-bResumePause.getHeight()-bMenuPause.getHeight());
         bMenuPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -204,9 +199,6 @@ public class GameScreen implements Screen {
         });
 
         TextButton bExitPause = new TextButton("Exit", skin, "default");
-        bExitPause.setWidth(150);
-        bExitPause.setHeight(70);
-        bExitPause.setPosition(-bExitPause.getWidth()/2, -60-bResumePause.getHeight()-bMenuPause.getHeight()-bExitPause.getHeight());
         bExitPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -216,18 +208,25 @@ public class GameScreen implements Screen {
             }
         });
 
-        pauseMenu.addActor(backgroundPause);
-        pauseMenu.addActor(lScorePause);
-        pauseMenu.addActor(bResumePause);
-        pauseMenu.addActor(bRetryPause);
-        pauseMenu.addActor(bMenuPause);
-        pauseMenu.addActor(bExitPause);
+        pauseMenu.defaults().pad(10, 20, 10, 20);
 
-        stage.addActor(pauseMenu);
-        stage.addActor(gameOverMenu);
+        pauseMenu.add(lScorePause).row();
+        pauseMenu.add(bResumePause).size(180, 50).row();
+        pauseMenu.add(bRetryPause).size(180, 50).row();
+        pauseMenu.add(bMenuPause).size(180, 50).row();
+        pauseMenu.add(bExitPause).size(180, 50);
 
-        pauseMenu.setVisible(false);
-        gameOverMenu.setVisible(false);
+        pauseMenu.pack();
+
+        pausePanel.add(pauseMenu).center();
+        pausePanel.setFillParent(true);
+        pausePanel.pack();
+
+        stage.addActor(pausePanel);
+        stage.addActor(gameOverPanel);
+
+        pausePanel.setVisible(false);
+        gameOverPanel.setVisible(false);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -237,23 +236,24 @@ public class GameScreen implements Screen {
     private void pauseGame(){
         if(run) {
             lScorePause.setText(String.valueOf(score));
-            lScorePause.setPosition(-lScorePause.getPrefWidth() / 2, 100);
             run = false;
-            pauseMenu.setVisible(true);
+            pausePanel.setVisible(true);
         }
     }
 
     private void resumeGame(){
-        pauseMenu.setVisible(false);
+        pausePanel.setVisible(false);
         run = true;
     }
 
     @Override
     public void render(float delta) {
-        update();
+        update(delta);
 
         RenderUtils.clearScreen();
-        batch.setProjectionMatrix(stage.getCamera().combined);
+
+        viewport.apply();
+        batch.setProjectionMatrix(viewport.getCamera().combined);
 
         batch.begin();
 
@@ -265,7 +265,6 @@ public class GameScreen implements Screen {
         batch.draw(wallTexture, (Settings.SCREEN_WIDTH/2)-Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
         playerRight.render(batch);
 
-
         for(EntityObstaclePair obstacle : obstacles){
             obstacle.render(batch);
         }
@@ -276,12 +275,13 @@ public class GameScreen implements Screen {
 
         batch.end();
 
+        uiViewport.apply();
         stage.draw();
     }
 
-    private void update() {
+    private void update(float delta) {
 
-        stage.act(Gdx.graphics.getDeltaTime());
+        stage.act(delta);
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
             System.out.println("Back");
@@ -307,7 +307,7 @@ public class GameScreen implements Screen {
 
             if(!ready && (Gdx.input.isTouched(0) && Gdx.input.isTouched(1) || Gdx.input.isKeyJustPressed(Input.Keys.W))){
                 initObjects();
-                gameOverMenu.setVisible(false);
+                gameOverPanel.setVisible(false);
                 ready = true;
             }
 
@@ -320,6 +320,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height);
         stage.getViewport().update(width, height);
     }
 
@@ -370,14 +371,12 @@ public class GameScreen implements Screen {
     }
 
     private void gameOver(){
-        lHighScoreGameOver.setText("high: " + String.valueOf(Settings.HIGH_SCORE));
-        lHighScoreGameOver.setPosition(-lHighScoreGameOver.getPrefWidth()/2, 150);
+        lHighScoreGameOver.setText("high: " + Settings.HIGH_SCORE);
         Settings.setLastScore(score);
         if(score > Settings.HIGH_SCORE)
             Settings.setHighScore(score);
         lScoreGameOver.setText(Integer.toString(score));
-        lScoreGameOver.setPosition(-lScoreGameOver.getPrefWidth()/2, 100);
-        gameOverMenu.setVisible(true);
+        gameOverPanel.setVisible(true);
         nX = MathUtils.random(0, 1)==1 ? -640 : 0;
         run = false;
     }
