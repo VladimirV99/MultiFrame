@@ -20,28 +20,28 @@ public class EntityObstaclePair {
 
     public EntityObstaclePair(AssetManager assetManager, int count, int delay, GameScreen screen){
         this.gameScreen = screen;
-        left = new EntityObstacle(assetManager, new Vector2(0,0));
-        right = new EntityObstacle(assetManager, new Vector2(0,0));
+        left = new EntityObstacle(assetManager);
+        right = new EntityObstacle(assetManager);
         setPos(count, delay);
     }
 
     private void setPos(int count, int delay){
         this.x = gameScreen.nextX(count);
 
-        float mid = MathUtils.random(Settings.OBSTACLE_GAP/2, Settings.SCREEN_WIDTH/2-Settings.WALL_WIDTH*2-Settings.OBSTACLE_GAP/2);
+        float mid = MathUtils.random(Settings.OBSTACLE_GAP/2, Settings.SCREEN_WIDTH/2-2*Settings.WALL_WIDTH-Settings.OBSTACLE_GAP/2);
 
-        left.setPos(new Vector2(Settings.WALL_WIDTH+x, Settings.SCREEN_HEIGHT/2-Settings.OBSTACLE_COUNT*Settings.OBSTACLE_DISTANCE-(Settings.OBSTACLE_COUNT)*Settings.OBSTACLE_HEIGHT-(Settings.OBSTACLE_DISTANCE+Settings.OBSTACLE_HEIGHT)*delay));
-        left.setDest(new Vector2(mid-Settings.OBSTACLE_GAP/2, Settings.OBSTACLE_HEIGHT));
+        left.setPosition(new Vector2(x+Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT/2-Settings.OBSTACLE_COUNT*Settings.OBSTACLE_DISTANCE-(Settings.OBSTACLE_COUNT)*Settings.OBSTACLE_HEIGHT-(Settings.OBSTACLE_DISTANCE+Settings.OBSTACLE_HEIGHT)*delay));
+        left.setSize(new Vector2(mid-Settings.OBSTACLE_GAP/2, Settings.OBSTACLE_HEIGHT));
 
-        right.setPos(new Vector2(Settings.WALL_WIDTH+mid+Settings.OBSTACLE_GAP/2+x, Settings.SCREEN_HEIGHT/2-Settings.OBSTACLE_COUNT*Settings.OBSTACLE_DISTANCE-(Settings.OBSTACLE_COUNT)*Settings.OBSTACLE_HEIGHT-(Settings.OBSTACLE_DISTANCE+Settings.OBSTACLE_HEIGHT)*delay));
-        right.setDest(new Vector2(Settings.SCREEN_WIDTH/2-Settings.WALL_WIDTH-mid-Settings.OBSTACLE_GAP/2, Settings.OBSTACLE_HEIGHT));
+        right.setPosition(new Vector2(Settings.WALL_WIDTH+mid+Settings.OBSTACLE_GAP/2+x, Settings.SCREEN_HEIGHT/2-Settings.OBSTACLE_COUNT*Settings.OBSTACLE_DISTANCE-(Settings.OBSTACLE_COUNT)*Settings.OBSTACLE_HEIGHT-(Settings.OBSTACLE_DISTANCE+Settings.OBSTACLE_HEIGHT)*delay));
+        right.setSize(new Vector2(Settings.SCREEN_WIDTH/2-mid-Settings.OBSTACLE_GAP/2, Settings.OBSTACLE_HEIGHT));
 
         passed = false;
     }
 
-    public void update(){
-        left.update();
-        right.update();
+    public void update(float delta){
+        left.update(delta);
+        right.update(delta);
 
         if(right.getPosition().y>= Settings.SCREEN_HEIGHT/2){
             setPos(0, 0);
@@ -53,9 +53,9 @@ public class EntityObstaclePair {
         }
     }
 
-    public void render(SpriteBatch sb){
-        left.render(sb);
-        right.render(sb);
+    public void render(SpriteBatch batch, float delta){
+        left.render(batch, delta);
+        right.render(batch, delta);
     }
 
     public boolean intersects(Rectangle rect){

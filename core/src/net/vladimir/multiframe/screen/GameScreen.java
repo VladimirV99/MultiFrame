@@ -9,9 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -22,8 +20,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.entity.EntityObstaclePair;
-import net.vladimir.multiframe.entity.EntityPlayerLeft;
-import net.vladimir.multiframe.entity.EntityPlayerRight;
+import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
 
@@ -57,8 +54,8 @@ public class GameScreen implements Screen {
 
     private int score = 0;
 
-    private EntityPlayerLeft playerLeft;
-    private EntityPlayerRight playerRight;
+    private EntityPlayer playerLeft;
+    private EntityPlayer playerRight;
 
     private float selectorX = -(Settings.SCREEN_WIDTH/2);
 
@@ -121,7 +118,7 @@ public class GameScreen implements Screen {
                 initObjects();
                 ready = false;
                 run = true;
-                gameOverMenu.setVisible(false);
+                gameOverPanel.setVisible(false);
             }
         });
 
@@ -130,7 +127,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 run = false;
-                gameOverMenu.setVisible(false);
+                gameOverPanel.setVisible(false);
                 game.setScreen(new MenuScreen(game));
             }
         });
@@ -140,7 +137,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 run = false;
-                gameOverMenu.setVisible(false);
+                gameOverPanel.setVisible(false);
                 Gdx.app.exit();
             }
         });
@@ -184,7 +181,7 @@ public class GameScreen implements Screen {
                 initObjects();
                 ready = false;
                 run = true;
-                pauseMenu.setVisible(false);
+                pausePanel.setVisible(false);
             }
         });
 
@@ -193,7 +190,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 run = false;
-                pauseMenu.setVisible(false);
+                pausePanel.setVisible(false);
                 game.setScreen(new MenuScreen(game));
             }
         });
@@ -203,7 +200,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 run = false;
-                pauseMenu.setVisible(false);
+                pausePanel.setVisible(false);
                 Gdx.app.exit();
             }
         });
@@ -259,14 +256,14 @@ public class GameScreen implements Screen {
 
         batch.draw(wallTexture, -(Settings.SCREEN_WIDTH/2), -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
         batch.draw(wallTexture, -Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        playerLeft.render(batch);
+        playerLeft.render(batch, delta);
 
         batch.draw(wallTexture, 0, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
         batch.draw(wallTexture, (Settings.SCREEN_WIDTH/2)-Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        playerRight.render(batch);
+        playerRight.render(batch, delta);
 
         for(EntityObstaclePair obstacle : obstacles){
-            obstacle.render(batch);
+            obstacle.render(batch, delta);
         }
 
         font.draw(batch, score+"", -320, 280);
@@ -293,11 +290,11 @@ public class GameScreen implements Screen {
 
         if(run) {
 
-            playerLeft.update();
-            playerRight.update();
+            playerLeft.update(delta);
+            playerRight.update(delta);
 
             for(EntityObstaclePair obstacle : obstacles)
-                obstacle.update();
+                obstacle.update(delta);
 
             for(EntityObstaclePair obstacle : obstacles)
                 if(obstacle.intersects(playerLeft.getBounds()) || obstacle.intersects(playerRight.getBounds()))
@@ -386,8 +383,8 @@ public class GameScreen implements Screen {
         nX = MathUtils.random(0, 1)==1 ? -640 : 0;
         selectorX = -(Settings.SCREEN_WIDTH/2);
         score = 0;
-        playerLeft = new EntityPlayerLeft(assetManager, new Vector2(-345, Settings.PLAYER_Y), 50, 50, new Vector2(0, 0), stage.getCamera());
-        playerRight = new EntityPlayerRight(assetManager, new Vector2(295, Settings.PLAYER_Y), 50, 50, new Vector2(0, 0), stage.getCamera());
+        playerLeft = new EntityPlayer(assetManager, -345, Settings.PLAYER_Y, 50, 50, 1, -(int)Settings.SCREEN_WIDTH/2+Settings.WALL_WIDTH, -50-Settings.WALL_WIDTH, stage.getCamera());
+        playerRight = new EntityPlayer(assetManager, 295, Settings.PLAYER_Y, 50, 50, -1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-50-Settings.WALL_WIDTH, stage.getCamera());
 
         for(int i = 0; i<Settings.OBSTACLE_COUNT; i++){
             obstacles.add(new EntityObstaclePair(assetManager, i, i, this));

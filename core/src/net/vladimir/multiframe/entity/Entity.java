@@ -1,6 +1,5 @@
 package net.vladimir.multiframe.entity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,32 +8,45 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Entity {
 
     protected Texture texture;
-    protected Vector2 pos;
-    protected Vector2 direction;
+    protected int x;
+    protected int y;
+    protected int width;
+    protected int height;
 
-    public Entity(Texture texture, Vector2 pos, Vector2 direction) {
-        this.texture = texture;
-        this.pos = pos;
-        this.direction = direction;
+    public Entity(Texture texture, Vector2 position, Vector2 size) {
+        this(texture, (int)position.x, (int)position.y, (int)size.x, (int)size.y);
     }
 
-    public abstract void update();
+    public Entity(Texture texture, int x, int y, int width, int height) {
+        this.texture = texture;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
 
-    public void render(SpriteBatch sb) {
-        sb.draw(texture, pos.x, pos.y);
+    public abstract void update(float delta);
+
+    public void render(SpriteBatch batch, float delta) {
+        batch.draw(texture, x, y, width, height);
+    }
+
+    public void setPosition(Vector2 position) {
+        this.x = (int)position.x;
+        this.y = (int)position.y;
+    }
+
+    public void setSize(Vector2 size) {
+        this.width = (int)size.x;
+        this.height = (int)size.y;
     }
 
     public Vector2 getPosition() {
-        return pos;
+        return new Vector2(x, y);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(pos.x, pos.y, texture.getWidth(), texture.getHeight());
-    }
-
-    public void setDirection(float x, float y) {
-        direction.set(x, y);
-        direction.scl(Gdx.graphics.getDeltaTime());
+        return new Rectangle(x, y, width, height);
     }
 
 }
