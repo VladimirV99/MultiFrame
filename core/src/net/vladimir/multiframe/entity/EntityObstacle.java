@@ -13,7 +13,7 @@ public class EntityObstacle extends Entity {
 
     @Override
     public void update(float delta) {
-        y += Settings.OBSTACLE_SPEED * delta;
+        addY((int)(Settings.OBSTACLE_SPEED * delta));
     }
 
 }

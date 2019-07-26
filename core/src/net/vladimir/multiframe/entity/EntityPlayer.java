@@ -13,15 +13,15 @@ import net.vladimir.multiframe.references.Settings;
 
 public class EntityPlayer extends Entity {
 
-    protected int left;
-    protected int right;
-    protected int mult;
-    protected Camera camera;
+    private int minX;
+    private int maxX;
+    private int mult;
+    private Camera camera;
 
-    public EntityPlayer(AssetManager assetManager, int x, int y, int width, int height, int mult, int left, int right, Camera camera) {
+    public EntityPlayer(AssetManager assetManager, int x, int y, int width, int height, int mult, int minX, int maxX, Camera camera) {
         super(assetManager.get(AssetDescriptors.PLAYER), x, y, width, height);
-        this.left = left;
-        this.right = right;
+        this.minX = minX;
+        this.maxX = maxX;
         this.mult = mult;
         this.camera = camera;
     }
@@ -48,23 +48,21 @@ public class EntityPlayer extends Entity {
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.A))
-            if(dir>-1)
-                dir--;
+            dir--;
         if(Gdx.input.isKeyPressed(Input.Keys.D))
-            if(dir<1)
-                dir++;
+            dir++;
 
         if(dir>1)
             dir=1;
         else if(dir<-1)
             dir = -1;
 
-        x += mult * dir * Settings.PLAYER_SPEED * delta;
-        x = MathUtils.clamp(x, left, right);
+        if(dir != 0)
+            setX((int)MathUtils.clamp(getX() + mult * dir * Settings.PLAYER_SPEED * delta, minX, maxX));
     }
 
     public void switchDirection(){
-        mult = mult*-1;
+        mult *= -1;
     }
 
 }

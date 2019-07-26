@@ -9,7 +9,7 @@ public class Settings {
     private static Preferences data;
     private static Preferences settings;
 
-    public static final String VERSION = "Alpha 6";
+    public static final String VERSION = "Alpha 7";
 
     public static final float MENU_WIDTH = 1280;
     public static final float MENU_HEIGHT = 720;
@@ -97,9 +97,7 @@ public class Settings {
                 break;
             case OBSTACLE_GAP:
                 OBSTACLE_GAP = value;
-                Integer val1 = EnumSettings.WALL_WIDTH.recalculate();
-                if(val1!=null)
-                    screen.setOption(EnumSettings.WALL_WIDTH, val1);
+                screen.setOption(EnumSettings.WALL_WIDTH, EnumSettings.WALL_WIDTH.recalculate());
                 break;
             case OBSTACLE_DISTANCE:
                 OBSTACLE_DISTANCE = value;
@@ -110,9 +108,7 @@ public class Settings {
                 break;
             case WALL_WIDTH:
                 WALL_WIDTH = value;
-                Integer val2 = EnumSettings.OBSTACLE_GAP.recalculate();
-                if(val2!=null)
-                    screen.setOption(EnumSettings.OBSTACLE_GAP, val2);
+                screen.setOption(EnumSettings.OBSTACLE_GAP, EnumSettings.OBSTACLE_GAP.recalculate());
                 break;
         }
         settings.putInteger(setting.getId(), value);
