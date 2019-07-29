@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.entity.EntityPlayer;
+import net.vladimir.multiframe.frame.Frame;
 import net.vladimir.multiframe.frame.FrameHandler;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
 import net.vladimir.multiframe.frame.IGameListener;
@@ -46,7 +47,6 @@ public class GameScreen implements Screen, IGameListener {
     private Label lScoreGameOver;
     private Label lScorePause;
 
-    private boolean run;
     private boolean ready;
 
     private int score;
@@ -58,7 +58,6 @@ public class GameScreen implements Screen, IGameListener {
         this.assetManager = game.getAssetManager();
         this.batch = game.getBatch();
 
-        this.run = false;
         this.ready = false;
 
         this.score = 0;
@@ -79,8 +78,32 @@ public class GameScreen implements Screen, IGameListener {
 
         stage = new Stage(uiViewport);
 
-        initObjects();
+        init();
+        initGameOverPanel();
+        initPausePanel();
 
+        stage.addActor(pausePanel);
+        stage.addActor(gameOverPanel);
+
+        Gdx.input.setInputProcessor(stage);
+
+        startGame();
+    }
+
+    private void init() {
+        frameOrchestrator = new FrameOrchestrator(batch, viewport.getCamera(), assetManager, this, new FrameHandler());
+
+        frameOrchestrator.addFrame(new Frame(0, -(int)Settings.SCREEN_WIDTH/2, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
+        frameOrchestrator.addFrame(new Frame(1, 0, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
+
+        EntityPlayer playerLeft = new EntityPlayer(assetManager, 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, Settings.PLAYER_SIZE, Settings.PLAYER_SIZE, 1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-Settings.PLAYER_SIZE-Settings.WALL_WIDTH);
+        EntityPlayer playerRight = new EntityPlayer(assetManager, 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, Settings.PLAYER_SIZE, Settings.PLAYER_SIZE, -1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-Settings.PLAYER_SIZE-Settings.WALL_WIDTH);
+
+        frameOrchestrator.getFrame(0).addPlayer(playerLeft);
+        frameOrchestrator.getFrame(1).addPlayer(playerRight);
+    }
+
+    private void initGameOverPanel() {
         gameOverPanel = new Table();
 
         final Table gameOverMenu = new Table();
@@ -95,9 +118,10 @@ public class GameScreen implements Screen, IGameListener {
         bRetryGameOver.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                initObjects();
+                frameOrchestrator.reset();
+                startGame();
                 ready = false;
-                run = true;
+                frameOrchestrator.resume();
                 gameOverPanel.setVisible(false);
             }
         });
@@ -106,7 +130,7 @@ public class GameScreen implements Screen, IGameListener {
         bMenuGameOver.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                run = false;
+                frameOrchestrator.pause();
                 gameOverPanel.setVisible(false);
                 game.setScreen(new MenuScreen(game));
             }
@@ -116,7 +140,7 @@ public class GameScreen implements Screen, IGameListener {
         bExitGameOver.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                run = false;
+                frameOrchestrator.pause();
                 gameOverPanel.setVisible(false);
                 Gdx.app.exit();
             }
@@ -136,8 +160,10 @@ public class GameScreen implements Screen, IGameListener {
         gameOverPanel.setFillParent(true);
         gameOverPanel.pack();
 
+        gameOverPanel.setVisible(false);
+    }
 
-
+    private void initPausePanel() {
         pausePanel = new Table();
 
         final Table pauseMenu = new Table();
@@ -158,9 +184,10 @@ public class GameScreen implements Screen, IGameListener {
         bRetryPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                initObjects();
+                frameOrchestrator.reset();
+                startGame();
                 ready = false;
-                run = true;
+                frameOrchestrator.resume();
                 pausePanel.setVisible(false);
             }
         });
@@ -169,7 +196,7 @@ public class GameScreen implements Screen, IGameListener {
         bMenuPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                run = false;
+                frameOrchestrator.pause();
                 pausePanel.setVisible(false);
                 game.setScreen(new MenuScreen(game));
             }
@@ -179,7 +206,7 @@ public class GameScreen implements Screen, IGameListener {
         bExitPause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                run = false;
+                frameOrchestrator.pause();
                 pausePanel.setVisible(false);
                 Gdx.app.exit();
             }
@@ -199,28 +226,20 @@ public class GameScreen implements Screen, IGameListener {
         pausePanel.setFillParent(true);
         pausePanel.pack();
 
-        stage.addActor(pausePanel);
-        stage.addActor(gameOverPanel);
-
         pausePanel.setVisible(false);
-        gameOverPanel.setVisible(false);
-
-        Gdx.input.setInputProcessor(stage);
-
-        run = true;
     }
 
     private void pauseGame(){
-        if(run) {
+        if(frameOrchestrator.isRunning()) {
             lScorePause.setText(String.valueOf(score));
-            run = false;
+            frameOrchestrator.pause();
             pausePanel.setVisible(true);
         }
     }
 
     private void resumeGame(){
         pausePanel.setVisible(false);
-        run = true;
+        frameOrchestrator.resume();
     }
 
     @Override
@@ -247,26 +266,22 @@ public class GameScreen implements Screen, IGameListener {
     private void update(float delta) {
         stage.act(delta);
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
-            System.out.println("Back");
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             pauseGame();
         }
 
-        if(run) {
-            frameOrchestrator.update(delta);
-        }else{
+        frameOrchestrator.update(delta);
+
+        if(!frameOrchestrator.isRunning()) {
             if(!ready && (Gdx.input.isTouched(0) && Gdx.input.isTouched(1) || Gdx.input.isKeyJustPressed(Input.Keys.W))){
-                initObjects();
+                startGame();
                 gameOverPanel.setVisible(false);
                 ready = true;
             }
 
             if((!Gdx.input.isTouched() && !Gdx.input.isKeyPressed(Input.Keys.W)) && ready){
                 ready = false;
-                run = true;
+                frameOrchestrator.resume();
             }
         }
     }
@@ -299,28 +314,15 @@ public class GameScreen implements Screen, IGameListener {
             Settings.setHighScore(score);
         lScoreGameOver.setText(Integer.toString(score));
         gameOverPanel.setVisible(true);
-        run = false;
     }
 
     public void incrementScore() {
         score++;
     }
 
-    private void initObjects() {
+    private void startGame() {
         score = 0;
-        EntityPlayer playerLeft = new EntityPlayer(assetManager, 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, 50, 50, 1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-50-Settings.WALL_WIDTH);
-        EntityPlayer playerRight = new EntityPlayer(assetManager, 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, 50, 50, -1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-50-Settings.WALL_WIDTH);
-
-        frameOrchestrator = new FrameOrchestrator(batch, viewport.getCamera(), assetManager, this, new FrameHandler());
-
-        frameOrchestrator.addFrame(0, -(int)Settings.SCREEN_WIDTH/2, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT);
-        frameOrchestrator.addFrame(1, 0, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT);
-
-        frameOrchestrator.getFrame(0).addPlayer(playerLeft);
-        frameOrchestrator.getFrame(1).addPlayer(playerRight);
-
         frameOrchestrator.getFrame(0).setFocus(true);
-
         frameOrchestrator.start();
     }
 

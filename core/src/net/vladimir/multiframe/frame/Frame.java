@@ -7,6 +7,7 @@ import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
+import net.vladimir.multiframe.event.EventType;
 import net.vladimir.multiframe.references.Settings;
 
 import java.util.ArrayList;
@@ -32,9 +33,7 @@ public class Frame implements IFrame{
     private Texture selectorTexture;
     private Texture wallTexture;
 
-    public Frame(FrameOrchestrator orchestrator, int id, int x, int y, int width, int height) {
-        this.orchestrator = orchestrator;
-
+    public Frame(int id, int x, int y, int width, int height) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -45,6 +44,10 @@ public class Frame implements IFrame{
 
         this.players = new ArrayList<EntityPlayer>();
         this.obstacles = new LinkedList<EntityObstacle>();
+    }
+
+    public void init(FrameOrchestrator orchestrator) {
+        this.orchestrator = orchestrator;
 
         this.selectorTexture = orchestrator.getAssetManager().get(AssetDescriptors.SELECTOR);
         this.wallTexture = orchestrator.getAssetManager().get(AssetDescriptors.WALL);
@@ -71,7 +74,7 @@ public class Frame implements IFrame{
         for(EntityObstacle obstacle : obstacles)
             for(EntityPlayer player : players)
                 if(obstacle.intersects(player.getBounds()))
-                    orchestrator.getGameListener().gameOver();
+                    getOrchestrator().getHandler().handle(new Event(EventType.GAME_OVER, 0));
     }
 
     public void render(SpriteBatch batch, float delta) {
@@ -88,6 +91,14 @@ public class Frame implements IFrame{
         if(isInFocus()) {
             batch.draw(selectorTexture, x, y+height-20, width, 20);
         }
+    }
+
+    public void reset() {
+        for(EntityPlayer player : players) {
+            player.reset();
+        }
+        removeObstacles();
+        setFocus(false);
     }
 
     public void setFocus(boolean flag) {
@@ -108,6 +119,13 @@ public class Frame implements IFrame{
 
     public void removeObstacle(EntityObstacle obstacle) {
         this.getOrchestrator().getObstaclePool().free(obstacle);
+    }
+
+    public void removeObstacles() {
+        for(EntityObstacle obstacle : obstacles) {
+            this.getOrchestrator().getObstaclePool().free(obstacle);
+        }
+        obstacles.clear();
     }
 
     public void onEvent(Event event) {

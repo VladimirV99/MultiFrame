@@ -28,6 +28,8 @@ public class FrameOrchestrator {
     private IGameListener gameListener;
     private IFrameHandler frameHandler;
 
+    private boolean running;
+
     public FrameOrchestrator(SpriteBatch batch, Camera camera, final AssetManager assetManager, IGameListener gameListener, IFrameHandler frameHandler) {
         this.batch = batch;
         this.camera = camera;
@@ -43,13 +45,19 @@ public class FrameOrchestrator {
 
         this.gameListener = gameListener;
         this.frameHandler = frameHandler;
+
+        this.running = false;
     }
 
     public void start() {
         frameHandler.init(this);
+        running = true;
     }
 
     public void update(float delta) {
+        if(!running)
+            return;
+
         int i = 0;
         while(true){
             if(Gdx.input.isTouched(i)){
@@ -81,12 +89,26 @@ public class FrameOrchestrator {
         }
     }
 
-    public void addFrame(int id, int x, int y, int width, int height) {
-        IFrame frame = new Frame(this, id, x, y, width, height);
-        addFrame(frame);
+    public void pause() {
+        running = false;
+    }
+
+    public void resume() {
+        running = true;
+    }
+
+    public void reset() {
+        for(IFrame frame : frames.values()) {
+            frame.reset();
+        }
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public void addFrame(IFrame frame) {
+        frame.init(this);
         this.frames.put(frame.getId(), frame);
     }
 

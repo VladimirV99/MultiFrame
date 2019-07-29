@@ -8,9 +8,13 @@ import net.vladimir.multiframe.event.Event;
 
 public interface IFrame {
 
+    void init(FrameOrchestrator orchestrator);
+
     void update(float delta);
 
     void render(SpriteBatch batch, float delta);
+
+    void reset();
 
     void setFocus(boolean flag);
 
@@ -19,6 +23,8 @@ public interface IFrame {
     void addObstacle(EntityObstacle obstacle);
 
     void removeObstacle(EntityObstacle obstacle);
+
+    void removeObstacles();
 
     void onEvent(Event event);
 

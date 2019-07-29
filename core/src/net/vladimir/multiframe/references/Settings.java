@@ -9,7 +9,7 @@ public class Settings {
     private static Preferences data;
     private static Preferences settings;
 
-    public static final String VERSION = "Alpha 8";
+    public static final String VERSION = "Alpha 9";
 
     public static final float MENU_WIDTH = 1280;
     public static final float MENU_HEIGHT = 720;
@@ -36,6 +36,7 @@ public class Settings {
     public static int OBSTACLE_COUNT = 3;
     public static int OBSTACLE_DISTANCE = 300;
     public static int OBSTACLE_SPEED = 300;
+    public static int PLAYER_SIZE = 50;
     public static int PLAYER_SPEED = 800;
     public static int PLAYER_Y = -25;
     public static int LAST_SCORE = 0;

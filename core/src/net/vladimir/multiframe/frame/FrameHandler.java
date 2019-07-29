@@ -20,8 +20,12 @@ public class FrameHandler implements IFrameHandler {
 
     public void init (FrameOrchestrator orchestrator) {
         this.orchestrator = orchestrator;
+
+        dir = 0;
         obstacleFrame = 0;
         spawnedObstacles = 0;
+        lastObstacle = null;
+
         spawnObstacle();
     }
 
@@ -55,7 +59,8 @@ public class FrameHandler implements IFrameHandler {
             case OBSTACLE_PASS:
                 orchestrator.getGameListener().incrementScore();
                 if(Settings.PLAYER_SWITCH==-1){
-                    if(MathUtils.random(0, 2)==1)
+                    int rand = MathUtils.random(0, 2);
+                    if(rand==1)
                         orchestrator.raiseEvent(new Event(EventType.SWITCH_CONTROLS, 0));
                 }else{
                     if(Settings.PLAYER_SWITCH!=0) {
@@ -64,14 +69,17 @@ public class FrameHandler implements IFrameHandler {
                     }
                 }
                 break;
+            case GAME_OVER:
+                orchestrator.pause();
+                orchestrator.getGameListener().gameOver();
+                break;
         }
     }
 
     private void spawnObstacle() {
         int y = -Settings.OBSTACLE_HEIGHT - 100;
-        if (lastObstacle != null) {
+        if (lastObstacle != null)
             y = lastObstacle.getY() - Settings.OBSTACLE_DISTANCE - Settings.OBSTACLE_HEIGHT;
-        }
 
         EntityObstacle o = orchestrator.getObstaclePool().obtain();
         int nextFrame = getNextObstacleFrame();
