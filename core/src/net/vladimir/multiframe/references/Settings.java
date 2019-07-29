@@ -9,7 +9,7 @@ public class Settings {
     private static Preferences data;
     private static Preferences settings;
 
-    public static final String VERSION = "Alpha 7";
+    public static final String VERSION = "Alpha 8";
 
     public static final float MENU_WIDTH = 1280;
     public static final float MENU_HEIGHT = 720;

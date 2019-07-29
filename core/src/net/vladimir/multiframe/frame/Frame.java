@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import net.vladimir.multiframe.assets.AssetDescriptors;
-import net.vladimir.multiframe.entity.EntityObstaclePair;
+import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.references.Settings;
@@ -27,7 +27,7 @@ public class Frame implements IFrame{
     private boolean inFocus;
 
     private List<EntityPlayer> players;
-    private List<EntityObstaclePair> obstacles;
+    private List<EntityObstacle> obstacles;
 
     private Texture selectorTexture;
     private Texture wallTexture;
@@ -44,7 +44,7 @@ public class Frame implements IFrame{
         this.inFocus = false;
 
         this.players = new ArrayList<EntityPlayer>();
-        this.obstacles = new LinkedList<EntityObstaclePair>();
+        this.obstacles = new LinkedList<EntityObstacle>();
 
         this.selectorTexture = orchestrator.getAssetManager().get(AssetDescriptors.SELECTOR);
         this.wallTexture = orchestrator.getAssetManager().get(AssetDescriptors.WALL);
@@ -54,12 +54,12 @@ public class Frame implements IFrame{
         for(EntityPlayer player : players) {
             player.update(delta);
         }
-        for(EntityObstaclePair obstacle : obstacles) {
+        for(EntityObstacle obstacle : obstacles) {
             obstacle.update(delta);
         }
 
-        ListIterator<EntityObstaclePair> it = obstacles.listIterator();
-        EntityObstaclePair o;
+        ListIterator<EntityObstacle> it = obstacles.listIterator();
+        EntityObstacle o;
         while(it.hasNext()){
             o = it.next();
             if(o.isDead()) {
@@ -68,7 +68,7 @@ public class Frame implements IFrame{
             }
         }
 
-        for(EntityObstaclePair obstacle : obstacles)
+        for(EntityObstacle obstacle : obstacles)
             for(EntityPlayer player : players)
                 if(obstacle.intersects(player.getBounds()))
                     orchestrator.getScreenHandler().gameOver();
@@ -81,7 +81,7 @@ public class Frame implements IFrame{
         for(EntityPlayer player : players) {
             player.render(batch, delta, x, y);
         }
-        for(EntityObstaclePair obstacle : obstacles) {
+        for(EntityObstacle obstacle : obstacles) {
             obstacle.render(batch, delta, x, y);
         }
 
@@ -102,11 +102,11 @@ public class Frame implements IFrame{
         this.players.add(player);
     }
 
-    public void addObstacle(EntityObstaclePair obstacle) {
+    public void addObstacle(EntityObstacle obstacle) {
         this.obstacles.add(obstacle);
     }
 
-    public void removeObstacle(EntityObstaclePair obstacle) {
+    public void removeObstacle(EntityObstacle obstacle) {
         this.getOrchestrator().getObstaclePool().free(obstacle);
     }
 

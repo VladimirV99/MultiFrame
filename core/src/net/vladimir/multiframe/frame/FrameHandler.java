@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 
-import net.vladimir.multiframe.entity.EntityObstaclePair;
+import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
 import net.vladimir.multiframe.references.Settings;
@@ -16,7 +16,7 @@ public class FrameHandler implements IFrameHandler {
     private int dir = 0;
     private int obstacleFrame = 0;
     private int spawnedObstacles = 0;
-    private EntityObstaclePair lastObstacle = null;
+    private EntityObstacle lastObstacle = null;
 
     public void init (FrameOrchestrator orchestrator) {
         this.orchestrator = orchestrator;
@@ -73,10 +73,10 @@ public class FrameHandler implements IFrameHandler {
             y = lastObstacle.getY() - Settings.OBSTACLE_DISTANCE - Settings.OBSTACLE_HEIGHT;
         }
 
-        EntityObstaclePair o = orchestrator.getObstaclePool().obtain();
+        EntityObstacle o = orchestrator.getObstaclePool().obtain();
         int nextFrame = getNextObstacleFrame();
         o.init(orchestrator.getFrame(nextFrame), y);
-        orchestrator.getFrame(nextFrame).addObstacle(o);
+        orchestrator.addObstacle(nextFrame, o);
         spawnedObstacles++;
         lastObstacle = o;
     }

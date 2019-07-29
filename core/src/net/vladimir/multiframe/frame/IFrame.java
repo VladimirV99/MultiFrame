@@ -2,7 +2,7 @@ package net.vladimir.multiframe.frame;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import net.vladimir.multiframe.entity.EntityObstaclePair;
+import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 
@@ -16,9 +16,9 @@ public interface IFrame {
 
     void addPlayer(EntityPlayer player);
 
-    void addObstacle(EntityObstaclePair obstacle);
+    void addObstacle(EntityObstacle obstacle);
 
-    void removeObstacle(EntityObstaclePair obstacle);
+    void removeObstacle(EntityObstacle obstacle);
 
     void onEvent(Event event);
 

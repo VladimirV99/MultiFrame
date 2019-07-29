@@ -13,19 +13,19 @@ import net.vladimir.multiframe.event.EventType;
 import net.vladimir.multiframe.frame.IFrame;
 import net.vladimir.multiframe.references.Settings;
 
-public class EntityObstaclePair implements Pool.Poolable {
+public class EntityObstacle implements Pool.Poolable {
 
-    private EntityObstacle left;
-    private EntityObstacle right;
+    private EntityObstaclePart left;
+    private EntityObstaclePart right;
 
     private IFrame frame;
 
     private boolean passed;
     private boolean dead;
 
-    public EntityObstaclePair(AssetManager assetManager){
-        left = new EntityObstacle(assetManager);
-        right = new EntityObstacle(assetManager);
+    public EntityObstacle(AssetManager assetManager){
+        left = new EntityObstaclePart(assetManager);
+        right = new EntityObstaclePart(assetManager);
 
         passed = false;
         dead = false;
@@ -54,7 +54,7 @@ public class EntityObstaclePair implements Pool.Poolable {
         right.update(delta);
 
         if(right.getPosition().y>= frame.getHeight()){
-            dead = true;
+            setDead();
             return;
         }
 
@@ -91,8 +91,8 @@ public class EntityObstaclePair implements Pool.Poolable {
         dead = false;
     }
 
-    private class EntityObstacle extends Entity {
-        public EntityObstacle(AssetManager assetManager) {
+    private class EntityObstaclePart extends Entity {
+        public EntityObstaclePart(AssetManager assetManager) {
             super(assetManager.get(AssetDescriptors.OBSTACLE));
         }
 

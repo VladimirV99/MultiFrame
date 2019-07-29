@@ -8,10 +8,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool;
 
-import net.vladimir.multiframe.entity.EntityObstaclePair;
+import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
-import net.vladimir.multiframe.screen.GameScreen;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,7 +23,7 @@ public class FrameOrchestrator {
     private AssetManager assetManager;
 
     private Map<Integer, IFrame> frames;
-    private Pool<EntityObstaclePair> obstaclePool;
+    private Pool<EntityObstacle> obstaclePool;
 
     private IScreenHandler screenHandler;
     private IFrameHandler frameHandler;
@@ -35,10 +34,10 @@ public class FrameOrchestrator {
         this.assetManager = assetManager;
 
         this.frames = new HashMap<Integer, IFrame>();
-        this.obstaclePool = new Pool<EntityObstaclePair>() {
+        this.obstaclePool = new Pool<EntityObstacle>() {
             @Override
-            protected EntityObstaclePair newObject() {
-                return new EntityObstaclePair(assetManager);
+            protected EntityObstacle newObject() {
+                return new EntityObstacle(assetManager);
             }
         };
 
@@ -105,11 +104,11 @@ public class FrameOrchestrator {
         }
     }
 
-    public void addObstacle(int frame, EntityObstaclePair obstacle) {
+    public void addObstacle(int frame, EntityObstacle obstacle) {
         this.getFrame(frame).addObstacle(obstacle);
     }
 
-    public Pool<EntityObstaclePair> getObstaclePool() {
+    public Pool<EntityObstacle> getObstaclePool() {
         return obstaclePool;
     }
 
