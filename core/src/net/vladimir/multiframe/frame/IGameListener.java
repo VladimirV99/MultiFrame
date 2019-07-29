@@ -1,6 +1,6 @@
 package net.vladimir.multiframe.frame;
 
-public interface IScreenHandler {
+public interface IGameListener {
 
     void gameOver();
 

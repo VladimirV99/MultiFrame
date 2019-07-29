@@ -71,7 +71,7 @@ public class Frame implements IFrame{
         for(EntityObstacle obstacle : obstacles)
             for(EntityPlayer player : players)
                 if(obstacle.intersects(player.getBounds()))
-                    orchestrator.getScreenHandler().gameOver();
+                    orchestrator.getGameListener().gameOver();
     }
 
     public void render(SpriteBatch batch, float delta) {

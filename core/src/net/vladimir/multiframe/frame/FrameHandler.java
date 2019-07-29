@@ -53,7 +53,7 @@ public class FrameHandler implements IFrameHandler {
                     dir++;
                 break;
             case OBSTACLE_PASS:
-                orchestrator.getScreenHandler().incrementScore();
+                orchestrator.getGameListener().incrementScore();
                 if(Settings.PLAYER_SWITCH==-1){
                     if(MathUtils.random(0, 2)==1)
                         orchestrator.raiseEvent(new Event(EventType.SWITCH_CONTROLS, 0));

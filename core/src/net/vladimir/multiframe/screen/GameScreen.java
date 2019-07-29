@@ -21,11 +21,11 @@ import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.frame.FrameHandler;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
-import net.vladimir.multiframe.frame.IScreenHandler;
+import net.vladimir.multiframe.frame.IGameListener;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
 
-public class GameScreen implements Screen, IScreenHandler {
+public class GameScreen implements Screen, IGameListener {
 
     private MultiFrame game;
     private AssetManager assetManager;

@@ -25,10 +25,10 @@ public class FrameOrchestrator {
     private Map<Integer, IFrame> frames;
     private Pool<EntityObstacle> obstaclePool;
 
-    private IScreenHandler screenHandler;
+    private IGameListener gameListener;
     private IFrameHandler frameHandler;
 
-    public FrameOrchestrator(SpriteBatch batch, Camera camera, final AssetManager assetManager, IScreenHandler screenHandler, IFrameHandler frameHandler) {
+    public FrameOrchestrator(SpriteBatch batch, Camera camera, final AssetManager assetManager, IGameListener gameListener, IFrameHandler frameHandler) {
         this.batch = batch;
         this.camera = camera;
         this.assetManager = assetManager;
@@ -41,7 +41,7 @@ public class FrameOrchestrator {
             }
         };
 
-        this.screenHandler = screenHandler;
+        this.gameListener = gameListener;
         this.frameHandler = frameHandler;
     }
 
@@ -120,7 +120,7 @@ public class FrameOrchestrator {
         return frameHandler;
     }
 
-    public IScreenHandler getScreenHandler() {
-        return screenHandler;
+    public IGameListener getGameListener() {
+        return gameListener;
     }
 }
