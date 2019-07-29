@@ -1,12 +1,7 @@
 package net.vladimir.multiframe.entity;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.references.Settings;
@@ -15,54 +10,31 @@ public class EntityPlayer extends Entity {
 
     private int minX;
     private int maxX;
-    private int mult;
-    private Camera camera;
+    private int multiplier;
+    private int dir;
 
-    public EntityPlayer(AssetManager assetManager, int x, int y, int width, int height, int mult, int minX, int maxX, Camera camera) {
+    public EntityPlayer(AssetManager assetManager, int x, int y, int width, int height, int multiplier, int minX, int maxX) {
         super(assetManager.get(AssetDescriptors.PLAYER), x, y, width, height);
         this.minX = minX;
         this.maxX = maxX;
-        this.mult = mult;
-        this.camera = camera;
+        this.multiplier = multiplier;
+        this.dir = 0;
     }
 
     @Override
     public void update(float delta) {
-        int dir = 0;
-
-        int i = 0;
-        while(true){
-            if(Gdx.input.isTouched(i)){
-                Vector3 projected = camera.unproject(new Vector3(Gdx.input.getX(i), Gdx.input.getY(i), 0));
-                Vector2 touch = new Vector2(projected.x, projected.y);
-
-                if (touch.x > 0)
-                    dir++;
-                else
-                    dir--;
-
-                i++;
-            }else{
-                break;
-            }
+        if(dir != 0) {
+            int deltaX = (int)(multiplier * dir * Settings.PLAYER_SPEED * delta);
+            setX(MathUtils.clamp(getX() + deltaX, minX, maxX));
         }
+    }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.A))
-            dir--;
-        if(Gdx.input.isKeyPressed(Input.Keys.D))
-            dir++;
-
-        if(dir>1)
-            dir=1;
-        else if(dir<-1)
-            dir = -1;
-
-        if(dir != 0)
-            setX((int)MathUtils.clamp(getX() + mult * dir * Settings.PLAYER_SPEED * delta, minX, maxX));
+    public void setDirection(int dir) {
+        this.dir = dir;
     }
 
     public void switchDirection(){
-        mult *= -1;
+        multiplier *= -1;
     }
 
 }

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -19,14 +18,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
-import net.vladimir.multiframe.entity.EntityObstaclePair;
 import net.vladimir.multiframe.entity.EntityPlayer;
+import net.vladimir.multiframe.frame.FrameHandler;
+import net.vladimir.multiframe.frame.FrameOrchestrator;
+import net.vladimir.multiframe.frame.IScreenHandler;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
 
-import java.util.ArrayList;
-
-public class GameScreen implements Screen {
+public class GameScreen implements Screen, IScreenHandler {
 
     private MultiFrame game;
     private AssetManager assetManager;
@@ -34,8 +33,6 @@ public class GameScreen implements Screen {
 
     private Skin skin;
     private BitmapFont font;
-    private Texture wallTexture;
-    private Texture selectorTexture;
     private Texture playerTexture;
 
     private Viewport viewport;
@@ -49,37 +46,22 @@ public class GameScreen implements Screen {
     private Label lScoreGameOver;
     private Label lScorePause;
 
-    private boolean run = false;
-    private boolean ready = false;
+    private boolean run;
+    private boolean ready;
 
-    private int score = 0;
+    private int score;
 
-    private EntityPlayer playerLeft;
-    private EntityPlayer playerRight;
-
-    private float selectorX = -(Settings.SCREEN_WIDTH/2);
-
-    private ArrayList<EntityObstaclePair> obstacles = new ArrayList<EntityObstaclePair>();
-
-    private int nX = MathUtils.random(0, 1)==1 ? -640 : 0;
+    private FrameOrchestrator frameOrchestrator;
 
     public GameScreen(MultiFrame game) {
         this.game = game;
         this.assetManager = game.getAssetManager();
         this.batch = game.getBatch();
-    }
 
-    public int nextX(int pass){
-        if(Settings.OBSTACLE_SWITCH==-1){
-            if(MathUtils.random(0, 1)==1){
-                switchObstacle();
-            }
-        }else{
-            if(Settings.OBSTACLE_SWITCH!=0 && (score+pass)%Settings.OBSTACLE_SWITCH==0){
-                switchObstacle();
-            }
-        }
-        return nX;
+        this.run = false;
+        this.ready = false;
+
+        this.score = 0;
     }
 
     @Override
@@ -90,8 +72,6 @@ public class GameScreen implements Screen {
         font.setColor(Color.BLACK);
         font.getData().setScale(2);
 
-        wallTexture = assetManager.get(AssetDescriptors.WALL);
-        selectorTexture = assetManager.get(AssetDescriptors.SELECTOR);
         playerTexture = assetManager.get(AssetDescriptors.PLAYER);
 
         viewport = new FitViewport(Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
@@ -254,21 +234,9 @@ public class GameScreen implements Screen {
 
         batch.begin();
 
-        batch.draw(wallTexture, -(Settings.SCREEN_WIDTH/2), -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        batch.draw(wallTexture, -Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        playerLeft.render(batch, delta);
-
-        batch.draw(wallTexture, 0, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        batch.draw(wallTexture, (Settings.SCREEN_WIDTH/2)-Settings.WALL_WIDTH, -Settings.SCREEN_HEIGHT/2, Settings.WALL_WIDTH, Settings.SCREEN_HEIGHT);
-        playerRight.render(batch, delta);
-
-        for(EntityObstaclePair obstacle : obstacles){
-            obstacle.render(batch, delta);
-        }
+        frameOrchestrator.render(delta);
 
         font.draw(batch, score+"", -320, 280);
-
-        batch.draw(selectorTexture, selectorX, Settings.SCREEN_HEIGHT/2-20);
 
         batch.end();
 
@@ -277,7 +245,6 @@ public class GameScreen implements Screen {
     }
 
     private void update(float delta) {
-
         stage.act(delta);
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
@@ -289,19 +256,8 @@ public class GameScreen implements Screen {
         }
 
         if(run) {
-
-            playerLeft.update(delta);
-            playerRight.update(delta);
-
-            for(EntityObstaclePair obstacle : obstacles)
-                obstacle.update(delta);
-
-            for(EntityObstaclePair obstacle : obstacles)
-                if(obstacle.intersects(playerLeft.getBounds()) || obstacle.intersects(playerRight.getBounds()))
-                    gameOver();
-
+            frameOrchestrator.update(delta);
         }else{
-
             if(!ready && (Gdx.input.isTouched(0) && Gdx.input.isTouched(1) || Gdx.input.isKeyJustPressed(Input.Keys.W))){
                 initObjects();
                 gameOverPanel.setVisible(false);
@@ -336,59 +292,36 @@ public class GameScreen implements Screen {
 
     }
 
-    public void onPass() {
-        score++;
-        if(Settings.PLAYER_SWITCH==-1){
-            if(MathUtils.random(0, 1)==1){
-                switchControls();
-            }
-        }else{
-            if(Settings.PLAYER_SWITCH!=0) {
-                if (score % Settings.PLAYER_SWITCH == 0) {
-                    switchControls();
-                }
-            }
-        }
-    }
-
-    private void switchControls(){
-        playerLeft.switchDirection();
-        playerRight.switchDirection();
-        if(selectorX == -(Settings.SCREEN_WIDTH/2))
-            selectorX = 0;
-        else
-            selectorX = -(Settings.SCREEN_WIDTH/2);
-    }
-
-    private void switchObstacle(){
-        if(nX==-640)
-            nX=0;
-        else
-            nX=-640;
-    }
-
-    private void gameOver(){
+    public void gameOver(){
         lHighScoreGameOver.setText("high: " + Settings.HIGH_SCORE);
         Settings.setLastScore(score);
         if(score > Settings.HIGH_SCORE)
             Settings.setHighScore(score);
         lScoreGameOver.setText(Integer.toString(score));
         gameOverPanel.setVisible(true);
-        nX = MathUtils.random(0, 1)==1 ? -640 : 0;
         run = false;
     }
 
-    private void initObjects(){
-        obstacles.clear();
-        nX = MathUtils.random(0, 1)==1 ? -640 : 0;
-        selectorX = -(Settings.SCREEN_WIDTH/2);
-        score = 0;
-        playerLeft = new EntityPlayer(assetManager, -345, Settings.PLAYER_Y, 50, 50, 1, -(int)Settings.SCREEN_WIDTH/2+Settings.WALL_WIDTH, -50-Settings.WALL_WIDTH, stage.getCamera());
-        playerRight = new EntityPlayer(assetManager, 295, Settings.PLAYER_Y, 50, 50, -1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-50-Settings.WALL_WIDTH, stage.getCamera());
+    public void incrementScore() {
+        score++;
+    }
 
-        for(int i = 0; i<Settings.OBSTACLE_COUNT; i++){
-            obstacles.add(new EntityObstaclePair(assetManager, i, i, this));
-        }
+    private void initObjects() {
+        score = 0;
+        EntityPlayer playerLeft = new EntityPlayer(assetManager, 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, 50, 50, 1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-50-Settings.WALL_WIDTH);
+        EntityPlayer playerRight = new EntityPlayer(assetManager, 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, 50, 50, -1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-50-Settings.WALL_WIDTH);
+
+        frameOrchestrator = new FrameOrchestrator(batch, viewport.getCamera(), assetManager, this, new FrameHandler());
+
+        frameOrchestrator.addFrame(0, -(int)Settings.SCREEN_WIDTH/2, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT);
+        frameOrchestrator.addFrame(1, 0, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT);
+
+        frameOrchestrator.getFrame(0).addPlayer(playerLeft);
+        frameOrchestrator.getFrame(1).addPlayer(playerRight);
+
+        frameOrchestrator.getFrame(0).setFocus(true);
+
+        frameOrchestrator.start();
     }
 
     @Override

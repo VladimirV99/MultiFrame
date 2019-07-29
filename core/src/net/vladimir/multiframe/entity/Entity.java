@@ -19,6 +19,10 @@ public abstract class Entity {
         this(texture, (int)position.x, (int)position.y, (int)size.x, (int)size.y);
     }
 
+    public Entity(Texture texture) {
+        this(texture, 0, 0, 0, 0);
+    }
+
     public Entity(Texture texture, int x, int y, int width, int height) {
         this.texture = texture;
         this.x = x;
@@ -30,8 +34,8 @@ public abstract class Entity {
 
     public abstract void update(float delta);
 
-    public void render(SpriteBatch batch, float delta) {
-        batch.draw(texture, x, y, width, height);
+    public void render(SpriteBatch batch, float delta, int offsetX, int offsetY) {
+        batch.draw(texture, offsetX+x, offsetY+y, width, height);
     }
 
     public void setX(int x) {
