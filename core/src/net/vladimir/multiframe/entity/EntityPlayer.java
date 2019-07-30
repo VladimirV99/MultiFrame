@@ -13,6 +13,7 @@ public class EntityPlayer extends Entity {
     private int multiplier;
     private int dir;
 
+    private int startMultiplier;
     private int startX;
 
     public EntityPlayer(AssetManager assetManager, int x, int y, int width, int height, int multiplier, int minX, int maxX) {
@@ -21,6 +22,7 @@ public class EntityPlayer extends Entity {
         this.minX = minX;
         this.maxX = maxX;
         this.multiplier = multiplier;
+        this.startMultiplier = multiplier;
         this.dir = 0;
     }
 
@@ -34,6 +36,7 @@ public class EntityPlayer extends Entity {
 
     public void reset() {
         this.setX(startX);
+        this.multiplier = startMultiplier;
     }
 
     public void setDirection(int dir) {

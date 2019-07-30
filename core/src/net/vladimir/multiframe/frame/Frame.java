@@ -1,21 +1,18 @@
 package net.vladimir.multiframe.frame;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
-import net.vladimir.multiframe.references.Settings;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class Frame implements IFrame{
+public abstract class Frame implements IFrame{
 
     private FrameOrchestrator orchestrator;
 
@@ -30,9 +27,6 @@ public class Frame implements IFrame{
     private List<EntityPlayer> players;
     private List<EntityObstacle> obstacles;
 
-    private Texture selectorTexture;
-    private Texture wallTexture;
-
     public Frame(int id, int x, int y, int width, int height) {
         this.id = id;
         this.x = x;
@@ -46,13 +40,12 @@ public class Frame implements IFrame{
         this.obstacles = new LinkedList<EntityObstacle>();
     }
 
+    @Override
     public void init(FrameOrchestrator orchestrator) {
         this.orchestrator = orchestrator;
-
-        this.selectorTexture = orchestrator.getAssetManager().get(AssetDescriptors.SELECTOR);
-        this.wallTexture = orchestrator.getAssetManager().get(AssetDescriptors.WALL);
     }
 
+    @Override
     public void update(float delta) {
         for(EntityPlayer player : players) {
             player.update(delta);
@@ -77,22 +70,17 @@ public class Frame implements IFrame{
                     getOrchestrator().getHandler().handle(new Event(EventType.GAME_OVER, 0));
     }
 
+    @Override
     public void render(SpriteBatch batch, float delta) {
-        batch.draw(wallTexture, x, y, Settings.WALL_WIDTH, height);
-        batch.draw(wallTexture, x+width-Settings.WALL_WIDTH, y, Settings.WALL_WIDTH, height);
-
         for(EntityPlayer player : players) {
             player.render(batch, delta, x, y);
         }
         for(EntityObstacle obstacle : obstacles) {
             obstacle.render(batch, delta, x, y);
         }
-
-        if(isInFocus()) {
-            batch.draw(selectorTexture, x, y+height-20, width, 20);
-        }
     }
 
+    @Override
     public void reset() {
         for(EntityPlayer player : players) {
             player.reset();
@@ -101,26 +89,32 @@ public class Frame implements IFrame{
         setFocus(false);
     }
 
+    @Override
     public void setFocus(boolean flag) {
         this.inFocus = flag;
     }
 
+    @Override
     public boolean isInFocus() {
         return inFocus;
     }
 
+    @Override
     public void addPlayer(EntityPlayer player) {
         this.players.add(player);
     }
 
+    @Override
     public void addObstacle(EntityObstacle obstacle) {
         this.obstacles.add(obstacle);
     }
 
+    @Override
     public void removeObstacle(EntityObstacle obstacle) {
         this.getOrchestrator().getObstaclePool().free(obstacle);
     }
 
+    @Override
     public void removeObstacles() {
         for(EntityObstacle obstacle : obstacles) {
             this.getOrchestrator().getObstaclePool().free(obstacle);
@@ -128,6 +122,7 @@ public class Frame implements IFrame{
         obstacles.clear();
     }
 
+    @Override
     public void onEvent(Event event) {
         switch (event.getType()) {
             case MOVE_PLAYER:
@@ -144,26 +139,32 @@ public class Frame implements IFrame{
         }
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
 
+    @Override
     public int getWidth() {
         return width;
     }
 
+    @Override
     public int getHeight() {
         return height;
     }
 
+    @Override
     public FrameOrchestrator getOrchestrator() {
         return orchestrator;
     }

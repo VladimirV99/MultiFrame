@@ -18,9 +18,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
-import net.vladimir.multiframe.entity.EntityPlayer;
-import net.vladimir.multiframe.frame.Frame;
-import net.vladimir.multiframe.frame.FrameHandler;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
 import net.vladimir.multiframe.frame.IFrameHandler;
 import net.vladimir.multiframe.frame.IGameListener;
@@ -302,6 +299,7 @@ public class GameScreen implements Screen, IGameListener {
 
     }
 
+    @Override
     public void gameOver(){
         lHighScoreGameOver.setText("high: " + Settings.HIGH_SCORE);
         Settings.setLastScore(score);
@@ -311,6 +309,7 @@ public class GameScreen implements Screen, IGameListener {
         gameOverPanel.setVisible(true);
     }
 
+    @Override
     public void incrementScore() {
         score++;
     }

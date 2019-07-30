@@ -18,6 +18,8 @@ public interface IFrame {
 
     void setFocus(boolean flag);
 
+    boolean isInFocus();
+
     void addPlayer(EntityPlayer player);
 
     void addObstacle(EntityObstacle obstacle);

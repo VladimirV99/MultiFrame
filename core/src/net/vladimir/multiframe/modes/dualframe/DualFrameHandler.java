@@ -1,4 +1,4 @@
-package net.vladimir.multiframe.frame;
+package net.vladimir.multiframe.modes.dualframe;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,9 +8,12 @@ import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
+import net.vladimir.multiframe.frame.Frame;
+import net.vladimir.multiframe.frame.FrameOrchestrator;
+import net.vladimir.multiframe.frame.IFrameHandler;
 import net.vladimir.multiframe.references.Settings;
 
-public class FrameHandler implements IFrameHandler {
+public class DualFrameHandler implements IFrameHandler {
 
     private FrameOrchestrator orchestrator;
 
@@ -19,11 +22,12 @@ public class FrameHandler implements IFrameHandler {
     private int spawnedObstacles = 0;
     private EntityObstacle lastObstacle = null;
 
+    @Override
     public void init (FrameOrchestrator orchestrator) {
         this.orchestrator = orchestrator;
 
-        orchestrator.addFrame(new Frame(0, -(int)Settings.SCREEN_WIDTH/2, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
-        orchestrator.addFrame(new Frame(1, 0, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
+        orchestrator.addFrame(new DualFrame(0, -(int)Settings.SCREEN_WIDTH/2, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
+        orchestrator.addFrame(new DualFrame(1, 0, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
 
         EntityPlayer playerLeft = new EntityPlayer(orchestrator.getAssetManager(), 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, Settings.PLAYER_SIZE, Settings.PLAYER_SIZE, 1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-Settings.PLAYER_SIZE-Settings.WALL_WIDTH);
         EntityPlayer playerRight = new EntityPlayer(orchestrator.getAssetManager(), 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, Settings.PLAYER_SIZE, Settings.PLAYER_SIZE, -1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-Settings.PLAYER_SIZE-Settings.WALL_WIDTH);
@@ -32,6 +36,7 @@ public class FrameHandler implements IFrameHandler {
         orchestrator.getFrame(1).addPlayer(playerRight);
     }
 
+    @Override
     public void update() {
         if(Gdx.input.isKeyPressed(Input.Keys.A))
             dir--;
@@ -59,6 +64,7 @@ public class FrameHandler implements IFrameHandler {
         lastObstacle = null;
     }
 
+    @Override
     public void handle(Event event) {
         switch (event.getType()) {
             case TOUCH:

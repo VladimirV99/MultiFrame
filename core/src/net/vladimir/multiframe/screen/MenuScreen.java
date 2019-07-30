@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
-import net.vladimir.multiframe.frame.FrameHandler;
+import net.vladimir.multiframe.modes.dualframe.DualFrameHandler;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
 
@@ -51,7 +51,7 @@ public class MenuScreen extends ScreenAdapter {
         bPlay.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game, new FrameHandler()));
+                game.setScreen(new GameScreen(game, new DualFrameHandler()));
             }
         });
 
