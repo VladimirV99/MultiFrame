@@ -22,6 +22,7 @@ import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.frame.Frame;
 import net.vladimir.multiframe.frame.FrameHandler;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
+import net.vladimir.multiframe.frame.IFrameHandler;
 import net.vladimir.multiframe.frame.IGameListener;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
@@ -52,11 +53,13 @@ public class GameScreen implements Screen, IGameListener {
     private int score;
 
     private FrameOrchestrator frameOrchestrator;
+    private IFrameHandler frameHandler;
 
-    public GameScreen(MultiFrame game) {
+    public GameScreen(MultiFrame game, IFrameHandler frameHandler) {
         this.game = game;
         this.assetManager = game.getAssetManager();
         this.batch = game.getBatch();
+        this.frameHandler = frameHandler;
 
         this.ready = false;
 
@@ -78,7 +81,7 @@ public class GameScreen implements Screen, IGameListener {
 
         stage = new Stage(uiViewport);
 
-        init();
+        initOrchestrator();
         initGameOverPanel();
         initPausePanel();
 
@@ -90,17 +93,9 @@ public class GameScreen implements Screen, IGameListener {
         startGame();
     }
 
-    private void init() {
-        frameOrchestrator = new FrameOrchestrator(batch, viewport.getCamera(), assetManager, this, new FrameHandler());
-
-        frameOrchestrator.addFrame(new Frame(0, -(int)Settings.SCREEN_WIDTH/2, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
-        frameOrchestrator.addFrame(new Frame(1, 0, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
-
-        EntityPlayer playerLeft = new EntityPlayer(assetManager, 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, Settings.PLAYER_SIZE, Settings.PLAYER_SIZE, 1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-Settings.PLAYER_SIZE-Settings.WALL_WIDTH);
-        EntityPlayer playerRight = new EntityPlayer(assetManager, 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, Settings.PLAYER_SIZE, Settings.PLAYER_SIZE, -1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-Settings.PLAYER_SIZE-Settings.WALL_WIDTH);
-
-        frameOrchestrator.getFrame(0).addPlayer(playerLeft);
-        frameOrchestrator.getFrame(1).addPlayer(playerRight);
+    private void initOrchestrator() {
+        frameOrchestrator = new FrameOrchestrator(batch, viewport.getCamera(), assetManager, this, frameHandler);
+        frameOrchestrator.init();
     }
 
     private void initGameOverPanel() {

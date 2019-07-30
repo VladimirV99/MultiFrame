@@ -9,7 +9,7 @@ public class Settings {
     private static Preferences data;
     private static Preferences settings;
 
-    public static final String VERSION = "Alpha 9";
+    public static final String VERSION = "Alpha 10";
 
     public static final float MENU_WIDTH = 1280;
     public static final float MENU_HEIGHT = 720;
@@ -74,7 +74,6 @@ public class Settings {
         data.flush();
     }
 
-    //TODO Test Back Button
     public static void set(EnumSettings setting, int value, OptionsScreen screen){
         switch(setting){
             case PLAYER_SWITCH:

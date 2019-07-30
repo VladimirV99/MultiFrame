@@ -1,19 +1,18 @@
 package net.vladimir.multiframe.references;
 
 import com.badlogic.gdx.math.MathUtils;
-import net.vladimir.multiframe.screen.OptionsScreen;
 
 public enum EnumSettings {
     PLAYER_SWITCH("playerSwitch", "Player Control Switch", Settings.DEFAULT_PLAYER_SWITCH, -1, 100, 1),
     PLAYER_SPEED("playerSpeed", "Player Speed", Settings.DEFAULT_PLAYER_SPEED, 0, 2000, 50),
-    PLAYER_Y("playerY", "Player Y Position", (int)Settings.DEFAULT_PLAYER_Y, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_HEIGHT/2, 25),
+    PLAYER_Y("playerY", "Player Y Position", Settings.DEFAULT_PLAYER_Y, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_HEIGHT/2, 25),
     OBSTACLE_COUNT("obstacleCount", "Number of Obstacles", Settings.DEFAULT_OBSTACLE_COUNT, 0, 10, 1),
     OBSTACLE_SWITCH("obstacleSwitch", "Obstacle Side Switch", Settings.DEFAULT_OBSTACLE_SWITCH, -1, 100, 1),
     OBSTACLE_HEIGHT("obstacleHeight", "Obstacle Height", Settings.DEFAULT_OBSTACLE_HEIGHT, 20, 500, 10),
-    OBSTACLE_GAP("obstacleGap", "Obstacle Gap", (int)Settings.DEFAULT_OBSTACLE_GAP, 60, (int)Settings.SCREEN_WIDTH/2-2*Settings.WALL_WIDTH, 10),
+    OBSTACLE_GAP("obstacleGap", "Obstacle Gap", Settings.DEFAULT_OBSTACLE_GAP, 60, (int)Settings.SCREEN_WIDTH/2-2*Settings.WALL_WIDTH, 10),
     OBSTACLE_DISTANCE("obstacleDistance", "Distance Between Obstacles", Settings.DEFAULT_OBSTACLE_DISTANCE, 0, 1000, 50),
     OBSTACLE_SPEED("obstacleSpeed", "Obstacle Speed", Settings.DEFAULT_OBSTACLE_SPEED, 10, 600, 10),
-    WALL_WIDTH("wallWidth", "Wall Width", (int)Settings.DEFAULT_WALL_WIDTH, 5, (int)(Settings.SCREEN_WIDTH/2-Settings.OBSTACLE_GAP)/2, 5);
+    WALL_WIDTH("wallWidth", "Wall Width", Settings.DEFAULT_WALL_WIDTH, 5, (int)(Settings.SCREEN_WIDTH/2-Settings.OBSTACLE_GAP)/2, 5);
 
     private String id;
     private String name;
@@ -22,7 +21,7 @@ public enum EnumSettings {
     private int max;
     private int step;
 
-    private EnumSettings(String id, String name, int defaultValue, int min, int max, int step){
+    EnumSettings(String id, String name, int defaultValue, int min, int max, int step){
         this.id = id;
         this.name = name;
         this.defaultValue = defaultValue;
@@ -78,7 +77,7 @@ public enum EnumSettings {
                 }
                 break;
             case OBSTACLE_COUNT:
-                return MathUtils.ceil((float)(Settings.SCREEN_HEIGHT+Settings.OBSTACLE_HEIGHT)/(Settings.OBSTACLE_HEIGHT+Settings.OBSTACLE_DISTANCE));
+                return MathUtils.ceil((Settings.SCREEN_HEIGHT+Settings.OBSTACLE_HEIGHT)/(Settings.OBSTACLE_HEIGHT+Settings.OBSTACLE_DISTANCE));
             default:
                 break;
         }

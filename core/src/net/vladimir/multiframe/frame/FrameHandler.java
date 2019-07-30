@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 
 import net.vladimir.multiframe.entity.EntityObstacle;
+import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
 import net.vladimir.multiframe.references.Settings;
@@ -21,12 +22,14 @@ public class FrameHandler implements IFrameHandler {
     public void init (FrameOrchestrator orchestrator) {
         this.orchestrator = orchestrator;
 
-        dir = 0;
-        obstacleFrame = 0;
-        spawnedObstacles = 0;
-        lastObstacle = null;
+        orchestrator.addFrame(new Frame(0, -(int)Settings.SCREEN_WIDTH/2, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
+        orchestrator.addFrame(new Frame(1, 0, -(int)Settings.SCREEN_HEIGHT/2, (int)Settings.SCREEN_WIDTH/2, (int)Settings.SCREEN_HEIGHT));
 
-        spawnObstacle();
+        EntityPlayer playerLeft = new EntityPlayer(orchestrator.getAssetManager(), 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, Settings.PLAYER_SIZE, Settings.PLAYER_SIZE, 1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-Settings.PLAYER_SIZE-Settings.WALL_WIDTH);
+        EntityPlayer playerRight = new EntityPlayer(orchestrator.getAssetManager(), 295, (int)Settings.SCREEN_HEIGHT/2+Settings.PLAYER_Y, Settings.PLAYER_SIZE, Settings.PLAYER_SIZE, -1, Settings.WALL_WIDTH, (int)Settings.SCREEN_WIDTH/2-Settings.PLAYER_SIZE-Settings.WALL_WIDTH);
+
+        orchestrator.getFrame(0).addPlayer(playerLeft);
+        orchestrator.getFrame(1).addPlayer(playerRight);
     }
 
     public void update() {
@@ -46,6 +49,14 @@ public class FrameHandler implements IFrameHandler {
 
         if(lastObstacle==null || lastObstacle.getY()>Settings.OBSTACLE_DISTANCE/2)
             spawnObstacle();
+    }
+
+    @Override
+    public void reset() {
+        dir = 0;
+        obstacleFrame = 0;
+        spawnedObstacles = 0;
+        lastObstacle = null;
     }
 
     public void handle(Event event) {

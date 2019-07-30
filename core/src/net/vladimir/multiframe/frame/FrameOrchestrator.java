@@ -49,8 +49,12 @@ public class FrameOrchestrator {
         this.running = false;
     }
 
-    public void start() {
+    public void init() {
         frameHandler.init(this);
+    }
+
+    public void start() {
+        frameHandler.reset();
         running = true;
     }
 
@@ -98,6 +102,7 @@ public class FrameOrchestrator {
     }
 
     public void reset() {
+        frameHandler.reset();
         for(IFrame frame : frames.values()) {
             frame.reset();
         }

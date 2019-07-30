@@ -8,6 +8,8 @@ public interface IFrameHandler {
 
     void update();
 
+    void reset();
+
     void handle(Event event);
 
 }
