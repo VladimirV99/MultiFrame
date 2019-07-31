@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import net.vladimir.multiframe.event.Event;
+
 public abstract class Entity {
 
     private Texture texture;
@@ -38,6 +40,10 @@ public abstract class Entity {
         batch.draw(texture, offsetX+x, offsetY+y, width, height);
     }
 
+    public void onEvent(Event event) {
+
+    }
+
     public void setX(int x) {
         this.x = x;
         this.bounds.x = this.x;
@@ -48,14 +54,19 @@ public abstract class Entity {
         this.bounds.y = this.y;
     }
 
-    public void addX(int deltaX) {
+    public void add(int deltaX, int deltaY) {
         this.x += deltaX;
+        this.y += deltaY;
         this.bounds.x = this.x;
+        this.bounds.y = this.y;
+    }
+
+    public void addX(int deltaX) {
+        add(deltaX, 0);
     }
 
     public void addY(int deltaY) {
-        this.y += deltaY;
-        this.bounds.y = this.y;
+        add(0, deltaY);
     }
 
     public void setPosition(Vector2 position) {
@@ -94,6 +105,10 @@ public abstract class Entity {
 
     public Rectangle getBounds() {
         return this.bounds;
+    }
+
+    public Texture getTexture() {
+        return texture;
     }
 
 }

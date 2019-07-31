@@ -30,18 +30,10 @@ public class FrameOrchestrator {
 
     private boolean running;
 
-    public FrameOrchestrator(SpriteBatch batch, Camera camera, final AssetManager assetManager, IGameListener gameListener, IFrameHandler frameHandler) {
+    public FrameOrchestrator(SpriteBatch batch, Camera camera, AssetManager assetManager, IGameListener gameListener, IFrameHandler frameHandler) {
         this.batch = batch;
         this.camera = camera;
         this.assetManager = assetManager;
-
-        this.frames = new HashMap<Integer, IFrame>();
-        this.obstaclePool = new Pool<EntityObstacle>() {
-            @Override
-            protected EntityObstacle newObject() {
-                return new EntityObstacle(assetManager);
-            }
-        };
 
         this.gameListener = gameListener;
         this.frameHandler = frameHandler;
@@ -50,6 +42,8 @@ public class FrameOrchestrator {
     }
 
     public void init() {
+        this.frames = new HashMap<Integer, IFrame>();
+        this.obstaclePool = frameHandler.createObstaclePool();
         frameHandler.init(this);
     }
 

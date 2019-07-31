@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import net.vladimir.multiframe.assets.AssetDescriptors;
+import net.vladimir.multiframe.modes.dualframe.custom.DualFrameSettings;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.screen.MenuScreen;
 
@@ -19,6 +20,8 @@ public class MultiFrame extends Game {
 		loadAssets();
 
 		Settings.init();
+		DualFrameSettings.init();
+
 		setScreen(new MenuScreen(this));
 	}
 

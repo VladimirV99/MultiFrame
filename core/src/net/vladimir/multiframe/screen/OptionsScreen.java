@@ -13,8 +13,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
-import net.vladimir.multiframe.references.EnumSettings;
-import net.vladimir.multiframe.references.Settings;
+import net.vladimir.multiframe.modes.dualframe.custom.EnumDualFrameSettings;
+import net.vladimir.multiframe.references.References;
+import net.vladimir.multiframe.modes.dualframe.custom.DualFrameSettings;
 import net.vladimir.multiframe.utils.RenderUtils;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class OptionsScreen implements Screen {
     private Stage stage;
     private Skin skin;
 
-    private HashMap<EnumSettings, TextField> options = new HashMap<EnumSettings, TextField>();
+    private HashMap<EnumDualFrameSettings, TextField> options = new HashMap<EnumDualFrameSettings, TextField>();
 
     public OptionsScreen(MultiFrame game) {
         this.game = game;
@@ -39,7 +40,7 @@ public class OptionsScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(Settings.MENU_WIDTH,  Settings.MENU_HEIGHT), batch);
+        stage = new Stage(new FitViewport(References.MENU_WIDTH,  References.MENU_HEIGHT), batch);
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
         options.clear();
@@ -50,15 +51,15 @@ public class OptionsScreen implements Screen {
 //        table.setDebug(true);
 //        optionsTable.setDebug(true);
 
-        addNumberOption(optionsTable, EnumSettings.PLAYER_SWITCH, Settings.PLAYER_SWITCH);
-        addNumberOption(optionsTable, EnumSettings.PLAYER_SPEED, Settings.PLAYER_SPEED);
-        addNumberOption(optionsTable, EnumSettings.PLAYER_Y, Settings.PLAYER_Y);
-        addNumberOption(optionsTable, EnumSettings.OBSTACLE_SWITCH, Settings.OBSTACLE_SWITCH);
-        addNumberOption(optionsTable, EnumSettings.OBSTACLE_HEIGHT, Settings.OBSTACLE_HEIGHT);
-        addNumberOption(optionsTable, EnumSettings.OBSTACLE_GAP, Settings.OBSTACLE_GAP);
-        addNumberOption(optionsTable, EnumSettings.OBSTACLE_DISTANCE, Settings.OBSTACLE_DISTANCE);
-        addNumberOption(optionsTable, EnumSettings.OBSTACLE_SPEED, Settings.OBSTACLE_SPEED);
-        addNumberOption(optionsTable, EnumSettings.WALL_WIDTH, Settings.WALL_WIDTH);
+        addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_SWITCH, DualFrameSettings.PLAYER_SWITCH);
+        addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_SPEED, DualFrameSettings.PLAYER_SPEED);
+        addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_Y, DualFrameSettings.PLAYER_Y);
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_SWITCH, DualFrameSettings.OBSTACLE_SWITCH);
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_HEIGHT, DualFrameSettings.OBSTACLE_HEIGHT);
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_GAP, DualFrameSettings.OBSTACLE_GAP);
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_DISTANCE, DualFrameSettings.OBSTACLE_DISTANCE);
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_SPEED, DualFrameSettings.OBSTACLE_SPEED);
+        addNumberOption(optionsTable, EnumDualFrameSettings.WALL_WIDTH, DualFrameSettings.WALL_WIDTH);
 
         TextButton bMenu = new TextButton("Return To Menu", skin, "default");
         bMenu.addListener(new ChangeListener() {
@@ -72,7 +73,7 @@ public class OptionsScreen implements Screen {
         bReset.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                for(Map.Entry<EnumSettings, TextField> entry : options.entrySet()){
+                for(Map.Entry<EnumDualFrameSettings, TextField> entry : options.entrySet()){
                     setOption(entry.getKey(), entry.getKey().getDefaultValue());
                 }
             }
@@ -124,7 +125,7 @@ public class OptionsScreen implements Screen {
 
     }
 
-    private void addNumberOption(Table table, final EnumSettings setting, final int value){
+    private void addNumberOption(Table table, final EnumDualFrameSettings setting, final int value){
         final Label lText = new Label(setting.getName(), skin, "default");
 
         final TextField fValue = new TextField(String.valueOf(value), skin);
@@ -140,7 +141,7 @@ public class OptionsScreen implements Screen {
         bDecrease.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                setOption(setting, decreaseValue(Settings.get(setting), setting.getStep(), setting.getMin()));
+                setOption(setting, decreaseValue(DualFrameSettings.get(setting), setting.getStep(), setting.getMin()));
             }
         });
 
@@ -148,7 +149,7 @@ public class OptionsScreen implements Screen {
         bIncrease.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                setOption(setting, increaseValue(Settings.get(setting), setting.getStep(), setting.getMax()));
+                setOption(setting, increaseValue(DualFrameSettings.get(setting), setting.getStep(), setting.getMax()));
             }
         });
 
@@ -170,10 +171,10 @@ public class OptionsScreen implements Screen {
         options.put(setting, fValue);
     }
 
-    public void setOption(EnumSettings setting, int value){
+    public void setOption(EnumDualFrameSettings setting, int value){
         if(options.containsKey(setting)){
             options.get(setting).setText(String.valueOf(value));
-            Settings.set(setting, value, this);
+            DualFrameSettings.set(setting, value, this);
         }
     }
 

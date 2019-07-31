@@ -123,23 +123,6 @@ public abstract class Frame implements IFrame{
     }
 
     @Override
-    public void onEvent(Event event) {
-        switch (event.getType()) {
-            case MOVE_PLAYER:
-                for(EntityPlayer player : players) {
-                    player.setDirection(event.getData());
-                }
-                break;
-            case SWITCH_CONTROLS:
-                setFocus(!isInFocus());
-                for (EntityPlayer player : players) {
-                    player.switchDirection();
-                }
-                break;
-        }
-    }
-
-    @Override
     public int getId() {
         return id;
     }
@@ -167,6 +150,14 @@ public abstract class Frame implements IFrame{
     @Override
     public FrameOrchestrator getOrchestrator() {
         return orchestrator;
+    }
+
+    public List<EntityPlayer> getPlayers() {
+        return players;
+    }
+
+    public List<EntityObstacle> getObstacles() {
+        return obstacles;
     }
 
 }

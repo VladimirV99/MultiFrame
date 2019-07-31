@@ -21,6 +21,7 @@ import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
 import net.vladimir.multiframe.frame.IFrameHandler;
 import net.vladimir.multiframe.frame.IGameListener;
+import net.vladimir.multiframe.references.References;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
 
@@ -73,8 +74,8 @@ public class GameScreen implements Screen, IGameListener {
 
         playerTexture = assetManager.get(AssetDescriptors.PLAYER);
 
-        viewport = new FitViewport(Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
-        uiViewport = new FitViewport(Settings.MENU_WIDTH, Settings.MENU_HEIGHT);
+        viewport = new FitViewport(References.SCREEN_WIDTH, References.SCREEN_HEIGHT);
+        uiViewport = new FitViewport(References.MENU_WIDTH, References.MENU_HEIGHT);
 
         stage = new Stage(uiViewport);
 
@@ -101,7 +102,7 @@ public class GameScreen implements Screen, IGameListener {
         final Table gameOverMenu = new Table();
         gameOverMenu.background(new TextureRegionDrawable(playerTexture));
 
-        lHighScoreGameOver = new Label("high: " + Settings.HIGH_SCORE, skin, "white");
+        lHighScoreGameOver = new Label("", skin, "white");
 
         lScoreGameOver = new Label("0", skin, "white");
         lScoreGameOver.setFontScale(2);
@@ -161,7 +162,7 @@ public class GameScreen implements Screen, IGameListener {
         final Table pauseMenu = new Table();
         pauseMenu.background(new TextureRegionDrawable(playerTexture));
 
-        lScorePause = new Label("0", skin, "white");
+        lScorePause = new Label("", skin, "white");
         lScorePause.setFontScale(2);
 
         TextButton bResumePause = new TextButton("Resume", skin, "default");
@@ -301,10 +302,9 @@ public class GameScreen implements Screen, IGameListener {
 
     @Override
     public void gameOver(){
-        lHighScoreGameOver.setText("high: " + Settings.HIGH_SCORE);
-        Settings.setLastScore(score);
-        if(score > Settings.HIGH_SCORE)
-            Settings.setHighScore(score);
+        lHighScoreGameOver.setText("high: " + Settings.getHighScore(frameHandler.getId()));
+        if(score > Settings.getHighScore(frameHandler.getId()))
+            Settings.setHighScore(frameHandler.getId(), score);
         lScoreGameOver.setText(Integer.toString(score));
         gameOverPanel.setVisible(true);
     }

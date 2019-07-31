@@ -1,50 +1,57 @@
 package net.vladimir.multiframe.entity;
 
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 
-import net.vladimir.multiframe.assets.AssetDescriptors;
-import net.vladimir.multiframe.references.Settings;
+public abstract class EntityPlayer extends Entity {
 
-public class EntityPlayer extends Entity {
+    protected int dirX;
+    protected int dirY;
 
-    private int minX;
-    private int maxX;
-    private int multiplier;
-    private int dir;
+    protected int speed;
 
-    private int startMultiplier;
+    protected int minX;
+    protected int maxX;
+    protected int minY;
+    protected int maxY;
+
     private int startX;
+    private int startY;
 
-    public EntityPlayer(AssetManager assetManager, int x, int y, int width, int height, int multiplier, int minX, int maxX) {
-        super(assetManager.get(AssetDescriptors.PLAYER), x, y, width, height);
-        this.startX = x;
+    public EntityPlayer(Texture texture, int x, int y, int width, int height, int speed, int minX, int maxX, int minY, int maxY) {
+        super(texture, x, y, width, height);
+        this.speed = speed;
         this.minX = minX;
         this.maxX = maxX;
-        this.multiplier = multiplier;
-        this.startMultiplier = multiplier;
-        this.dir = 0;
+        this.minY = minY;
+        this.maxY = maxY;
+
+        this.startX = x;
+        this.startY = y;
+
+        this.dirX = 0;
+        this.dirY = 0;
     }
 
     @Override
     public void update(float delta) {
-        if(dir != 0) {
-            int deltaX = (int)(multiplier * dir * Settings.PLAYER_SPEED * delta);
-            setX(MathUtils.clamp(getX() + deltaX, minX, maxX));
-        }
+        int deltaX = 0;
+        int deltaY = 0;
+        if(dirX != 0)
+            deltaX = (int)(dirX * speed * delta);
+        if(dirY != 0)
+            deltaY = (int)(dirY * speed * delta);
+        add(MathUtils.clamp(getX() + deltaX, minX, maxX), MathUtils.clamp(getY() + deltaY, minY, maxY));
     }
 
     public void reset() {
         this.setX(startX);
-        this.multiplier = startMultiplier;
+        this.setY(startY);
     }
 
-    public void setDirection(int dir) {
-        this.dir = dir;
-    }
-
-    public void switchDirection(){
-        multiplier *= -1;
+    public void setDirection(int dirX, int dirY) {
+        this.dirX = dirX;
+        this.dirY = dirY;
     }
 
 }

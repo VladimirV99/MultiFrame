@@ -15,8 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
-import net.vladimir.multiframe.modes.dualframe.DualFrameHandler;
-import net.vladimir.multiframe.references.Settings;
+import net.vladimir.multiframe.references.References;
 import net.vladimir.multiframe.utils.RenderUtils;
 
 public class MenuScreen extends ScreenAdapter {
@@ -38,7 +37,7 @@ public class MenuScreen extends ScreenAdapter {
     public void show() {
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
-        stage = new Stage(new FitViewport(Settings.MENU_WIDTH, Settings.MENU_HEIGHT), batch);
+        stage = new Stage(new FitViewport(References.MENU_WIDTH, References.MENU_HEIGHT), batch);
 
         Table table = new Table();
 
@@ -51,15 +50,15 @@ public class MenuScreen extends ScreenAdapter {
         bPlay.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game, new DualFrameHandler()));
+                game.setScreen(new GameSelectScreen(game));
             }
         });
 
-        TextButton bOptions = new TextButton("Options", skin, "default");
+        TextButton bOptions = new TextButton("Options (Disabled)", skin, "default");
         bOptions.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new OptionsScreen(game));
+//                game.setScreen(new OptionsScreen(game));
             }
         });
 
@@ -76,7 +75,7 @@ public class MenuScreen extends ScreenAdapter {
         buttonTable.add(bOptions).height(70).fill().row();
         buttonTable.add(bExit).height(70).fill().row();
 
-        Label lVersion = new Label(Settings.VERSION, skin, "default");
+        Label lVersion = new Label(References.VERSION, skin, "default");
         lVersion.setFontScale(1.2f);
 
         table.add(buttonTable).expand().fill().row();
