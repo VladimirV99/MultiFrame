@@ -54,7 +54,7 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
-//        TextButton bOptions = new TextButton("Options (Disabled)", skin, "default");
+//        TextButton bOptions = new TextButton("Options", skin, "default");
 //        bOptions.addListener(new ChangeListener() {
 //            @Override
 //            public void changed(ChangeEvent event, Actor actor) {

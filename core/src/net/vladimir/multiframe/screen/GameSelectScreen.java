@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.modes.GameModes;
+import net.vladimir.multiframe.modes.dualframe.custom.DualFrameOptionsScreen;
 import net.vladimir.multiframe.references.References;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
@@ -91,7 +92,7 @@ public class GameSelectScreen extends ScreenAdapter {
         bEdit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new OptionsScreen(game));
+                game.setScreen(new DualFrameOptionsScreen(game));
             }
         });
         bEdit.setVisible(false);

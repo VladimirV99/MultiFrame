@@ -1,4 +1,4 @@
-package net.vladimir.multiframe.screen;
+package net.vladimir.multiframe.modes.dualframe.custom;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,15 +13,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
-import net.vladimir.multiframe.modes.dualframe.custom.EnumDualFrameSettings;
 import net.vladimir.multiframe.references.References;
-import net.vladimir.multiframe.modes.dualframe.custom.DualFrameSettings;
+import net.vladimir.multiframe.screen.GameSelectScreen;
 import net.vladimir.multiframe.utils.RenderUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class OptionsScreen implements Screen {
+public class DualFrameOptionsScreen implements Screen {
 
     private final MultiFrame game;
     private final AssetManager assetManager;
@@ -32,7 +31,7 @@ public class OptionsScreen implements Screen {
 
     private HashMap<EnumDualFrameSettings, TextField> options = new HashMap<EnumDualFrameSettings, TextField>();
 
-    public OptionsScreen(MultiFrame game) {
+    public DualFrameOptionsScreen(MultiFrame game) {
         this.game = game;
         this.assetManager = game.getAssetManager();
         this.batch = game.getBatch();

@@ -10,13 +10,15 @@ public class DualFrameSettings {
 
     private static Preferences settings;
 
+    private static String PREFERENCES_NAME = "multiframe_settings";
+
     private static DualFrameData currentData;
     private static DualFrameData newData;
 
     public static DualFrameData mediumModeData;
 
     public static void init(){
-        settings = Gdx.app.getPreferences("multiframe_settings");
+        settings = Gdx.app.getPreferences(PREFERENCES_NAME);
         currentData = new DualFrameData();
         currentData.playerSwitch = settings.getInteger(EnumDualFrameSettings.PLAYER_SWITCH.getId(), EnumDualFrameSettings.PLAYER_SWITCH.getDefaultValue());
         currentData.obstacleSpeed = settings.getInteger(EnumDualFrameSettings.PLAYER_SPEED.getId(), EnumDualFrameSettings.PLAYER_SPEED.getDefaultValue());
@@ -67,24 +69,6 @@ public class DualFrameSettings {
         }
     }
 
-    public static void save() {
-        currentData.copy(newData);
-        settings.putInteger(EnumDualFrameSettings.PLAYER_SWITCH.getId(), currentData.playerSwitch);
-        settings.putInteger(EnumDualFrameSettings.PLAYER_SPEED.getId(), currentData.playerSpeed);
-        settings.putInteger(EnumDualFrameSettings.PLAYER_Y.getId(), currentData.playerY);
-        settings.putInteger(EnumDualFrameSettings.OBSTACLE_SWITCH.getId(), currentData.obstacleSwitch);
-        settings.putInteger(EnumDualFrameSettings.OBSTACLE_HEIGHT.getId(), currentData.obstacleHeight);
-        settings.putInteger(EnumDualFrameSettings.OBSTACLE_GAP.getId(), currentData.obstacleGap);
-        settings.putInteger(EnumDualFrameSettings.OBSTACLE_DISTANCE.getId(), currentData.obstacleDistance);
-        settings.putInteger(EnumDualFrameSettings.OBSTACLE_SPEED.getId(), currentData.obstacleSpeed);
-        settings.putInteger(EnumDualFrameSettings.WALL_WIDTH.getId(), currentData.wallWidth);
-        settings.flush();
-    }
-
-    public static void discard() {
-        newData.copy(currentData);
-    }
-
     public static int get(EnumDualFrameSettings setting){
         switch(setting){
             case PLAYER_SWITCH:
@@ -107,6 +91,24 @@ public class DualFrameSettings {
                 return newData.wallWidth;
         }
         return 0;
+    }
+
+    public static void save() {
+        currentData.copy(newData);
+        settings.putInteger(EnumDualFrameSettings.PLAYER_SWITCH.getId(), currentData.playerSwitch);
+        settings.putInteger(EnumDualFrameSettings.PLAYER_SPEED.getId(), currentData.playerSpeed);
+        settings.putInteger(EnumDualFrameSettings.PLAYER_Y.getId(), currentData.playerY);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_SWITCH.getId(), currentData.obstacleSwitch);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_HEIGHT.getId(), currentData.obstacleHeight);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_GAP.getId(), currentData.obstacleGap);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_DISTANCE.getId(), currentData.obstacleDistance);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_SPEED.getId(), currentData.obstacleSpeed);
+        settings.putInteger(EnumDualFrameSettings.WALL_WIDTH.getId(), currentData.wallWidth);
+        settings.flush();
+    }
+
+    public static void discard() {
+        newData.copy(currentData);
     }
 
     public static DualFrameData getCurrentData() {
