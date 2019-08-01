@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -20,7 +21,11 @@ import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.modes.GameModes;
 import net.vladimir.multiframe.references.References;
+import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameSelectScreen extends ScreenAdapter {
 
@@ -33,6 +38,8 @@ public class GameSelectScreen extends ScreenAdapter {
 
     private GameModes gameMode = null;
 
+    private List<Button> buttons;
+
     private Label lModeTitle;
     private Label lModeDescription;
 
@@ -42,6 +49,8 @@ public class GameSelectScreen extends ScreenAdapter {
         this.game = game;
         this.assetManager = game.getAssetManager();
         this.batch = game.getBatch();
+
+        this.buttons = new ArrayList<Button>();
     }
 
     @Override
@@ -62,6 +71,7 @@ public class GameSelectScreen extends ScreenAdapter {
         gameList.defaults().pad(10);
 
         ButtonGroup<TextButton> gameListGroup = new ButtonGroup<TextButton>();
+        gameListGroup.setMinCheckCount(0);
 
         addGameMode(gameList, gameListGroup, GameModes.DUALFRAME_MEDIUM);
         addGameMode(gameList, gameListGroup, GameModes.DUALFRAME_CUSTOM);
@@ -114,9 +124,15 @@ public class GameSelectScreen extends ScreenAdapter {
         stage.addActor(table);
 
         Gdx.input.setInputProcessor(stage);
+
+        selectMode(Settings.LAST_SELECTION);
+        if(Settings.LAST_SELECTION>=0 && Settings.LAST_SELECTION<buttons.size())
+            buttons.get(Settings.LAST_SELECTION).toggle();
+        gameListGroup.setMinCheckCount(1);
     }
 
     private void addGameMode(Table table, ButtonGroup<TextButton> group, final GameModes mode) {
+        final int id = buttons.size();
         final TextButton button = new TextButton(mode.getTitle(), skin, "toggle");
         button.addListener(new ChangeListener() {
             @Override
@@ -131,10 +147,22 @@ public class GameSelectScreen extends ScreenAdapter {
                         bEdit.setVisible(false);
                 }
                 gameMode = mode;
+                selectMode(id);
             }
         });
         group.add(button);
+        buttons.add(button);
         table.add(button).height(100).width(400).row();
+    }
+
+    private void selectMode(int id) {
+        if(Settings.LAST_SELECTION >= 0) {
+            if (Settings.LAST_SELECTION < buttons.size()) {
+                Settings.setLastSelection(id);
+            } else {
+                Settings.setLastSelection(buttons.size()-1);
+            }
+        }
     }
 
     @Override
