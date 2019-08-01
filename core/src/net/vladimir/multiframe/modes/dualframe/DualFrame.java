@@ -8,15 +8,17 @@ import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.frame.Frame;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
-import net.vladimir.multiframe.modes.dualframe.custom.DualFrameSettings;
 
 public class DualFrame extends Frame {
+
+    private DualFrameData data;
 
     private Texture selectorTexture;
     private Texture wallTexture;
 
-    public DualFrame(int id, int x, int y, int width, int height) {
+    public DualFrame(int id, int x, int y, int width, int height, DualFrameData data) {
         super(id, x, y, width, height);
+        this.data = data;
     }
 
     @Override
@@ -29,8 +31,8 @@ public class DualFrame extends Frame {
     @Override
     public void render(SpriteBatch batch, float delta) {
         super.render(batch, delta);
-        batch.draw(wallTexture, getX(), getY(), DualFrameSettings.WALL_WIDTH, getHeight());
-        batch.draw(wallTexture, getX()+getWidth()- DualFrameSettings.WALL_WIDTH, getY(), DualFrameSettings.WALL_WIDTH, getHeight());
+        batch.draw(wallTexture, getX(), getY(), data.wallWidth, getHeight());
+        batch.draw(wallTexture, getX()+getWidth()-data.wallWidth, getY(), data.wallWidth, getHeight());
         if(isInFocus()) {
             batch.draw(selectorTexture, getX(), getY()+getHeight()-20, getWidth(), 20);
         }

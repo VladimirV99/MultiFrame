@@ -2,98 +2,115 @@ package net.vladimir.multiframe.modes.dualframe.custom;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import net.vladimir.multiframe.screen.OptionsScreen;
+
+import net.vladimir.multiframe.modes.dualframe.DualFrameData;
+import net.vladimir.multiframe.references.References;
 
 public class DualFrameSettings {
 
     private static Preferences settings;
 
-    public static int PLAYER_SWITCH;
-    public static int PLAYER_SPEED;
-    public static int PLAYER_Y;
-    public static int PLAYER_SIZE = 50;
-    public static int OBSTACLE_SWITCH;
-    public static int OBSTACLE_HEIGHT;
-    public static int OBSTACLE_GAP;
-    public static int OBSTACLE_DISTANCE;
-    public static int OBSTACLE_SPEED;
-    public static int WALL_WIDTH;
+    private static DualFrameData currentData;
+    private static DualFrameData newData;
+
+    public static DualFrameData mediumModeData;
 
     public static void init(){
         settings = Gdx.app.getPreferences("multiframe_settings");
-        PLAYER_SWITCH = settings.getInteger(EnumDualFrameSettings.PLAYER_SWITCH.getId(), EnumDualFrameSettings.PLAYER_SWITCH.getDefaultValue());
-        PLAYER_SPEED = settings.getInteger(EnumDualFrameSettings.PLAYER_SPEED.getId(), EnumDualFrameSettings.PLAYER_SPEED.getDefaultValue());
-        PLAYER_Y = settings.getInteger(EnumDualFrameSettings.PLAYER_Y.getId(), EnumDualFrameSettings.PLAYER_Y.getDefaultValue());
-        OBSTACLE_SWITCH = settings.getInteger(EnumDualFrameSettings.OBSTACLE_SWITCH.getId(), EnumDualFrameSettings.OBSTACLE_SWITCH.getDefaultValue());
-        OBSTACLE_HEIGHT = settings.getInteger(EnumDualFrameSettings.OBSTACLE_HEIGHT.getId(), EnumDualFrameSettings.OBSTACLE_HEIGHT.getDefaultValue());
-        OBSTACLE_GAP = settings.getInteger(EnumDualFrameSettings.OBSTACLE_GAP.getId(), EnumDualFrameSettings.OBSTACLE_GAP.getDefaultValue());
-        OBSTACLE_DISTANCE = settings.getInteger(EnumDualFrameSettings.OBSTACLE_DISTANCE.getId(), EnumDualFrameSettings.OBSTACLE_DISTANCE.getDefaultValue());
-        OBSTACLE_SPEED = settings.getInteger(EnumDualFrameSettings.OBSTACLE_SPEED.getId(), EnumDualFrameSettings.OBSTACLE_SPEED.getDefaultValue());
-        WALL_WIDTH = settings.getInteger(EnumDualFrameSettings.WALL_WIDTH.getId(), EnumDualFrameSettings.WALL_WIDTH.getDefaultValue());
+        currentData = new DualFrameData();
+        currentData.playerSwitch = settings.getInteger(EnumDualFrameSettings.PLAYER_SWITCH.getId(), EnumDualFrameSettings.PLAYER_SWITCH.getDefaultValue());
+        currentData.obstacleSpeed = settings.getInteger(EnumDualFrameSettings.PLAYER_SPEED.getId(), EnumDualFrameSettings.PLAYER_SPEED.getDefaultValue());
+        currentData.playerY = settings.getInteger(EnumDualFrameSettings.PLAYER_Y.getId(), EnumDualFrameSettings.PLAYER_Y.getDefaultValue());
+        currentData.playerSize = 50;
+        currentData.obstacleSwitch = settings.getInteger(EnumDualFrameSettings.OBSTACLE_SWITCH.getId(), EnumDualFrameSettings.OBSTACLE_SWITCH.getDefaultValue());
+        currentData.obstacleHeight = settings.getInteger(EnumDualFrameSettings.OBSTACLE_HEIGHT.getId(), EnumDualFrameSettings.OBSTACLE_HEIGHT.getDefaultValue());
+        currentData.obstacleGap = settings.getInteger(EnumDualFrameSettings.OBSTACLE_GAP.getId(), EnumDualFrameSettings.OBSTACLE_GAP.getDefaultValue());
+        currentData.obstacleDistance = settings.getInteger(EnumDualFrameSettings.OBSTACLE_DISTANCE.getId(), EnumDualFrameSettings.OBSTACLE_DISTANCE.getDefaultValue());
+        currentData.obstacleSpeed = settings.getInteger(EnumDualFrameSettings.OBSTACLE_SPEED.getId(), EnumDualFrameSettings.OBSTACLE_SPEED.getDefaultValue());
+        currentData.wallWidth = settings.getInteger(EnumDualFrameSettings.WALL_WIDTH.getId(), EnumDualFrameSettings.WALL_WIDTH.getDefaultValue());
+
+        newData = new DualFrameData();
+        newData.copy(currentData);
+
+        mediumModeData = new DualFrameData(1, 800, References.SCREEN_HEIGHT/2-25, 50, -1, 100, 150, 300, 300, 20);
     }
 
-    public static void set(EnumDualFrameSettings setting, int value, OptionsScreen screen){
+    public static void set(EnumDualFrameSettings setting, int value){
         switch(setting){
             case PLAYER_SWITCH:
-                PLAYER_SWITCH = value;
+                newData.playerSwitch = value;
                 break;
             case PLAYER_SPEED:
-                PLAYER_SPEED = value;
+                newData.playerSpeed = value;
                 break;
             case PLAYER_Y:
-                PLAYER_Y = value;
+                newData.playerY = value;
                 break;
             case OBSTACLE_SWITCH:
-                OBSTACLE_SWITCH = value;
+                newData.obstacleSwitch = value;
                 break;
             case OBSTACLE_HEIGHT:
-                OBSTACLE_HEIGHT = value;
+                newData.obstacleHeight = value;
                 break;
             case OBSTACLE_GAP:
-                OBSTACLE_GAP = value;
-                int wallWidth = EnumDualFrameSettings.WALL_WIDTH.recalculate();
-                if(wallWidth != 0)
-                    screen.setOption(EnumDualFrameSettings.WALL_WIDTH, wallWidth);
+                newData.obstacleGap = value;
                 break;
             case OBSTACLE_DISTANCE:
-                OBSTACLE_DISTANCE = value;
+                newData.obstacleDistance = value;
                 break;
             case OBSTACLE_SPEED:
-                OBSTACLE_SPEED = value;
+                newData.obstacleSpeed = value;
                 break;
             case WALL_WIDTH:
-                WALL_WIDTH = value;
-                int obstacleGap = EnumDualFrameSettings.OBSTACLE_GAP.recalculate();
-                if(obstacleGap != 0)
-                    screen.setOption(EnumDualFrameSettings.OBSTACLE_GAP, obstacleGap);
+                newData.wallWidth = value;
                 break;
         }
-        settings.putInteger(setting.getId(), value);
+    }
+
+    public static void save() {
+        currentData.copy(newData);
+        settings.putInteger(EnumDualFrameSettings.PLAYER_SWITCH.getId(), currentData.playerSwitch);
+        settings.putInteger(EnumDualFrameSettings.PLAYER_SPEED.getId(), currentData.playerSpeed);
+        settings.putInteger(EnumDualFrameSettings.PLAYER_Y.getId(), currentData.playerY);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_SWITCH.getId(), currentData.obstacleSwitch);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_HEIGHT.getId(), currentData.obstacleHeight);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_GAP.getId(), currentData.obstacleGap);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_DISTANCE.getId(), currentData.obstacleDistance);
+        settings.putInteger(EnumDualFrameSettings.OBSTACLE_SPEED.getId(), currentData.obstacleSpeed);
+        settings.putInteger(EnumDualFrameSettings.WALL_WIDTH.getId(), currentData.wallWidth);
         settings.flush();
+    }
+
+    public static void discard() {
+        newData.copy(currentData);
     }
 
     public static int get(EnumDualFrameSettings setting){
         switch(setting){
             case PLAYER_SWITCH:
-                return PLAYER_SWITCH;
+                return newData.playerSwitch;
             case PLAYER_SPEED:
-                return PLAYER_SPEED;
+                return newData.playerSpeed;
             case PLAYER_Y:
-                return PLAYER_Y;
+                return newData.playerY;
             case OBSTACLE_SWITCH:
-                return OBSTACLE_SWITCH;
+                return newData.obstacleSwitch;
             case OBSTACLE_HEIGHT:
-                return OBSTACLE_HEIGHT;
+                return newData.obstacleHeight;
             case OBSTACLE_GAP:
-                return OBSTACLE_GAP;
+                return newData.obstacleGap;
             case OBSTACLE_DISTANCE:
-                return OBSTACLE_DISTANCE;
+                return newData.obstacleDistance;
             case OBSTACLE_SPEED:
-                return OBSTACLE_SPEED;
+                return newData.obstacleSpeed;
             case WALL_WIDTH:
-                return WALL_WIDTH;
+                return newData.wallWidth;
         }
         return 0;
+    }
+
+    public static DualFrameData getCurrentData() {
+        return currentData;
     }
 
 }

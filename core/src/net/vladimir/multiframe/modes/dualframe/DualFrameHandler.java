@@ -13,22 +13,13 @@ import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
 import net.vladimir.multiframe.frame.IFrameHandler;
-import net.vladimir.multiframe.modes.dualframe.custom.DualFrameSettings;
 import net.vladimir.multiframe.references.References;
 
 public class DualFrameHandler implements IFrameHandler {
 
     private String id;
 
-    private int playerSwitch;
-    private int playerSpeed;
-    private int playerY;
-    private int obstacleSwitch;
-    private int obstacleHeight;
-    private int obstacleGap;
-    private int obstacleDistance;
-    private int obstacleSpeed;
-    private int wallWidth;
+    private DualFrameData data;
 
     private FrameOrchestrator orchestrator;
 
@@ -37,30 +28,20 @@ public class DualFrameHandler implements IFrameHandler {
     private int spawnedObstacles = 0;
     private EntityDualFrameObstacle lastObstacle = null;
 
-    public DualFrameHandler(String id, int playerSwitch, int playerSpeed, int playerY,
-                            int obstacleSwitch, int obstacleHeight, int obstacleGap, int obstacleDistance,
-                            int obstacleSpeed, int wallWidth) {
+    public DualFrameHandler(String id, DualFrameData data) {
         this.id = id;
-        this.playerSwitch = playerSwitch;
-        this.playerSpeed = playerSpeed;
-        this.playerY = playerY;
-        this.obstacleSwitch = obstacleSwitch;
-        this.obstacleHeight = obstacleHeight;
-        this.obstacleGap = obstacleGap;
-        this.obstacleDistance = obstacleDistance;
-        this.obstacleSpeed = obstacleSpeed;
-        this.wallWidth = wallWidth;
+        this.data = data;
     }
 
     @Override
     public void init (FrameOrchestrator orchestrator) {
         this.orchestrator = orchestrator;
 
-        orchestrator.addFrame(new DualFrame(0, -References.SCREEN_WIDTH/2, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT));
-        orchestrator.addFrame(new DualFrame(1, 0, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT));
+        orchestrator.addFrame(new DualFrame(0, -References.SCREEN_WIDTH/2, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT, data));
+        orchestrator.addFrame(new DualFrame(1, 0, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT, data));
 
-        EntityDualFramePlayer playerLeft = new EntityDualFramePlayer(orchestrator.getAssetManager().get(AssetDescriptors.PLAYER), References.SCREEN_WIDTH/4- DualFrameSettings.PLAYER_SIZE/2, playerY, DualFrameSettings.PLAYER_SIZE, DualFrameSettings.PLAYER_SIZE, playerSpeed, 1, wallWidth,References.SCREEN_WIDTH/2-DualFrameSettings.PLAYER_SIZE-wallWidth);
-        EntityDualFramePlayer playerRight = new EntityDualFramePlayer(orchestrator.getAssetManager().get(AssetDescriptors.PLAYER), References.SCREEN_WIDTH/4- DualFrameSettings.PLAYER_SIZE/2, playerY, DualFrameSettings.PLAYER_SIZE, DualFrameSettings.PLAYER_SIZE, playerSpeed,-1, wallWidth, References.SCREEN_WIDTH/2-DualFrameSettings.PLAYER_SIZE-wallWidth);
+        EntityDualFramePlayer playerLeft = new EntityDualFramePlayer(orchestrator.getAssetManager().get(AssetDescriptors.PLAYER), References.SCREEN_WIDTH/4-data.playerSize/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed, 1, data.wallWidth,References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
+        EntityDualFramePlayer playerRight = new EntityDualFramePlayer(orchestrator.getAssetManager().get(AssetDescriptors.PLAYER), References.SCREEN_WIDTH/4-data.playerY/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed,-1, data.wallWidth, References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
 
         orchestrator.getFrame(0).addPlayer(playerLeft);
         orchestrator.getFrame(1).addPlayer(playerRight);
@@ -72,7 +53,7 @@ public class DualFrameHandler implements IFrameHandler {
             @Override
             protected EntityObstacle newObject() {
                 return new EntityDualFrameObstacle(orchestrator.getAssetManager().get(AssetDescriptors.OBSTACLE),
-                        obstacleSpeed, obstacleGap, obstacleHeight, wallWidth, playerY);
+                        data.obstacleSpeed, data.obstacleGap, data.obstacleHeight, data.wallWidth, data.playerY);
             }
         };
     }
@@ -93,7 +74,7 @@ public class DualFrameHandler implements IFrameHandler {
 
         dir = 0;
 
-        if(lastObstacle==null || lastObstacle.getY()>obstacleDistance/2)
+        if(lastObstacle==null || lastObstacle.getY()>data.obstacleDistance/2)
             spawnObstacle();
     }
 
@@ -116,13 +97,13 @@ public class DualFrameHandler implements IFrameHandler {
                 break;
             case OBSTACLE_PASS:
                 orchestrator.getGameListener().incrementScore();
-                if(playerSwitch==-1){
+                if(data.playerSwitch==-1){
                     int rand = MathUtils.random(0, 2);
                     if(rand==1)
                         orchestrator.raiseEvent(new Event(EventType.SWITCH_CONTROLS, 0));
                 }else{
-                    if(playerSwitch!=0) {
-                        if (spawnedObstacles % playerSwitch == 0)
+                    if(data.playerSwitch!=0) {
+                        if (spawnedObstacles % data.playerSwitch == 0)
                             orchestrator.raiseEvent(new Event(EventType.SWITCH_CONTROLS, 0));
                     }
                 }
@@ -135,9 +116,9 @@ public class DualFrameHandler implements IFrameHandler {
     }
 
     private void spawnObstacle() {
-        int y = -obstacleHeight - 100;
+        int y = -data.obstacleHeight - 100;
         if (lastObstacle != null)
-            y = lastObstacle.getY() - obstacleDistance - obstacleHeight;
+            y = lastObstacle.getY() - data.obstacleDistance - data.obstacleHeight;
 
         EntityDualFrameObstacle o = (EntityDualFrameObstacle)orchestrator.getObstaclePool().obtain();
         int nextFrame = getNextObstacleFrame();
@@ -148,12 +129,12 @@ public class DualFrameHandler implements IFrameHandler {
     }
 
     private int getNextObstacleFrame(){
-        if(obstacleSwitch==-1) {
+        if(data.obstacleSwitch==-1) {
             int rand = MathUtils.random(0, 2);
             if(rand==1)
                 obstacleFrame  = (obstacleFrame+1)%2;
         } else {
-            if(obstacleSwitch!=0 && (spawnedObstacles+1)%obstacleSwitch==0)
+            if(data.obstacleSwitch!=0 && (spawnedObstacles+1)%data.obstacleSwitch==0)
                 obstacleFrame  = (obstacleFrame+1)%2;
         }
         return obstacleFrame;

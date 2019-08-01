@@ -6,13 +6,13 @@ public enum EnumDualFrameSettings {
 
     PLAYER_SWITCH("playerSwitch", "Player Control Switch", 1, -1, 100, 1),
     PLAYER_SPEED("playerSpeed", "Player Speed", 800, 200, 1800, 50),
-    PLAYER_Y("playerY", "Player Y Position", References.SCREEN_HEIGHT/2-25, 50, References.SCREEN_HEIGHT- DualFrameSettings.PLAYER_SIZE, 25),
+    PLAYER_Y("playerY", "Player Y Position", References.SCREEN_HEIGHT/2-25, 50, References.SCREEN_HEIGHT- 50, 25),
     OBSTACLE_SWITCH("obstacleSwitch", "Obstacle Side Switch", -1, -1, 100, 1),
     OBSTACLE_HEIGHT("obstacleHeight", "Obstacle Height", 100, 20, 500, 10),
-    OBSTACLE_GAP("obstacleGap", "Obstacle Gap", 150, 60, References.SCREEN_WIDTH/2-2* DualFrameSettings.WALL_WIDTH, 10),
+    OBSTACLE_GAP("obstacleGap", "Obstacle Gap", 150, 60, References.SCREEN_WIDTH/4/*-2*DualFrameSettings.WALL_WIDTH*/, 10),
     OBSTACLE_DISTANCE("obstacleDistance", "Distance Between Obstacles", 300, 0, 1000, 50),
     OBSTACLE_SPEED("obstacleSpeed", "Obstacle Speed", 300, 10, 600, 10),
-    WALL_WIDTH("wallWidth", "Wall Width", 20, 5, (References.SCREEN_WIDTH/2- DualFrameSettings.OBSTACLE_GAP)/2, 5);
+    WALL_WIDTH("wallWidth", "Wall Width", 20, 5, (References.SCREEN_WIDTH/8) /*2- DualFrameSettings.OBSTACLE_GAP)/2*/, 5);
 
     private String id;
     private String name;
@@ -52,34 +52,6 @@ public enum EnumDualFrameSettings {
 
     public int getStep() {
         return step;
-    }
-
-    private void setMin(int min){
-        this.min = min;
-    }
-
-    private void setMax(int max){
-        this.max = max;
-    }
-
-    public int recalculate(){
-        switch(this){
-            case WALL_WIDTH:
-                WALL_WIDTH.setMax((References.SCREEN_WIDTH/2-DualFrameSettings.OBSTACLE_GAP)/2);
-                if(DualFrameSettings.WALL_WIDTH>WALL_WIDTH.getMax()) {
-                    return WALL_WIDTH.getMax();
-                }
-                break;
-            case OBSTACLE_GAP:
-                OBSTACLE_GAP.setMax(References.SCREEN_WIDTH/2-2*DualFrameSettings.WALL_WIDTH);
-                if(DualFrameSettings.OBSTACLE_GAP>OBSTACLE_GAP.getMax()) {
-                    return OBSTACLE_GAP.getMax();
-                }
-                break;
-            default:
-                break;
-        }
-        return 0;
     }
 
 }

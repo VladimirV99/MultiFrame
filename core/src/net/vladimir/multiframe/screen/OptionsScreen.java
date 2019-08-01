@@ -51,25 +51,35 @@ public class OptionsScreen implements Screen {
 //        table.setDebug(true);
 //        optionsTable.setDebug(true);
 
-        addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_SWITCH, DualFrameSettings.PLAYER_SWITCH);
-        addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_SPEED, DualFrameSettings.PLAYER_SPEED);
-        addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_Y, DualFrameSettings.PLAYER_Y);
-        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_SWITCH, DualFrameSettings.OBSTACLE_SWITCH);
-        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_HEIGHT, DualFrameSettings.OBSTACLE_HEIGHT);
-        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_GAP, DualFrameSettings.OBSTACLE_GAP);
-        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_DISTANCE, DualFrameSettings.OBSTACLE_DISTANCE);
-        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_SPEED, DualFrameSettings.OBSTACLE_SPEED);
-        addNumberOption(optionsTable, EnumDualFrameSettings.WALL_WIDTH, DualFrameSettings.WALL_WIDTH);
+        addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_SWITCH, DualFrameSettings.get(EnumDualFrameSettings.PLAYER_SWITCH));
+        addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_SPEED, DualFrameSettings.get(EnumDualFrameSettings.PLAYER_SPEED));
+        addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_Y, DualFrameSettings.get(EnumDualFrameSettings.PLAYER_Y));
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_SWITCH, DualFrameSettings.get(EnumDualFrameSettings.OBSTACLE_SWITCH));
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_HEIGHT, DualFrameSettings.get(EnumDualFrameSettings.OBSTACLE_HEIGHT));
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_GAP, DualFrameSettings.get(EnumDualFrameSettings.OBSTACLE_GAP));
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_DISTANCE, DualFrameSettings.get(EnumDualFrameSettings.OBSTACLE_DISTANCE));
+        addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_SPEED, DualFrameSettings.get(EnumDualFrameSettings.OBSTACLE_SPEED));
+        addNumberOption(optionsTable, EnumDualFrameSettings.WALL_WIDTH, DualFrameSettings.get(EnumDualFrameSettings.WALL_WIDTH));
 
-        TextButton bMenu = new TextButton("Return To Menu", skin, "default");
-        bMenu.addListener(new ChangeListener() {
+        TextButton bBack = new TextButton("Back", skin, "default");
+        bBack.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MenuScreen(game));
+                DualFrameSettings.discard();
+                game.setScreen(new GameSelectScreen(game));
             }
         });
 
-        TextButton bReset = new TextButton("Reset Defaults", skin, "default");
+        TextButton bSave = new TextButton("Save", skin, "default");
+        bSave.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                DualFrameSettings.save();
+                game.setScreen(new GameSelectScreen(game));
+            }
+        });
+
+        TextButton bReset = new TextButton("Reset", skin, "default");
         bReset.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -81,9 +91,11 @@ public class OptionsScreen implements Screen {
 
         optionsTable.pack();
 
-        table.add(optionsTable).expandY().fillY().colspan(2).row();
-        table.add(bMenu).size(400, 60).pad(10).expandX();
-        table.add(bReset).size(400, 60).pad(10).expandX();
+        table.defaults().pad(10);
+        table.add(optionsTable).expandY().fillY().colspan(3).row();
+        table.add(bBack).height(50).expandX().fillX();
+        table.add(bSave).height(50).expandX().fillX();
+        table.add(bReset).height(50).expandX().fillX();
 
         table.setFillParent(true);
         table.pack();
@@ -174,7 +186,7 @@ public class OptionsScreen implements Screen {
     public void setOption(EnumDualFrameSettings setting, int value){
         if(options.containsKey(setting)){
             options.get(setting).setText(String.valueOf(value));
-            DualFrameSettings.set(setting, value, this);
+            DualFrameSettings.set(setting, value);
         }
     }
 

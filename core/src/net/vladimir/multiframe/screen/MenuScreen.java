@@ -54,13 +54,13 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
-        TextButton bOptions = new TextButton("Options (Disabled)", skin, "default");
-        bOptions.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
+//        TextButton bOptions = new TextButton("Options (Disabled)", skin, "default");
+//        bOptions.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
 //                game.setScreen(new OptionsScreen(game));
-            }
-        });
+//            }
+//        });
 
         TextButton bExit = new TextButton("Exit", skin, "default");
         bExit.addListener(new ChangeListener() {
@@ -72,7 +72,7 @@ public class MenuScreen extends ScreenAdapter {
 
         buttonTable.defaults().pad(15, 100, 15, 100);
         buttonTable.add(bPlay).height(70).expandX().fill().row();
-        buttonTable.add(bOptions).height(70).fill().row();
+//        buttonTable.add(bOptions).height(70).fill().row();
         buttonTable.add(bExit).height(70).fill().row();
 
         Label lVersion = new Label(References.VERSION, skin, "default");
