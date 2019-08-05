@@ -1,9 +1,8 @@
 package net.vladimir.multiframe.modes.dualframe;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.frame.Frame;
@@ -13,19 +12,19 @@ public class DualFrame extends Frame {
 
     private DualFrameData data;
 
-    private Texture selectorTexture;
-    private Texture wallTexture;
+    private TextureRegion selectorTexture;
+    private TextureRegion wallTexture;
 
-    public DualFrame(int id, int x, int y, int width, int height, DualFrameData data) {
+    public DualFrame(int id, int x, int y, int width, int height, TextureRegion selectorTexture, TextureRegion wallTexture, DualFrameData data) {
         super(id, x, y, width, height);
+        this.selectorTexture = selectorTexture;
+        this.wallTexture = wallTexture;
         this.data = data;
     }
 
     @Override
     public void init(FrameOrchestrator orchestrator) {
         super.init(orchestrator);
-        this.selectorTexture = orchestrator.getAssetManager().get(AssetDescriptors.SELECTOR);
-        this.wallTexture = orchestrator.getAssetManager().get(AssetDescriptors.WALL);
     }
 
     @Override

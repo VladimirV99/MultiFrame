@@ -1,7 +1,7 @@
 package net.vladimir.multiframe.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -9,7 +9,7 @@ import net.vladimir.multiframe.event.Event;
 
 public abstract class Entity {
 
-    private Texture texture;
+    private TextureRegion texture;
     private int x;
     private int y;
     private int width;
@@ -17,15 +17,15 @@ public abstract class Entity {
 
     private Rectangle bounds;
 
-    public Entity(Texture texture, Vector2 position, Vector2 size) {
+    public Entity(TextureRegion texture, Vector2 position, Vector2 size) {
         this(texture, (int)position.x, (int)position.y, (int)size.x, (int)size.y);
     }
 
-    public Entity(Texture texture) {
+    public Entity(TextureRegion texture) {
         this(texture, 0, 0, 0, 0);
     }
 
-    public Entity(Texture texture, int x, int y, int width, int height) {
+    public Entity(TextureRegion texture, int x, int y, int width, int height) {
         this.texture = texture;
         this.x = x;
         this.y = y;
@@ -107,7 +107,7 @@ public abstract class Entity {
         return this.bounds;
     }
 
-    public Texture getTexture() {
+    public TextureRegion getTexture() {
         return texture;
     }
 

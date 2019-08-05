@@ -5,9 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
+import net.vladimir.multiframe.assets.RegionNames;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
 import net.vladimir.multiframe.frame.IFrameHandler;
 import net.vladimir.multiframe.frame.IGameListener;
@@ -32,8 +34,8 @@ public class GameScreen implements Screen, IGameListener {
     private SpriteBatch batch;
 
     private Skin skin;
-    private BitmapFont font;
-    private Texture playerTexture;
+    private BitmapFont fontLarge;
+    private TextureRegion playerTexture;
 
     private Viewport viewport;
     private Viewport uiViewport;
@@ -42,6 +44,7 @@ public class GameScreen implements Screen, IGameListener {
     private Table gameOverPanel;
     private Table pausePanel;
 
+    private GlyphLayout glyphLayout;
     private Label lHighScoreGameOver;
     private Label lScoreGameOver;
     private Label lScorePause;
@@ -68,16 +71,17 @@ public class GameScreen implements Screen, IGameListener {
     public void show() {
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
-        font = assetManager.get(AssetDescriptors.UI_FONT);
-        font.setColor(Color.BLACK);
-        font.getData().setScale(2);
+        fontLarge = assetManager.get(AssetDescriptors.UI_FONT_LARGE);
+        fontLarge.setColor(Color.BLACK);
 
-        playerTexture = assetManager.get(AssetDescriptors.PLAYER);
+        playerTexture = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).findRegion(RegionNames.PLAYER);
 
         viewport = new FitViewport(References.SCREEN_WIDTH, References.SCREEN_HEIGHT);
         uiViewport = new FitViewport(References.MENU_WIDTH, References.MENU_HEIGHT);
 
         stage = new Stage(uiViewport);
+
+        glyphLayout = new GlyphLayout();
 
         initOrchestrator();
         initGameOverPanel();
@@ -102,10 +106,9 @@ public class GameScreen implements Screen, IGameListener {
         final Table gameOverMenu = new Table();
         gameOverMenu.background(new TextureRegionDrawable(playerTexture));
 
-        lHighScoreGameOver = new Label("", skin, "white");
+        lHighScoreGameOver = new Label("", skin, "small_white");
 
-        lScoreGameOver = new Label("0", skin, "white");
-        lScoreGameOver.setFontScale(2);
+        lScoreGameOver = new Label("0", skin, "large_white");
 
         TextButton bRetryGameOver = new TextButton("Retry", skin, "default");
         bRetryGameOver.addListener(new ChangeListener() {
@@ -161,9 +164,9 @@ public class GameScreen implements Screen, IGameListener {
 
         final Table pauseMenu = new Table();
         pauseMenu.background(new TextureRegionDrawable(playerTexture));
+        pauseMenu.setDebug(true);
 
-        lScorePause = new Label("", skin, "white");
-        lScorePause.setFontScale(2);
+        lScorePause = new Label("", skin, "large_white");
 
         TextButton bResumePause = new TextButton("Resume", skin, "default");
         bResumePause.addListener(new ChangeListener() {
@@ -248,7 +251,8 @@ public class GameScreen implements Screen, IGameListener {
 
         frameOrchestrator.render(delta);
 
-        font.draw(batch, score+"", -320, 280);
+        glyphLayout.setText(fontLarge, score+"");
+        fontLarge.draw(batch, score+"", -References.SCREEN_WIDTH/4-glyphLayout.width/2, References.SCREEN_HEIGHT/2-glyphLayout.height-10);
 
         batch.end();
 

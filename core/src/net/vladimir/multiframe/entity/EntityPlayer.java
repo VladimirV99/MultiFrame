@@ -1,6 +1,6 @@
 package net.vladimir.multiframe.entity;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
 public abstract class EntityPlayer extends Entity {
@@ -18,7 +18,7 @@ public abstract class EntityPlayer extends Entity {
     private int startX;
     private int startY;
 
-    public EntityPlayer(Texture texture, int x, int y, int width, int height, int speed, int minX, int maxX, int minY, int maxY) {
+    public EntityPlayer(TextureRegion texture, int x, int y, int width, int height, int speed, int minX, int maxX, int minY, int maxY) {
         super(texture, x, y, width, height);
         this.speed = speed;
         this.minX = minX;

@@ -1,6 +1,6 @@
 package net.vladimir.multiframe.entity;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool;
 
@@ -9,7 +9,7 @@ public abstract class EntityObstacle extends Entity implements Pool.Poolable {
     protected boolean passed;
     private boolean dead;
 
-    public EntityObstacle(Texture texture) {
+    public EntityObstacle(TextureRegion texture) {
         super(texture);
         passed = false;
         dead = false;

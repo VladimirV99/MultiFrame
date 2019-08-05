@@ -76,7 +76,6 @@ public class MenuScreen extends ScreenAdapter {
         buttonTable.add(bExit).height(70).fill().row();
 
         Label lVersion = new Label(References.VERSION, skin, "default");
-        lVersion.setFontScale(1.2f);
 
         table.add(buttonTable).expand().fill().row();
         table.add(lVersion).pad(30).align(Align.bottomRight);

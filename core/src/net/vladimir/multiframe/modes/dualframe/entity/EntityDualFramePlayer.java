@@ -1,6 +1,6 @@
 package net.vladimir.multiframe.modes.dualframe.entity;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
 import net.vladimir.multiframe.entity.EntityPlayer;
@@ -11,7 +11,7 @@ public class EntityDualFramePlayer extends EntityPlayer {
     private int multiplier;
     private int startMultiplier;
 
-    public EntityDualFramePlayer(Texture texture, int x, int y, int width, int height, int speed, int multiplier, int minX, int maxX) {
+    public EntityDualFramePlayer(TextureRegion texture, int x, int y, int width, int height, int speed, int multiplier, int minX, int maxX) {
         super(texture, x, y, width, height, speed, minX, maxX, y, y);
         this.multiplier = multiplier;
         this.startMultiplier = multiplier;

@@ -1,7 +1,7 @@
 package net.vladimir.multiframe.modes.dualframe.entity;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -24,7 +24,7 @@ public class EntityDualFrameObstacle extends EntityObstacle {
     private int wallWidth;
     private int playerY;
 
-    public EntityDualFrameObstacle(Texture texture, int obstacleSpeed, int obstacleGap, int obstacleHeight, int wallWidth, int playerY) {
+    public EntityDualFrameObstacle(TextureRegion texture, int obstacleSpeed, int obstacleGap, int obstacleHeight, int wallWidth, int playerY) {
         super(texture);
         this.obstacleSpeed = obstacleSpeed;
         this.obstacleGap = obstacleGap;

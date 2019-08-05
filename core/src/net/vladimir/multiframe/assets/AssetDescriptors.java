@@ -1,19 +1,17 @@
 package net.vladimir.multiframe.assets;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class AssetDescriptors {
 
-    public static final AssetDescriptor<BitmapFont> UI_FONT = new AssetDescriptor<BitmapFont>(AssetPaths.UI_FONT, BitmapFont.class);
+    public static final AssetDescriptor<BitmapFont> UI_FONT_SMALL = new AssetDescriptor<BitmapFont>(AssetPaths.UI_FONT_SMALL, BitmapFont.class);
+    public static final AssetDescriptor<BitmapFont> UI_FONT_LARGE = new AssetDescriptor<BitmapFont>(AssetPaths.UI_FONT_LARGE, BitmapFont.class);
     public static final AssetDescriptor<Skin> UI_SKIN = new AssetDescriptor<Skin>(AssetPaths.UI_SKIN, Skin.class);
 
-    public static final AssetDescriptor<Texture> PLAYER = new AssetDescriptor<Texture>(AssetPaths.PLAYER, Texture.class);
-    public static final AssetDescriptor<Texture> OBSTACLE = new AssetDescriptor<Texture>(AssetPaths.OBSTACLE, Texture.class);
-    public static final AssetDescriptor<Texture> SELECTOR = new AssetDescriptor<Texture>(AssetPaths.SELECTOR, Texture.class);
-    public static final AssetDescriptor<Texture> WALL = new AssetDescriptor<Texture>(AssetPaths.WALL, Texture.class);
+    public static final AssetDescriptor<TextureAtlas> GAMEPLAY_ATLAS = new AssetDescriptor<TextureAtlas>(AssetPaths.GAMEPLAY_ATLAS, TextureAtlas.class);
 
     private AssetDescriptors() {
 
