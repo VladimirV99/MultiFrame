@@ -8,12 +8,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -35,7 +34,6 @@ public class GameScreen implements Screen, IGameListener {
 
     private Skin skin;
     private BitmapFont fontLarge;
-    private TextureRegion playerTexture;
 
     private Viewport viewport;
     private Viewport uiViewport;
@@ -74,8 +72,6 @@ public class GameScreen implements Screen, IGameListener {
         fontLarge = assetManager.get(AssetDescriptors.UI_FONT_LARGE);
         fontLarge.setColor(Color.BLACK);
 
-        playerTexture = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).findRegion(RegionNames.PLAYER);
-
         viewport = new FitViewport(References.SCREEN_WIDTH, References.SCREEN_HEIGHT);
         uiViewport = new FitViewport(References.MENU_WIDTH, References.MENU_HEIGHT);
 
@@ -104,11 +100,11 @@ public class GameScreen implements Screen, IGameListener {
         gameOverPanel = new Table();
 
         final Table gameOverMenu = new Table();
-        gameOverMenu.background(new TextureRegionDrawable(playerTexture));
+        gameOverMenu.background(new NinePatchDrawable(assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).createPatch(RegionNames.PANEL)));
 
-        lHighScoreGameOver = new Label("", skin, "small_white");
+        lHighScoreGameOver = new Label("", skin, "small");
 
-        lScoreGameOver = new Label("0", skin, "large_white");
+        lScoreGameOver = new Label("0", skin, "large");
 
         TextButton bRetryGameOver = new TextButton("Retry", skin, "default");
         bRetryGameOver.addListener(new ChangeListener() {
@@ -163,10 +159,9 @@ public class GameScreen implements Screen, IGameListener {
         pausePanel = new Table();
 
         final Table pauseMenu = new Table();
-        pauseMenu.background(new TextureRegionDrawable(playerTexture));
-        pauseMenu.setDebug(true);
+        pauseMenu.background(new NinePatchDrawable(assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).createPatch(RegionNames.PANEL)));
 
-        lScorePause = new Label("", skin, "large_white");
+        lScorePause = new Label("", skin, "large");
 
         TextButton bResumePause = new TextButton("Resume", skin, "default");
         bResumePause.addListener(new ChangeListener() {

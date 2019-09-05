@@ -1,10 +1,12 @@
 package net.vladimir.multiframe.modes.dualframe.entity;
 
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.event.Event;
@@ -24,8 +26,13 @@ public class EntityDualFrameObstacle extends EntityObstacle {
     private int wallWidth;
     private int playerY;
 
-    public EntityDualFrameObstacle(TextureRegion texture, int obstacleSpeed, int obstacleGap, int obstacleHeight, int wallWidth, int playerY) {
-        super(texture);
+    private NinePatchDrawable textureLeft;
+    private NinePatchDrawable textureRight;
+
+    public EntityDualFrameObstacle(TextureRegion left, TextureRegion right, int obstacleSpeed, int obstacleGap, int obstacleHeight, int wallWidth, int playerY) {
+        super(null);
+        this.textureLeft = new NinePatchDrawable(new NinePatch(left, 4, 4, 4, 4));
+        this.textureRight = new NinePatchDrawable(new NinePatch(right, 4, 4, 4, 4));
         this.obstacleSpeed = obstacleSpeed;
         this.obstacleGap = obstacleGap;
         this.obstacleHeight = obstacleHeight;
@@ -69,8 +76,8 @@ public class EntityDualFrameObstacle extends EntityObstacle {
 
     @Override
     public void render(SpriteBatch batch, float delta, int offsetX, int offsetY){
-        batch.draw(getTexture(), offsetX+left.x, offsetY+left.y, left.width, left.height);
-        batch.draw(getTexture(), offsetX+right.x, offsetY+right.y, right.width, right.height);
+        textureLeft.draw(batch, offsetX+left.x, offsetY+left.y, left.width, left.height);
+        textureRight.draw(batch, offsetX+right.x, offsetY+right.y, right.width, right.height);
     }
 
     public boolean intersects(Rectangle rect){

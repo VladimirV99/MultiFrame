@@ -42,8 +42,8 @@ public class DualFrameHandler implements IFrameHandler {
         this.orchestrator = orchestrator;
         this.gameplayAtlas = orchestrator.getAssetManager().get(AssetDescriptors.GAMEPLAY_ATLAS);
 
-        orchestrator.addFrame(new DualFrame(0, -References.SCREEN_WIDTH/2, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT, gameplayAtlas.findRegion(RegionNames.SELECTOR), gameplayAtlas.findRegion(RegionNames.WALL), data));
-        orchestrator.addFrame(new DualFrame(1, 0, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT, gameplayAtlas.findRegion(RegionNames.SELECTOR), gameplayAtlas.findRegion(RegionNames.WALL), data));
+        orchestrator.addFrame(new DualFrame(0, -References.SCREEN_WIDTH/2, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT, orchestrator.getAssetManager(), data));
+        orchestrator.addFrame(new DualFrame(1, 0, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT, orchestrator.getAssetManager(), data));
 
         EntityDualFramePlayer playerLeft = new EntityDualFramePlayer(gameplayAtlas.findRegion(RegionNames.PLAYER), References.SCREEN_WIDTH/4-data.playerSize/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed, 1, data.wallWidth,References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
         EntityDualFramePlayer playerRight = new EntityDualFramePlayer(gameplayAtlas.findRegion(RegionNames.PLAYER), References.SCREEN_WIDTH/4-data.playerSize/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed,-1, data.wallWidth, References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
@@ -57,8 +57,15 @@ public class DualFrameHandler implements IFrameHandler {
         return new Pool<EntityObstacle>() {
             @Override
             protected EntityObstacle newObject() {
-                return new EntityDualFrameObstacle(gameplayAtlas.findRegion(RegionNames.OBSTACLE),
-                        data.obstacleSpeed, data.obstacleGap, data.obstacleHeight, data.wallWidth, data.playerY);
+                return new EntityDualFrameObstacle(
+                        gameplayAtlas.findRegion(RegionNames.OBSTACLE_LEFT),
+                        gameplayAtlas.findRegion(RegionNames.OBSTACLE_RIGHT),
+                        data.obstacleSpeed,
+                        data.obstacleGap,
+                        data.obstacleHeight,
+                        data.wallWidth,
+                        data.playerY
+                );
             }
         };
     }

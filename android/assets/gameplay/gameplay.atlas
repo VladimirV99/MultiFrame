@@ -4,30 +4,53 @@ size: 1024,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-obstacle
+obstacle_left
   rotate: false
-  xy: 0, 320
-  size: 640, 400
-  orig: 640, 400
+  xy: 0, 0
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+obstacle_right
+  rotate: false
+  xy: 680, 720
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+panel
+  rotate: false
+  xy: 40, 636
+  size: 76, 76
+  split: 36, 36, 36, 36
+  pad: 15, 15, 15, 15
+  orig: 76, 76
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 660, 670
+  xy: 40, 586
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 selector
   rotate: false
-  xy: 0, 300
+  xy: 40, 712
   size: 640, 20
   orig: 640, 20
   offset: 0, 0
   index: -1
-wall
+wall_left
   rotate: false
-  xy: 640, 0
+  xy: 0, 12
+  size: 20, 720
+  orig: 20, 720
+  offset: 0, 0
+  index: -1
+wall_right
+  rotate: false
+  xy: 20, 12
   size: 20, 720
   orig: 20, 720
   offset: 0, 0
