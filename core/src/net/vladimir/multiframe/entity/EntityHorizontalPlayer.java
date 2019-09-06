@@ -1,4 +1,4 @@
-package net.vladimir.multiframe.modes.dualframe.entity;
+package net.vladimir.multiframe.entity;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -6,12 +6,12 @@ import com.badlogic.gdx.math.MathUtils;
 import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 
-public class EntityDualFramePlayer extends EntityPlayer {
+public class EntityHorizontalPlayer extends EntityPlayer {
 
     private int multiplier;
     private int startMultiplier;
 
-    public EntityDualFramePlayer(TextureRegion texture, int x, int y, int width, int height, int speed, int multiplier, int minX, int maxX) {
+    public EntityHorizontalPlayer(TextureRegion texture, int x, int y, int width, int height, int speed, int multiplier, int minX, int maxX) {
         super(texture, x, y, width, height, speed, minX, maxX, y, y);
         this.multiplier = multiplier;
         this.startMultiplier = multiplier;

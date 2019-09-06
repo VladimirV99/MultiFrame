@@ -1,4 +1,4 @@
-package net.vladimir.multiframe.modes.dualframe.entity;
+package net.vladimir.multiframe.entity;
 
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,7 +13,7 @@ import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
 import net.vladimir.multiframe.frame.IFrame;
 
-public class EntityDualFrameObstacle extends EntityObstacle {
+public class EntityHorizontalObstacle extends EntityObstacle {
 
     private Rectangle left;
     private Rectangle right;
@@ -29,7 +29,7 @@ public class EntityDualFrameObstacle extends EntityObstacle {
     private NinePatchDrawable textureLeft;
     private NinePatchDrawable textureRight;
 
-    public EntityDualFrameObstacle(TextureRegion left, TextureRegion right, int obstacleSpeed, int obstacleGap, int obstacleHeight, int wallWidth, int playerY) {
+    public EntityHorizontalObstacle(TextureRegion left, TextureRegion right, int obstacleSpeed, int obstacleGap, int obstacleHeight, int wallWidth, int playerY) {
         super(null);
         this.textureLeft = new NinePatchDrawable(new NinePatch(left, 4, 4, 4, 4));
         this.textureRight = new NinePatchDrawable(new NinePatch(right, 4, 4, 4, 4));
@@ -46,7 +46,7 @@ public class EntityDualFrameObstacle extends EntityObstacle {
         setPosition(y);
     }
 
-    private void setPosition(int y){
+    private void setPosition(int y) {
         int mid = MathUtils.random(obstacleGap/2, frame.getWidth()-2*wallWidth-obstacleGap/2);
 
         left = new Rectangle(wallWidth, y, mid-obstacleGap/2, obstacleHeight);
@@ -58,7 +58,7 @@ public class EntityDualFrameObstacle extends EntityObstacle {
     }
 
     @Override
-    public void update(float delta){
+    public void update(float delta) {
         addY((int)(obstacleSpeed * delta));
         left.y = getY();
         right.y = getY();
@@ -75,12 +75,12 @@ public class EntityDualFrameObstacle extends EntityObstacle {
     }
 
     @Override
-    public void render(SpriteBatch batch, float delta, int offsetX, int offsetY){
+    public void render(SpriteBatch batch, float delta, int offsetX, int offsetY) {
         textureLeft.draw(batch, offsetX+left.x, offsetY+left.y, left.width, left.height);
         textureRight.draw(batch, offsetX+right.x, offsetY+right.y, right.width, right.height);
     }
 
-    public boolean intersects(Rectangle rect){
+    public boolean intersects(Rectangle rect) {
         return rect.overlaps(left) || rect.overlaps(right);
     }
 

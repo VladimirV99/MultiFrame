@@ -9,8 +9,8 @@ import com.badlogic.gdx.utils.Pool;
 import net.vladimir.multiframe.assets.AssetDescriptors;
 import net.vladimir.multiframe.assets.RegionNames;
 import net.vladimir.multiframe.entity.EntityObstacle;
-import net.vladimir.multiframe.modes.dualframe.entity.EntityDualFrameObstacle;
-import net.vladimir.multiframe.modes.dualframe.entity.EntityDualFramePlayer;
+import net.vladimir.multiframe.entity.EntityHorizontalObstacle;
+import net.vladimir.multiframe.entity.EntityHorizontalPlayer;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
@@ -30,7 +30,7 @@ public class DualFrameHandler implements IFrameHandler {
     private int dir = 0;
     private int obstacleFrame = 0;
     private int spawnedObstacles = 0;
-    private EntityDualFrameObstacle lastObstacle = null;
+    private EntityHorizontalObstacle lastObstacle = null;
 
     public DualFrameHandler(String id, DualFrameData data) {
         this.id = id;
@@ -45,8 +45,8 @@ public class DualFrameHandler implements IFrameHandler {
         orchestrator.addFrame(new DualFrame(0, -References.SCREEN_WIDTH/2, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT, orchestrator.getAssetManager(), data));
         orchestrator.addFrame(new DualFrame(1, 0, -References.SCREEN_HEIGHT/2, References.SCREEN_WIDTH/2, References.SCREEN_HEIGHT, orchestrator.getAssetManager(), data));
 
-        EntityDualFramePlayer playerLeft = new EntityDualFramePlayer(gameplayAtlas.findRegion(RegionNames.PLAYER), References.SCREEN_WIDTH/4-data.playerSize/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed, 1, data.wallWidth,References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
-        EntityDualFramePlayer playerRight = new EntityDualFramePlayer(gameplayAtlas.findRegion(RegionNames.PLAYER), References.SCREEN_WIDTH/4-data.playerSize/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed,-1, data.wallWidth, References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
+        EntityHorizontalPlayer playerLeft = new EntityHorizontalPlayer(gameplayAtlas.findRegion(RegionNames.PLAYER), References.SCREEN_WIDTH/4-data.playerSize/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed, 1, data.wallWidth,References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
+        EntityHorizontalPlayer playerRight = new EntityHorizontalPlayer(gameplayAtlas.findRegion(RegionNames.PLAYER), References.SCREEN_WIDTH/4-data.playerSize/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed,-1, data.wallWidth, References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
 
         orchestrator.getFrame(0).addPlayer(playerLeft);
         orchestrator.getFrame(1).addPlayer(playerRight);
@@ -57,7 +57,7 @@ public class DualFrameHandler implements IFrameHandler {
         return new Pool<EntityObstacle>() {
             @Override
             protected EntityObstacle newObject() {
-                return new EntityDualFrameObstacle(
+                return new EntityHorizontalObstacle(
                         gameplayAtlas.findRegion(RegionNames.OBSTACLE_LEFT),
                         gameplayAtlas.findRegion(RegionNames.OBSTACLE_RIGHT),
                         data.obstacleSpeed,
@@ -132,7 +132,7 @@ public class DualFrameHandler implements IFrameHandler {
         if (lastObstacle != null)
             y = lastObstacle.getY() - data.obstacleDistance - data.obstacleHeight;
 
-        EntityDualFrameObstacle o = (EntityDualFrameObstacle)orchestrator.getObstaclePool().obtain();
+        EntityHorizontalObstacle o = (EntityHorizontalObstacle)orchestrator.getObstaclePool().obtain();
         int nextFrame = getNextObstacleFrame();
         o.init(orchestrator.getFrame(nextFrame), y);
         orchestrator.addObstacle(nextFrame, o);
