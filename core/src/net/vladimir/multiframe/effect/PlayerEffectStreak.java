@@ -28,7 +28,6 @@ public class PlayerEffectStreak extends PlayerEffect{
             path.removeFirst();
         for(Vector2 position : path) {
             position.add(streakVelocity.x * delta, streakVelocity.y * delta);
-//            position.add(0, 300*delta);
         }
         path.addLast(player.getPosition());
     }
@@ -43,6 +42,11 @@ public class PlayerEffectStreak extends PlayerEffect{
             opacity += 0.05f;
         }
         batch.setColor(currentColor);
+    }
+
+    @Override
+    public void reset() {
+        path.clear();
     }
 
 }

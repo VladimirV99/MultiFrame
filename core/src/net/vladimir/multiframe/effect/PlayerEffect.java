@@ -16,4 +16,6 @@ public abstract class PlayerEffect {
 
     public abstract void render(SpriteBatch batch, float delta, int offsetX, int offsetY);
 
+    public abstract void reset();
+
 }

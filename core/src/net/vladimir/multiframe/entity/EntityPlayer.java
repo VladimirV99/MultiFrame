@@ -60,7 +60,7 @@ public abstract class EntityPlayer extends Entity {
         this.updateEffects(delta);
     }
 
-    public void updateEffects(float delta) {
+    protected void updateEffects(float delta) {
         for(PlayerEffect effect : effects)
             effect.update(delta);
     }
@@ -71,7 +71,7 @@ public abstract class EntityPlayer extends Entity {
         super.render(batch, delta, offsetX, offsetY);
     }
 
-    public void renderEffects(SpriteBatch batch, float delta, int offsetX, int offsetY) {
+    protected void renderEffects(SpriteBatch batch, float delta, int offsetX, int offsetY) {
         for(PlayerEffect effect : effects)
             effect.render(batch, delta, offsetX, offsetY);
     }
@@ -79,6 +79,12 @@ public abstract class EntityPlayer extends Entity {
     public void reset() {
         this.setX(startX);
         this.setY(startY);
+        this.resetEffects();
+    }
+
+    protected void resetEffects() {
+        for(PlayerEffect effect : effects)
+            effect.reset();
     }
 
     public void setDirection(int dirX, int dirY) {

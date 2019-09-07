@@ -60,6 +60,11 @@ public class PlayerEffectCrumble extends PlayerEffect {
         batch.setColor(currentColor);
     }
 
+    @Override
+    public void reset() {
+        particles.clear();
+    }
+
     private final class Particle {
 
         private TextureRegion textureRegion;
