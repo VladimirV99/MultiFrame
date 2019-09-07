@@ -1,26 +1,33 @@
 
 gameplay.png
-size: 1024,1024
+size: 2048,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+background_lines
+  rotate: false
+  xy: 0, 70
+  size: 1280, 720
+  orig: 1280, 720
+  offset: 0, 0
+  index: -1
 obstacle_left
   rotate: false
-  xy: 0, 0
+  xy: 640, 58
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 obstacle_right
   rotate: false
-  xy: 680, 720
+  xy: 1320, 702
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 panel
   rotate: false
-  xy: 40, 636
+  xy: 1320, 714
   size: 76, 76
   split: 36, 36, 36, 36
   pad: 15, 15, 15, 15
@@ -29,28 +36,28 @@ panel
   index: -1
 player
   rotate: false
-  xy: 40, 586
+  xy: 0, 0
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 selector
   rotate: false
-  xy: 40, 712
+  xy: 0, 50
   size: 640, 20
   orig: 640, 20
   offset: 0, 0
   index: -1
 wall_left
   rotate: false
-  xy: 0, 12
+  xy: 1280, 70
   size: 20, 720
   orig: 20, 720
   offset: 0, 0
   index: -1
 wall_right
   rotate: false
-  xy: 20, 12
+  xy: 1300, 70
   size: 20, 720
   orig: 20, 720
   offset: 0, 0

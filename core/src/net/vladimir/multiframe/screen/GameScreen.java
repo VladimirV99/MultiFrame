@@ -24,6 +24,7 @@ import net.vladimir.multiframe.frame.IFrameHandler;
 import net.vladimir.multiframe.frame.IGameListener;
 import net.vladimir.multiframe.references.References;
 import net.vladimir.multiframe.references.Settings;
+import net.vladimir.multiframe.utils.Background;
 import net.vladimir.multiframe.utils.RenderUtils;
 
 public class GameScreen implements Screen, IGameListener {
@@ -46,6 +47,8 @@ public class GameScreen implements Screen, IGameListener {
     private Label lHighScoreGameOver;
     private Label lScoreGameOver;
     private Label lScorePause;
+
+    private Background background;
 
     private boolean ready;
 
@@ -87,6 +90,12 @@ public class GameScreen implements Screen, IGameListener {
         stage.addActor(gameOverPanel);
 
         Gdx.input.setInputProcessor(stage);
+
+        this.background = new Background(
+                assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).findRegion(RegionNames.BACKGROUND_LINES),
+                Background.Direction.UP,
+                200
+        );
 
         startGame();
     }
@@ -244,6 +253,8 @@ public class GameScreen implements Screen, IGameListener {
 
         batch.begin();
 
+        background.render(batch, delta);
+
         frameOrchestrator.render(delta);
 
         glyphLayout.setText(fontLarge, score+"");
@@ -261,6 +272,9 @@ public class GameScreen implements Screen, IGameListener {
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             pauseGame();
         }
+
+        if(frameOrchestrator.isRunning())
+            background.update(delta);
 
         frameOrchestrator.update(delta);
 
