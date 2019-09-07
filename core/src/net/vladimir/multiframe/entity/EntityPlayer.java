@@ -1,7 +1,13 @@
 package net.vladimir.multiframe.entity;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+
+import net.vladimir.multiframe.effect.PlayerEffect;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class EntityPlayer extends Entity {
 
@@ -18,6 +24,8 @@ public abstract class EntityPlayer extends Entity {
     private int startX;
     private int startY;
 
+    private List<PlayerEffect> effects;
+
     public EntityPlayer(TextureRegion texture, int x, int y, int width, int height, int speed, int minX, int maxX, int minY, int maxY) {
         super(texture, x, y, width, height);
         this.speed = speed;
@@ -31,6 +39,12 @@ public abstract class EntityPlayer extends Entity {
 
         this.dirX = 0;
         this.dirY = 0;
+
+        this.effects = new ArrayList<PlayerEffect>();
+    }
+
+    public void addEffect(PlayerEffect effect) {
+        this.effects.add(effect);
     }
 
     @Override
@@ -41,7 +55,25 @@ public abstract class EntityPlayer extends Entity {
             deltaX = (int)(dirX * speed * delta);
         if(dirY != 0)
             deltaY = (int)(dirY * speed * delta);
-        add(MathUtils.clamp(getX() + deltaX, minX, maxX), MathUtils.clamp(getY() + deltaY, minY, maxY));
+        setPosition(MathUtils.clamp(getX() + deltaX, minX, maxX), MathUtils.clamp(getY() + deltaY, minY, maxY));
+
+        this.updateEffects(delta);
+    }
+
+    public void updateEffects(float delta) {
+        for(PlayerEffect effect : effects)
+            effect.update(delta);
+    }
+
+    @Override
+    public void render(SpriteBatch batch, float delta, int offsetX, int offsetY) {
+        this.renderEffects(batch, delta, offsetX, offsetY);
+        super.render(batch, delta, offsetX, offsetY);
+    }
+
+    public void renderEffects(SpriteBatch batch, float delta, int offsetX, int offsetY) {
+        for(PlayerEffect effect : effects)
+            effect.render(batch, delta, offsetX, offsetY);
     }
 
     public void reset() {

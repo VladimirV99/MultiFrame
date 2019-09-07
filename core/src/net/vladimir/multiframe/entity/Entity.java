@@ -69,6 +69,13 @@ public abstract class Entity {
         add(0, deltaY);
     }
 
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.bounds.x = this.x;
+        this.bounds.y = this.y;
+    }
+
     public void setPosition(Vector2 position) {
         this.x = (int)position.x;
         this.y = (int)position.y;

@@ -48,6 +48,11 @@ public class DualFrameHandler implements IFrameHandler {
         EntityHorizontalPlayer playerLeft = new EntityHorizontalPlayer(gameplayAtlas.findRegion(RegionNames.PLAYER), References.SCREEN_WIDTH/4-data.playerSize/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed, 1, data.wallWidth,References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
         EntityHorizontalPlayer playerRight = new EntityHorizontalPlayer(gameplayAtlas.findRegion(RegionNames.PLAYER), References.SCREEN_WIDTH/4-data.playerSize/2, data.playerY, data.playerSize, data.playerSize, data.playerSpeed,-1, data.wallWidth, References.SCREEN_WIDTH/2-data.playerSize-data.wallWidth);
 
+//        playerLeft.addEffect(new PlayerEffectStreak(playerLeft, 20, new Vector2(0, data.obstacleSpeed)));
+//        playerRight.addEffect(new PlayerEffectStreak(playerRight, 20, new Vector2(0, data.obstacleSpeed)));
+//        playerLeft.addEffect(new PlayerEffectCrumble(playerLeft, 8, 0.6f));
+//        playerRight.addEffect(new PlayerEffectCrumble(playerRight, 8, 0.6f));
+
         orchestrator.getFrame(0).addPlayer(playerLeft);
         orchestrator.getFrame(1).addPlayer(playerRight);
     }

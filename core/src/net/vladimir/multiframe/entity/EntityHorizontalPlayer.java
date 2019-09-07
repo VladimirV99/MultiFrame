@@ -3,7 +3,6 @@ package net.vladimir.multiframe.entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
-import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 
 public class EntityHorizontalPlayer extends EntityPlayer {
@@ -23,6 +22,7 @@ public class EntityHorizontalPlayer extends EntityPlayer {
             int deltaX = (int) (multiplier * dirX * speed * delta);
             setX(MathUtils.clamp(getX() + deltaX, minX, maxX));
         }
+        this.updateEffects(delta);
     }
 
     @Override
