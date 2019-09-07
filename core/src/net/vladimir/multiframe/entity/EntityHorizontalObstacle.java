@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
-import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
 import net.vladimir.multiframe.frame.IFrame;
@@ -80,8 +79,24 @@ public class EntityHorizontalObstacle extends EntityObstacle {
         textureRight.draw(batch, offsetX+right.x, offsetY+right.y, right.width, right.height);
     }
 
-    public boolean intersects(Rectangle rect) {
-        return rect.overlaps(left) || rect.overlaps(right);
+    @Override
+    public boolean checkCollision(EntityPlayer player) {
+        if(player.getBounds().overlaps(left) || player.getBounds().overlaps(right)) {
+            int clip = 5;
+            int multiplier = frame.isInFocus() ? 1 : -1;
+            int move = (int) left.x + (int) left.width - player.getX();
+            if (multiplier * player.dirX >= 0 && move > 0 && move < clip) {
+                frame.getOrchestrator().raiseEvent(new Event(EventType.CLIP_PLAYER, multiplier * move));
+                return false;
+            }
+            move = player.getX() + player.getWidth() - (int) right.x;
+            if (multiplier * player.dirX <= 0 && move > 0 && move < clip) {
+                frame.getOrchestrator().raiseEvent(new Event(EventType.CLIP_PLAYER, -(multiplier * move)));
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
 }

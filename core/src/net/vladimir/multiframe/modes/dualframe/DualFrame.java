@@ -48,6 +48,7 @@ public class DualFrame extends Frame {
     public void onEvent(Event event) {
         switch (event.getType()) {
             case MOVE_PLAYER:
+            case CLIP_PLAYER:
                 for(EntityPlayer player : getPlayers()) {
                     player.onEvent(event);
                 }

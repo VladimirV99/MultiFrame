@@ -66,7 +66,7 @@ public abstract class Frame implements IFrame{
 
         for(EntityObstacle obstacle : obstacles)
             for(EntityPlayer player : players)
-                if(obstacle.intersects(player.getBounds()))
+                if(obstacle.checkCollision(player))
                     getOrchestrator().getHandler().handle(new Event(EventType.GAME_OVER, 0));
     }
 

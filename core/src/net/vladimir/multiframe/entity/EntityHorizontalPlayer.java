@@ -31,6 +31,9 @@ public class EntityHorizontalPlayer extends EntityPlayer {
             case MOVE_PLAYER:
                 setDirection(event.getData(), 0);
                 break;
+            case CLIP_PLAYER:
+                addX(multiplier * event.getData());
+                break;
             case SWITCH_CONTROLS:
                 switchDirection();
                 break;

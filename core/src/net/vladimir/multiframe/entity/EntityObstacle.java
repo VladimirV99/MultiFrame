@@ -1,7 +1,6 @@
 package net.vladimir.multiframe.entity;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool;
 
 public abstract class EntityObstacle extends Entity implements Pool.Poolable {
@@ -15,7 +14,7 @@ public abstract class EntityObstacle extends Entity implements Pool.Poolable {
         dead = false;
     }
 
-    public abstract boolean intersects(Rectangle rect);
+    public abstract boolean checkCollision(EntityPlayer player);
 
     public void setDead() {
         dead = true;
