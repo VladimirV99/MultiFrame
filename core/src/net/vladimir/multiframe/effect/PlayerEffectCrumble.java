@@ -26,15 +26,6 @@ public class PlayerEffectCrumble extends PlayerEffect {
 
     @Override
     public void update(float delta) {
-        Iterator<Particle> it = particles.iterator();
-        Particle particle;
-        while(it.hasNext()) {
-            particle = it.next();
-            if(particle.isDead())
-                it.remove();
-            else
-                particle.update(delta);
-        }
         if(MathUtils.random(0, 5) < 4) {
             particles.add(
                     new Particle(
@@ -54,9 +45,18 @@ public class PlayerEffectCrumble extends PlayerEffect {
     @Override
     public void render(SpriteBatch batch, float delta, int offsetX, int offsetY) {
         Color currentColor = batch.getColor().cpy();
-        for(Particle particle : particles) {
+
+        Iterator<Particle> it = particles.iterator();
+        Particle particle;
+        while(it.hasNext()) {
+            particle = it.next();
+            if(particle.isDead())
+                it.remove();
+            else
+                particle.update(delta);
             particle.render(batch, delta, offsetX, offsetY, currentColor);
         }
+
         batch.setColor(currentColor);
     }
 

@@ -24,16 +24,17 @@ public class PlayerEffectStreak extends PlayerEffect{
 
     @Override
     public void update(float delta) {
-        if(path.size() >= streakLength)
-            path.removeFirst();
         for(Vector2 position : path) {
             position.add(streakVelocity.x * delta, streakVelocity.y * delta);
         }
-        path.addLast(player.getPosition());
     }
 
     @Override
     public void render(SpriteBatch batch, float delta, int offsetX, int offsetY) {
+        if(path.size() >= streakLength)
+            path.removeFirst();
+        path.addLast(player.getPosition());
+
         Color currentColor = batch.getColor().cpy();
         float opacity = 0.5f - path.size()*0.05f;
         for(Vector2 position : path) {
