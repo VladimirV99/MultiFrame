@@ -109,6 +109,11 @@ public class DualFrameOptionsScreen implements Screen {
         update();
 
         RenderUtils.clearScreen();
+
+        batch.begin();
+        game.getBackground().render(batch, delta);
+        batch.end();
+
         stage.draw();
     }
 

@@ -171,6 +171,11 @@ public class GameSelectScreen extends ScreenAdapter {
         update(delta);
 
         RenderUtils.clearScreen();
+
+        batch.begin();
+        game.getBackground().render(batch, delta);
+        batch.end();
+
         stage.draw();
     }
 

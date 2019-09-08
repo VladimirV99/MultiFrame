@@ -24,7 +24,7 @@ import net.vladimir.multiframe.frame.IFrameHandler;
 import net.vladimir.multiframe.frame.IGameListener;
 import net.vladimir.multiframe.references.References;
 import net.vladimir.multiframe.references.Settings;
-import net.vladimir.multiframe.utils.Background;
+import net.vladimir.multiframe.utils.ScrollingBackground;
 import net.vladimir.multiframe.utils.RenderUtils;
 
 public class GameScreen implements Screen, IGameListener {
@@ -48,7 +48,7 @@ public class GameScreen implements Screen, IGameListener {
     private Label lScoreGameOver;
     private Label lScorePause;
 
-    private Background background;
+    private ScrollingBackground background;
 
     private boolean ready;
 
@@ -91,9 +91,9 @@ public class GameScreen implements Screen, IGameListener {
 
         Gdx.input.setInputProcessor(stage);
 
-        this.background = new Background(
+        this.background = new ScrollingBackground(
                 assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).findRegion(RegionNames.BACKGROUND_LINES),
-                Background.Direction.UP,
+                ScrollingBackground.Direction.UP,
                 200
         );
 

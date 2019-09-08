@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 public class RenderUtils {
 
     public static void clearScreen() {
-        clearScreen(1f, 1f, 1f, 1f);
+        clearScreen(0f, 0f, 0f, 1f);
     }
 
     public static void clearScreen(Color color) {

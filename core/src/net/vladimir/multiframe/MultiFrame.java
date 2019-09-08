@@ -4,20 +4,28 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import net.vladimir.multiframe.assets.AssetDescriptors;
+import net.vladimir.multiframe.assets.RegionNames;
 import net.vladimir.multiframe.modes.dualframe.custom.DualFrameSettings;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.screen.MenuScreen;
+import net.vladimir.multiframe.utils.MenuBackground;
 
 public class MultiFrame extends Game {
 
 	private AssetManager assetManager;
 	private SpriteBatch batch;
+	private MenuBackground background;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		assetManager = new AssetManager();
 		loadAssets();
+
+		background = new MenuBackground(
+				assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).findRegion(RegionNames.BACKGROUND_SQUARES),
+				0.1f, 0.05f, 0.2f, 0.08f
+		);
 
 		Settings.init();
 		DualFrameSettings.init();
@@ -68,6 +76,10 @@ public class MultiFrame extends Game {
 
 	public AssetManager getAssetManager() {
 		return assetManager;
+	}
+
+	public MenuBackground getBackground() {
+		return background;
 	}
 
 }

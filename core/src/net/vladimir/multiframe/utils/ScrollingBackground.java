@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import net.vladimir.multiframe.references.References;
 
-public class Background {
+public class ScrollingBackground {
 
     private TextureRegion texture;
     private Direction direction;
@@ -19,7 +19,7 @@ public class Background {
     private final int screenLeft = -References.SCREEN_WIDTH / 2;
     private final int screenRight = References.SCREEN_WIDTH / 2;
 
-    public Background(TextureRegion texture, Direction direction, int speed) {
+    public ScrollingBackground(TextureRegion texture, Direction direction, int speed) {
         this.texture = texture;
         this.direction = direction;
         this.speed = speed;
