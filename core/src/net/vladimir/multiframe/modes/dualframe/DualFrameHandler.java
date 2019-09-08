@@ -52,6 +52,8 @@ public class DualFrameHandler implements IFrameHandler {
 //        playerRight.addEffect(new PlayerEffectStreak(playerRight, 20, new Vector2(0, data.obstacleSpeed)));
 //        playerLeft.addEffect(new PlayerEffectCrumble(playerLeft, 8, 0.6f));
 //        playerRight.addEffect(new PlayerEffectCrumble(playerRight, 8, 0.6f));
+//        playerLeft.addEffect(new PlayerEffectGlow(playerLeft, 40));
+//        playerRight.addEffect(new PlayerEffectGlow(playerRight, 40));
 
         orchestrator.getFrame(0).addPlayer(playerLeft);
         orchestrator.getFrame(1).addPlayer(playerRight);
