@@ -21,7 +21,7 @@ public class DualFrameSettings {
         settings = Gdx.app.getPreferences(PREFERENCES_NAME);
         currentData = new DualFrameData();
         currentData.playerSwitch = settings.getInteger(EnumDualFrameSettings.PLAYER_SWITCH.getId(), EnumDualFrameSettings.PLAYER_SWITCH.getDefaultValue());
-        currentData.obstacleSpeed = settings.getInteger(EnumDualFrameSettings.PLAYER_SPEED.getId(), EnumDualFrameSettings.PLAYER_SPEED.getDefaultValue());
+        currentData.playerSpeed = settings.getInteger(EnumDualFrameSettings.PLAYER_SPEED.getId(), EnumDualFrameSettings.PLAYER_SPEED.getDefaultValue());
         currentData.playerY = settings.getInteger(EnumDualFrameSettings.PLAYER_Y.getId(), EnumDualFrameSettings.PLAYER_Y.getDefaultValue());
         currentData.playerSize = 50;
         currentData.obstacleSwitch = settings.getInteger(EnumDualFrameSettings.OBSTACLE_SWITCH.getId(), EnumDualFrameSettings.OBSTACLE_SWITCH.getDefaultValue());
