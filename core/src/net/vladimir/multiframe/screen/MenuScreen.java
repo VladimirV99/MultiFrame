@@ -46,7 +46,7 @@ public class MenuScreen extends ScreenAdapter {
 //        table.setDebug(true);
 //        buttonTable.setDebug(true);
 
-        TextButton bPlay = new TextButton("Play", skin, "default");
+        TextButton bPlay = new TextButton("Play", skin, "large");
         bPlay.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -54,7 +54,7 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
-//        TextButton bOptions = new TextButton("Options", skin, "default");
+//        TextButton bOptions = new TextButton("Options", skin, "large");
 //        bOptions.addListener(new ChangeListener() {
 //            @Override
 //            public void changed(ChangeEvent event, Actor actor) {
@@ -62,7 +62,7 @@ public class MenuScreen extends ScreenAdapter {
 //            }
 //        });
 
-        TextButton bExit = new TextButton("Exit", skin, "default");
+        TextButton bExit = new TextButton("Exit", skin, "large");
         bExit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -71,13 +71,13 @@ public class MenuScreen extends ScreenAdapter {
         });
 
         buttonTable.defaults().pad(15, 100, 15, 100);
-        buttonTable.add(bPlay).height(70).expandX().fill().row();
-//        buttonTable.add(bOptions).height(70).fill().row();
-        buttonTable.add(bExit).height(70).fill().row();
+        buttonTable.add(bPlay).expandX().fill().row();
+//        buttonTable.add(bOptions).fill().row();
+        buttonTable.add(bExit).fill().row();
 
-        Label lVersion = new Label(References.VERSION, skin, "default");
+        Label lVersion = new Label(References.VERSION, skin, "default_white");
 
-        table.add(buttonTable).expand().fill().row();
+        table.add(buttonTable).grow().row();
         table.add(lVersion).pad(30).align(Align.bottomRight);
 
         table.setFillParent(true);

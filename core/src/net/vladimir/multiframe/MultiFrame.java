@@ -35,9 +35,6 @@ public class MultiFrame extends Game {
 
 	private void loadAssets() {
 		assetManager.load(AssetDescriptors.UI_SKIN);
-		assetManager.load(AssetDescriptors.UI_FONT_SMALL);
-		assetManager.load(AssetDescriptors.UI_FONT_LARGE);
-
 		assetManager.load(AssetDescriptors.GAMEPLAY_ATLAS);
 
 		assetManager.finishLoading();

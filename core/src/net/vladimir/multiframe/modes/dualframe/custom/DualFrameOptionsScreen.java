@@ -46,6 +46,7 @@ public class DualFrameOptionsScreen implements Screen {
 
         Table table = new Table();
         Table optionsTable = new Table();
+        ScrollPane optionsScroll = new ScrollPane(optionsTable, skin);
 
 //        table.setDebug(true);
 //        optionsTable.setDebug(true);
@@ -60,7 +61,7 @@ public class DualFrameOptionsScreen implements Screen {
         addNumberOption(optionsTable, EnumDualFrameSettings.OBSTACLE_SPEED, DualFrameSettings.get(EnumDualFrameSettings.OBSTACLE_SPEED));
         addNumberOption(optionsTable, EnumDualFrameSettings.WALL_WIDTH, DualFrameSettings.get(EnumDualFrameSettings.WALL_WIDTH));
 
-        TextButton bBack = new TextButton("Back", skin, "default");
+        TextButton bBack = new TextButton("Back", skin, "large");
         bBack.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -69,7 +70,7 @@ public class DualFrameOptionsScreen implements Screen {
             }
         });
 
-        TextButton bSave = new TextButton("Save", skin, "default");
+        TextButton bSave = new TextButton("Save", skin, "large");
         bSave.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -78,7 +79,7 @@ public class DualFrameOptionsScreen implements Screen {
             }
         });
 
-        TextButton bReset = new TextButton("Reset", skin, "default");
+        TextButton bReset = new TextButton("Reset All", skin, "large");
         bReset.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -91,10 +92,10 @@ public class DualFrameOptionsScreen implements Screen {
         optionsTable.pack();
 
         table.defaults().pad(10);
-        table.add(optionsTable).expandY().fillY().colspan(3).row();
-        table.add(bBack).height(50).expandX().fillX();
-        table.add(bSave).height(50).expandX().fillX();
-        table.add(bReset).height(50).expandX().fillX();
+        table.add(optionsScroll).pad(20, 20, 0, 20).expand().fill().colspan(3).row();
+        table.add(bBack).width(360);
+        table.add(bSave).width(360);
+        table.add(bReset).width(360);
 
         table.setFillParent(true);
         table.pack();
@@ -142,7 +143,7 @@ public class DualFrameOptionsScreen implements Screen {
     }
 
     private void addNumberOption(Table table, final EnumDualFrameSettings setting, final int value){
-        final Label lText = new Label(setting.getName(), skin, "default");
+        final Label lText = new Label(setting.getName(), skin, "default_white");
 
         final TextField fValue = new TextField(String.valueOf(value), skin);
         fValue.setAlignment(Align.center);
@@ -153,7 +154,7 @@ public class DualFrameOptionsScreen implements Screen {
             }
         });
 
-        TextButton bDecrease = new TextButton("-", skin, "default");
+        Button bDecrease = new Button(skin, "minus");
         bDecrease.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -161,7 +162,7 @@ public class DualFrameOptionsScreen implements Screen {
             }
         });
 
-        TextButton bIncrease = new TextButton("+", skin, "default");
+        Button bIncrease = new Button(skin, "plus");
         bIncrease.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -177,11 +178,12 @@ public class DualFrameOptionsScreen implements Screen {
             }
         });
 
-        table.add(lText).width(450).expandX();
+        table.pad(10);
+        table.add(lText).align(Align.left).expandX();
         table.add(bDecrease).size(50, 50).pad(5, 10, 5, 10);
         table.add(fValue).size(120, 60).pad(5, 0, 5, 0);
         table.add(bIncrease).size(50, 50).pad(5, 10, 5, 10);
-        table.add(bReset).size(140, 60).pad(5);
+        table.add(bReset).width(180).pad(5);
         table.row();
 
         options.put(setting, fValue);

@@ -72,7 +72,7 @@ public class GameScreen implements Screen, IGameListener {
     public void show() {
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
-        fontLarge = assetManager.get(AssetDescriptors.UI_FONT_LARGE);
+        fontLarge = assetManager.get(AssetDescriptors.UI_SKIN).getFont(RegionNames.FONT_LARGE);
         fontLarge.setColor(Color.BLACK);
 
         viewport = new FitViewport(References.SCREEN_WIDTH, References.SCREEN_HEIGHT);
@@ -109,9 +109,9 @@ public class GameScreen implements Screen, IGameListener {
         gameOverPanel = new Table();
 
         final Table gameOverMenu = new Table();
-        gameOverMenu.background(new NinePatchDrawable(assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).createPatch(RegionNames.PANEL)));
+        gameOverMenu.background(new NinePatchDrawable(assetManager.get(AssetDescriptors.UI_SKIN).getAtlas().createPatch(RegionNames.PANEL)));
 
-        lHighScoreGameOver = new Label("", skin, "small");
+        lHighScoreGameOver = new Label("", skin, "default");
 
         lScoreGameOver = new Label("0", skin, "large");
 
@@ -147,13 +147,13 @@ public class GameScreen implements Screen, IGameListener {
             }
         });
 
-        gameOverMenu.defaults().pad(10, 20, 10, 20);
+        gameOverMenu.defaults().pad(5, 20, 5, 20);
 
         gameOverMenu.add(lHighScoreGameOver).row();
-        gameOverMenu.add(lScoreGameOver).row();
-        gameOverMenu.add(bRetryGameOver).size(180, 50).row();
-        gameOverMenu.add(bMenuGameOver).size(180, 50).row();
-        gameOverMenu.add(bExitGameOver).size(180, 50);
+        gameOverMenu.add(lScoreGameOver).pad(20).row();
+        gameOverMenu.add(bRetryGameOver).width(300).row();
+        gameOverMenu.add(bMenuGameOver).width(300).row();
+        gameOverMenu.add(bExitGameOver).width(300);
 
         gameOverMenu.pack();
 
@@ -168,7 +168,7 @@ public class GameScreen implements Screen, IGameListener {
         pausePanel = new Table();
 
         final Table pauseMenu = new Table();
-        pauseMenu.background(new NinePatchDrawable(assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS).createPatch(RegionNames.PANEL)));
+        pauseMenu.background(new NinePatchDrawable(assetManager.get(AssetDescriptors.UI_SKIN).getAtlas().createPatch(RegionNames.PANEL)));
 
         lScorePause = new Label("", skin, "large");
 
@@ -212,13 +212,13 @@ public class GameScreen implements Screen, IGameListener {
             }
         });
 
-        pauseMenu.defaults().pad(10, 20, 10, 20);
+        pauseMenu.defaults().pad(5, 20, 5, 20);
 
         pauseMenu.add(lScorePause).row();
-        pauseMenu.add(bResumePause).size(180, 50).row();
-        pauseMenu.add(bRetryPause).size(180, 50).row();
-        pauseMenu.add(bMenuPause).size(180, 50).row();
-        pauseMenu.add(bExitPause).size(180, 50);
+        pauseMenu.add(bResumePause).width(300).row();
+        pauseMenu.add(bRetryPause).width(300).row();
+        pauseMenu.add(bMenuPause).width(300).row();
+        pauseMenu.add(bExitPause).width(300);
 
         pauseMenu.pack();
 

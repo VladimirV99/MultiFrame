@@ -60,16 +60,16 @@ public class GameSelectScreen extends ScreenAdapter {
 
         stage = new Stage(new FitViewport(References.MENU_WIDTH, References.MENU_HEIGHT), batch);
 
-        lModeTitle = new Label("", skin);
+        lModeTitle = new Label("", skin, "large_white");
         lModeTitle.setAlignment(Align.center);
-        lModeDescription = new Label("", skin);
-        bEdit = new TextButton("Edit", skin);
+        lModeDescription = new Label("", skin, "default_white");
+        bEdit = new TextButton("Edit", skin, "large");
 
         Table table = new Table();
 
         Table gameList = new Table(skin);
         gameList.align(Align.top);
-        gameList.defaults().pad(10);
+        gameList.defaults();
 
         ButtonGroup<TextButton> gameListGroup = new ButtonGroup<TextButton>();
         gameListGroup.setMinCheckCount(0);
@@ -78,11 +78,11 @@ public class GameSelectScreen extends ScreenAdapter {
         addGameMode(gameList, gameListGroup, GameModes.DUALFRAME_CUSTOM);
 
         gameList.pack();
-        ScrollPane gameListScroll = new ScrollPane(gameList);
+        ScrollPane gameListScroll = new ScrollPane(gameList, skin);
 
         Table selectionTable = new Table(skin);
 
-        TextButton bBack = new TextButton("Back", skin);
+        TextButton bBack = new TextButton("Back", skin, "large");
         bBack.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -96,7 +96,7 @@ public class GameSelectScreen extends ScreenAdapter {
             }
         });
         bEdit.setVisible(false);
-        TextButton bPlay = new TextButton("Play", skin);
+        TextButton bPlay = new TextButton("Play", skin, "large");
         bPlay.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -104,17 +104,17 @@ public class GameSelectScreen extends ScreenAdapter {
             }
         });
 
-        selectionTable.defaults().pad(20);
-        selectionTable.add(lModeTitle).colspan(3).pad(30, 20, 20, 20).expandX().fillX().row();
+        selectionTable.defaults().pad(10);
+        selectionTable.add(lModeTitle).colspan(3).pad(30, 20, 20, 20).growX().row();
         selectionTable.add(lModeDescription).colspan(3).pad(20, 20, 10, 20).fillX().expandY().align(Align.top).row();
-        selectionTable.add(bBack).align(Align.bottomLeft).height(50).expandX().fillX();
-        selectionTable.add(bEdit).height(50).expandX().fillX();
-        selectionTable.add(bPlay).align(Align.bottomRight).height(50).expandX().fillX();
+        selectionTable.add(bBack).align(Align.bottomLeft).growX();
+        selectionTable.add(bEdit).growX();
+        selectionTable.add(bPlay).align(Align.bottomRight).growX();
 
         selectionTable.pack();
 
-        table.add(gameListScroll).expandY().fillY();
-        table.add(selectionTable).expandX().fillX().fillY();
+        table.add(gameListScroll).growY();
+        table.add(selectionTable).growX().fillY();
 
 //        selectionTable.setDebug(true);
 //        table.setDebug(true);
@@ -153,7 +153,7 @@ public class GameSelectScreen extends ScreenAdapter {
         });
         group.add(button);
         buttons.add(button);
-        table.add(button).height(100).width(400).row();
+        table.add(button).size(450, 130).row();
     }
 
     private void selectMode(int id) {

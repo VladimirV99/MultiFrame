@@ -1,0 +1,38 @@
+{
+  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "font-default": { "file": "font_default.fnt" },
+    "font-large": { "file": "font_large.fnt" }
+  },
+  "com.badlogic.gdx.graphics.Color": {
+    "black": { "a": 1, "b": 0, "g": 0, "r": 0 },
+    "white": { "a": 1, "b": 1, "g": 1, "r": 1 }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+    "default": { "down": "button-down", "up": "button-up" },
+    "minus": { "down": "minus", "up": "minus" },
+    "plus": { "down": "plus", "up": "plus" },
+    "toggle": { "down": "button-toggle-down", "checked": "button-toggle-down", "up": "button-toggle-up" }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+    "default": { "down": "button-down", "up": "button-up", "font": "font-default", "fontColor": "black" },
+    "large": { "down": "button-down", "up": "button-up", "font": "font-large", "fontColor": "black" },
+    "toggle": { "down": "button-toggle-down", "up": "button-toggle-up", "checked": "button-toggle-down", "font": "font-default", "fontColor": "black", "downFontColor": "black" }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
+    "default": { "background": "scrollpane-background" }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "default": { "font": "font-default", "fontColor": "black" },
+    "default_white": { "font": "font-default", "fontColor": "white" },
+    "small": { "font": "font-default", "fontColor": "black" },
+    "large": { "font": "font-large", "fontColor": "black" },
+    "large_white": { "font": "font-large", "fontColor": "white" }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
+    "default": { "background": "textfield-background", "font": "font-default", "fontColor": "black" }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
+    "default": { "checkboxOn": "checkbox-on", "checkboxOff": "checkbox-off", "font": "font-default", "fontColor": "black" },
+    "default_white": { "checkboxOn": "checkbox-on", "checkboxOff": "checkbox-off", "font": "font-default", "fontColor": "white" }
+  }
+}
