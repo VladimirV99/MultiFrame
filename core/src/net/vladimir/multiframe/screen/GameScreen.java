@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -58,6 +59,9 @@ public class GameScreen implements Screen, IGameListener {
     private FrameOrchestrator frameOrchestrator;
     private IFrameHandler frameHandler;
 
+    private Sound playerExplode;
+    private Sound playerScore;
+
     public GameScreen(MultiFrame game, IFrameHandler frameHandler) {
         this.game = game;
         this.assetManager = game.getAssetManager();
@@ -75,6 +79,9 @@ public class GameScreen implements Screen, IGameListener {
 
         fontLarge = assetManager.get(AssetDescriptors.UI_SKIN).getFont(RegionNames.FONT_LARGE);
         fontLarge.setColor(Color.BLACK);
+
+        playerExplode = assetManager.get(AssetDescriptors.SOUND_PLAYER_EXPLODE);
+        playerScore = assetManager.get(AssetDescriptors.SOUND_PLAYER_SCORE);
 
         viewport = new FitViewport(References.SCREEN_WIDTH, References.SCREEN_HEIGHT);
         uiViewport = new FitViewport(References.MENU_WIDTH, References.MENU_HEIGHT);
@@ -316,6 +323,7 @@ public class GameScreen implements Screen, IGameListener {
 
     @Override
     public void gameOver(){
+        playerExplode.play();
         lHighScoreGameOver.setText("high: " + Settings.getHighScore(frameHandler.getId()));
         if(score > Settings.getHighScore(frameHandler.getId()))
             Settings.setHighScore(frameHandler.getId(), score);
@@ -325,6 +333,7 @@ public class GameScreen implements Screen, IGameListener {
 
     @Override
     public void incrementScore() {
+        playerScore.play();
         score++;
     }
 

@@ -36,6 +36,8 @@ public class MultiFrame extends Game {
 	private void loadAssets() {
 		assetManager.load(AssetDescriptors.UI_SKIN);
 		assetManager.load(AssetDescriptors.GAMEPLAY_ATLAS);
+		assetManager.load(AssetDescriptors.SOUND_PLAYER_EXPLODE);
+		assetManager.load(AssetDescriptors.SOUND_PLAYER_SCORE);
 
 		assetManager.finishLoading();
 	}
