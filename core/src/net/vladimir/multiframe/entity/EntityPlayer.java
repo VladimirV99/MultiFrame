@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
 import net.vladimir.multiframe.effect.PlayerEffect;
+import net.vladimir.multiframe.effect.PlayerEffectExplode;
+import net.vladimir.multiframe.event.Event;
+import net.vladimir.multiframe.event.EventType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,10 @@ public abstract class EntityPlayer extends Entity {
     private int startX;
     private int startY;
 
+    private boolean dead;
+
     private List<PlayerEffect> effects;
+    private PlayerEffect deathEffect;
 
     public EntityPlayer(TextureRegion texture, int x, int y, int width, int height, int speed, int minX, int maxX, int minY, int maxY) {
         super(texture, x, y, width, height);
@@ -40,7 +46,10 @@ public abstract class EntityPlayer extends Entity {
         this.dirX = 0;
         this.dirY = 0;
 
+        this.dead = false;
+
         this.effects = new ArrayList<PlayerEffect>();
+        this.deathEffect = new PlayerEffectExplode(this, 30, 15, 0.2f);
     }
 
     public void addEffect(PlayerEffect effect) {
@@ -68,7 +77,10 @@ public abstract class EntityPlayer extends Entity {
     @Override
     public void render(SpriteBatch batch, float delta, int offsetX, int offsetY) {
         this.renderEffects(batch, delta, offsetX, offsetY);
-        super.render(batch, delta, offsetX, offsetY);
+        if(!dead)
+            super.render(batch, delta, offsetX, offsetY);
+        else
+            deathEffect.render(batch, delta, offsetX, offsetY);
     }
 
     protected void renderEffects(SpriteBatch batch, float delta, int offsetX, int offsetY) {
@@ -76,7 +88,18 @@ public abstract class EntityPlayer extends Entity {
             effect.render(batch, delta, offsetX, offsetY);
     }
 
+    @Override
+    public boolean onEvent(Event event) {
+        if(event.getType() == EventType.DESTROY_PLAYER) {
+            deathEffect.reset();
+            this.dead = true;
+            return true;
+        }
+        return false;
+    }
+
     public void reset() {
+        this.dead = false;
         this.setX(startX);
         this.setY(startY);
         this.resetEffects();

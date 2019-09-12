@@ -26,18 +26,21 @@ public class EntityHorizontalPlayer extends EntityPlayer {
     }
 
     @Override
-    public void onEvent(Event event) {
+    public boolean onEvent(Event event) {
+        if(super.onEvent(event))
+            return true;
         switch (event.getType()) {
             case MOVE_PLAYER:
                 setDirection(event.getData(), 0);
-                break;
+                return true;
             case CLIP_PLAYER:
                 addX(multiplier * event.getData());
-                break;
+                return true;
             case SWITCH_CONTROLS:
                 switchDirection();
-                break;
+                return true;
         }
+        return false;
     }
 
     @Override

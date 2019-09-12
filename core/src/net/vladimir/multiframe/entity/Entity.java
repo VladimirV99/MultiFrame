@@ -40,8 +40,8 @@ public abstract class Entity {
         batch.draw(texture, offsetX+x, offsetY+y, width, height);
     }
 
-    public void onEvent(Event event) {
-
+    public boolean onEvent(Event event) {
+        return false;
     }
 
     public void setX(int x) {

@@ -10,6 +10,10 @@ public class Event {
         this.data = data;
     }
 
+    public Event(EventType type) {
+        this(type, 0);
+    }
+
     public EventType getType() {
         return type;
     }
