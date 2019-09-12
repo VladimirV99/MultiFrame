@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -319,7 +320,7 @@ public class GameScreen implements Screen, IGameListener {
         if(score > Settings.getHighScore(frameHandler.getId()))
             Settings.setHighScore(frameHandler.getId(), score);
         lScoreGameOver.setText(Integer.toString(score));
-        gameOverPanel.setVisible(true);
+        gameOverPanel.addAction(Actions.sequence(Actions.delay(0.4f, Actions.show())));
     }
 
     @Override
