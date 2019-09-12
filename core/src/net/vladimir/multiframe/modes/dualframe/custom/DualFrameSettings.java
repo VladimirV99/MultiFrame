@@ -15,7 +15,9 @@ public class DualFrameSettings {
     private static DualFrameData currentData;
     private static DualFrameData newData;
 
-    public static DualFrameData mediumModeData;
+    public static DualFrameData easyModeData;
+    public static DualFrameData normalModeData;
+    public static DualFrameData hardModeData;
 
     public static void init(){
         settings = Gdx.app.getPreferences(PREFERENCES_NAME);
@@ -34,7 +36,9 @@ public class DualFrameSettings {
         newData = new DualFrameData();
         newData.copy(currentData);
 
-        mediumModeData = new DualFrameData(1, 800, References.SCREEN_HEIGHT/2-25, 50, -1, 100, 150, 300, 300, 20);
+        easyModeData = new DualFrameData(10, 700, References.SCREEN_HEIGHT/2-25, 50, -1, 90, 170, 320, 250, 20);
+        normalModeData = new DualFrameData(1, 800, References.SCREEN_HEIGHT/2-25, 50, -1, 100, 150, 300, 300, 20);
+        hardModeData = new DualFrameData(-1, 800, References.SCREEN_HEIGHT/2-25, 50, -1, 100, 150, 340, 300, 20);
     }
 
     public static void set(EnumDualFrameSettings setting, int value){

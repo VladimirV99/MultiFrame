@@ -63,6 +63,7 @@ public class GameSelectScreen extends ScreenAdapter {
         lModeTitle = new Label("", skin, "large_white");
         lModeTitle.setAlignment(Align.center);
         lModeDescription = new Label("", skin, "default_white");
+        lModeDescription.setWrap(true);
         bEdit = new TextButton("Edit", skin, "large");
 
         Table table = new Table();
@@ -74,7 +75,9 @@ public class GameSelectScreen extends ScreenAdapter {
         ButtonGroup<TextButton> gameListGroup = new ButtonGroup<TextButton>();
         gameListGroup.setMinCheckCount(0);
 
-        addGameMode(gameList, gameListGroup, GameModes.DUALFRAME_MEDIUM);
+        addGameMode(gameList, gameListGroup, GameModes.DUALFRAME_EASY);
+        addGameMode(gameList, gameListGroup, GameModes.DUALFRAME_NORMAL);
+        addGameMode(gameList, gameListGroup, GameModes.DUALFRAME_HARD);
         addGameMode(gameList, gameListGroup, GameModes.DUALFRAME_CUSTOM);
 
         gameList.pack();
