@@ -49,7 +49,7 @@ public class EntityHorizontalObstacle extends EntityObstacle {
         int mid = MathUtils.random(obstacleGap/2, frame.getWidth()-2*wallWidth-obstacleGap/2);
 
         left = new Rectangle(wallWidth, y, mid-obstacleGap/2, obstacleHeight);
-        right = new Rectangle(wallWidth+mid+obstacleGap/2, y, frame.getWidth()-mid-obstacleGap/2, obstacleHeight);
+        right = new Rectangle(wallWidth+mid+obstacleGap/2, y, frame.getWidth()-mid-2*wallWidth-obstacleGap/2, obstacleHeight);
 
         setPosition(new Vector2(wallWidth, y));
 

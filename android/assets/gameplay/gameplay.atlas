@@ -6,35 +6,35 @@ filter: Nearest,Nearest
 repeat: none
 background_lines
   rotate: false
-  xy: 0, 790
+  xy: 0, 808
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: -1
 background_squares
   rotate: false
-  xy: 0, 70
+  xy: 0, 88
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: -1
 obstacle_left
   rotate: false
-  xy: 640, 58
+  xy: 1920, 1516
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 obstacle_right
   rotate: false
-  xy: 1300, 1422
+  xy: 0, 0
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 panel
   rotate: false
-  xy: 1300, 1434
+  xy: 0, 12
   size: 76, 76
   split: 36, 36, 36, 36
   pad: 15, 15, 15, 15
@@ -43,29 +43,29 @@ panel
   index: -1
 player
   rotate: false
-  xy: 0, 0
+  xy: 1280, 1458
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: -1
 selector
   rotate: false
-  xy: 0, 50
+  xy: 1280, 1508
   size: 640, 20
   orig: 640, 20
   offset: 0, 0
   index: -1
 wall_left
   rotate: false
-  xy: 1280, 790
-  size: 20, 720
-  orig: 20, 720
+  xy: 76, 80
+  size: 8, 8
+  orig: 8, 8
   offset: 0, 0
   index: -1
 wall_right
   rotate: false
-  xy: 1280, 70
-  size: 20, 720
-  orig: 20, 720
+  xy: 1280, 1450
+  size: 8, 8
+  orig: 8, 8
   offset: 0, 0
   index: -1
