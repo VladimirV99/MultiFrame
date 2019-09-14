@@ -21,6 +21,9 @@
   "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
     "default": { "background": "scrollpane-background" }
   },
+  "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
+    "default-horizontal": { "background": "slider-background", "knob": "slider-knob" }
+  },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "default": { "font": "font-default", "fontColor": "black" },
     "default_white": { "font": "font-default", "fontColor": "white" },

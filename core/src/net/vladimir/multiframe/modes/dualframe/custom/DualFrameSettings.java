@@ -10,7 +10,7 @@ public class DualFrameSettings {
 
     private static Preferences settings;
 
-    private static String PREFERENCES_NAME = "multiframe_settings";
+    private static String PREFERENCES_NAME = "multiframe_dualframe_settings";
 
     private static DualFrameData currentData;
     private static DualFrameData newData;

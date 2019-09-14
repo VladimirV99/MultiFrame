@@ -323,7 +323,7 @@ public class GameScreen implements Screen, IGameListener {
 
     @Override
     public void gameOver(){
-        playerExplode.play();
+        playerExplode.play(Settings.getVolume());
         lHighScoreGameOver.setText("high: " + Settings.getHighScore(frameHandler.getId()));
         if(score > Settings.getHighScore(frameHandler.getId()))
             Settings.setHighScore(frameHandler.getId(), score);
@@ -333,7 +333,7 @@ public class GameScreen implements Screen, IGameListener {
 
     @Override
     public void incrementScore() {
-        playerScore.play();
+        playerScore.play(Settings.getVolume());
         score++;
     }
 

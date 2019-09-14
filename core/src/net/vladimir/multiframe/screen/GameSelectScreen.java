@@ -119,9 +119,6 @@ public class GameSelectScreen extends ScreenAdapter {
         table.add(gameListScroll).growY();
         table.add(selectionTable).growX().fillY();
 
-//        selectionTable.setDebug(true);
-//        table.setDebug(true);
-
         table.setFillParent(true);
         table.pack();
 
@@ -129,9 +126,9 @@ public class GameSelectScreen extends ScreenAdapter {
 
         Gdx.input.setInputProcessor(stage);
 
-        selectMode(Settings.LAST_SELECTION);
-        if(Settings.LAST_SELECTION>=0 && Settings.LAST_SELECTION<buttons.size())
-            buttons.get(Settings.LAST_SELECTION).toggle();
+        selectMode(Settings.getLastSelection());
+        if(Settings.getLastSelection()>=0 && Settings.getLastSelection()<buttons.size())
+            buttons.get(Settings.getLastSelection()).toggle();
         gameListGroup.setMinCheckCount(1);
     }
 
@@ -160,8 +157,8 @@ public class GameSelectScreen extends ScreenAdapter {
     }
 
     private void selectMode(int id) {
-        if(Settings.LAST_SELECTION >= 0) {
-            if (Settings.LAST_SELECTION < buttons.size()) {
+        if(Settings.getLastSelection() >= 0) {
+            if (Settings.getLastSelection() < buttons.size()) {
                 Settings.setLastSelection(id);
             } else {
                 Settings.setLastSelection(buttons.size()-1);

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Pool;
 import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
+import net.vladimir.multiframe.references.Settings;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -120,6 +121,8 @@ public class FrameOrchestrator {
     }
 
     public void raiseEvent(Event event) {
+        if(Settings.getVibrate() && event.getType() == EventType.SWITCH_CONTROLS)
+            Gdx.input.vibrate(200);
         for(IFrame frame : frames.values()) {
             frame.onEvent(event);
         }

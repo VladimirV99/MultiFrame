@@ -119,11 +119,11 @@ public class DualFrameHandler implements IFrameHandler {
                 if(data.playerSwitch==-1){
                     int rand = MathUtils.random(0, 2);
                     if(rand==1)
-                        orchestrator.raiseEvent(new Event(EventType.SWITCH_CONTROLS, 0));
+                        orchestrator.raiseEvent(new Event(EventType.SWITCH_CONTROLS));
                 }else{
                     if(data.playerSwitch!=0) {
                         if (spawnedObstacles % data.playerSwitch == 0)
-                            orchestrator.raiseEvent(new Event(EventType.SWITCH_CONTROLS, 0));
+                            orchestrator.raiseEvent(new Event(EventType.SWITCH_CONTROLS));
                     }
                 }
                 break;

@@ -6,19 +6,25 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
+import net.vladimir.multiframe.assets.RegionNames;
 import net.vladimir.multiframe.references.References;
+import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.utils.RenderUtils;
 
-public class MenuScreen extends ScreenAdapter {
+public class OptionsScreen extends ScreenAdapter {
 
     private MultiFrame game;
     private AssetManager assetManager;
@@ -27,7 +33,7 @@ public class MenuScreen extends ScreenAdapter {
     private Stage stage;
     private Skin skin;
 
-    public MenuScreen(MultiFrame game) {
+    public OptionsScreen(MultiFrame game) {
         this.game = game;
         this.assetManager = game.getAssetManager();
         this.batch = game.getBatch();
@@ -40,42 +46,57 @@ public class MenuScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(References.MENU_WIDTH, References.MENU_HEIGHT), batch);
 
         Table table = new Table();
+        Table optionsTable = new Table(skin);
+        optionsTable.background(new NinePatchDrawable(assetManager.get(AssetDescriptors.UI_SKIN).getAtlas().createPatch(RegionNames.TABLE_BACKGROUND)));
 
-        Table buttonTable = new Table();
-
-        TextButton bPlay = new TextButton("Play", skin, "large");
-        bPlay.addListener(new ChangeListener() {
+        Table volumeTable = new Table(skin);
+        Label lVolume = new Label("Volume:", skin, "default_white");
+        Slider sVolume = new Slider(0, 100, 10, false, skin);
+        final Label lVolumePercentage = new Label("100%", skin, "default_white");
+        sVolume.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameSelectScreen(game));
+                float volume = ((Slider)actor).getValue();
+                Settings.setVolume(volume);
+                lVolumePercentage.setText((int)volume + "%");
+            }
+        });
+        sVolume.setValue(Settings.getVolumePercentage());
+        volumeTable.defaults().pad(0, 10, 0 , 10);
+        volumeTable.add(lVolume).padRight(60);
+        volumeTable.add(sVolume).growX();
+        volumeTable.add(lVolumePercentage);
+        volumeTable.pack();
+
+        CheckBox cbVibrate = new CheckBox("Vibrate on control switch", skin, "default_white");
+        cbVibrate.getLabelCell().padLeft(20);
+        cbVibrate.setChecked(Settings.getVibrate());
+        cbVibrate.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Settings.setVibrate(((CheckBox)actor).isChecked());
             }
         });
 
-        TextButton bOptions = new TextButton("Options", skin, "large");
-        bOptions.addListener(new ChangeListener() {
+        optionsTable.align(Align.top);
+        optionsTable.pad(20);
+        optionsTable.defaults().pad(20, 60, 20, 60);
+        optionsTable.add(volumeTable).growX().row();
+        optionsTable.add(cbVibrate).growX();
+
+        optionsTable.pack();
+
+        TextButton bBack = new TextButton("Back", skin, "large");
+        bBack.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new OptionsScreen(game));
+                game.setScreen(new MenuScreen(game));
             }
         });
 
-        TextButton bExit = new TextButton("Exit", skin, "large");
-        bExit.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
-            }
-        });
-
-        buttonTable.defaults().pad(15, 100, 15, 100);
-        buttonTable.add(bPlay).expandX().fill().row();
-        buttonTable.add(bOptions).fill().row();
-        buttonTable.add(bExit).fill().row();
-
-        Label lVersion = new Label(References.VERSION, skin, "default_white");
-
-        table.add(buttonTable).grow().row();
-        table.add(lVersion).pad(30).align(Align.bottomRight);
+        table.pad(20);
+        table.add(optionsTable).grow().row();
+        table.add(bBack).padTop(20).align(Align.bottom).growX();
 
         table.setFillParent(true);
         table.pack();
