@@ -1,11 +1,11 @@
-package net.vladimir.multiframe.utils;
+package net.vladimir.multiframe.background;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import net.vladimir.multiframe.references.References;
 
-public class ScrollingBackground {
+public class ScrollingBackground implements IBackground{
 
     private TextureRegion texture;
     private Direction direction;
@@ -28,6 +28,7 @@ public class ScrollingBackground {
         this.y = screenBottom;
     }
 
+    @Override
     public void update(float delta) {
         switch (direction) {
             case UP:
@@ -53,6 +54,7 @@ public class ScrollingBackground {
         }
     }
 
+    @Override
     public void render(SpriteBatch batch, float delta) {
         switch (direction) {
             case UP:
@@ -72,6 +74,11 @@ public class ScrollingBackground {
                 batch.draw(texture, x-texture.getRegionWidth(), screenBottom);
                 break;
         }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
     }
 
     public enum Direction {

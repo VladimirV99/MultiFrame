@@ -26,7 +26,7 @@ import net.vladimir.multiframe.frame.IFrameHandler;
 import net.vladimir.multiframe.frame.IGameListener;
 import net.vladimir.multiframe.references.References;
 import net.vladimir.multiframe.references.Settings;
-import net.vladimir.multiframe.utils.ScrollingBackground;
+import net.vladimir.multiframe.background.ScrollingBackground;
 import net.vladimir.multiframe.utils.RenderUtils;
 
 public class GameScreen implements Screen, IGameListener {

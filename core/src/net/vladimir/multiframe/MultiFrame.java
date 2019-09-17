@@ -8,7 +8,7 @@ import net.vladimir.multiframe.assets.RegionNames;
 import net.vladimir.multiframe.modes.dualframe.custom.DualFrameSettings;
 import net.vladimir.multiframe.references.Settings;
 import net.vladimir.multiframe.screen.MenuScreen;
-import net.vladimir.multiframe.utils.MenuBackground;
+import net.vladimir.multiframe.background.MenuBackground;
 
 public class MultiFrame extends Game {
 

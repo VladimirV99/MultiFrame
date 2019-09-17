@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
@@ -58,7 +58,10 @@ public class GameSelectScreen extends ScreenAdapter {
     public void show() {
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
 
-        stage = new Stage(new FitViewport(References.MENU_WIDTH, References.MENU_HEIGHT), batch);
+        stage = new Stage(
+                new ExtendViewport(References.MENU_WIDTH, References.MENU_HEIGHT, References.MENU_WIDTH_MAX, References.MENU_HEIGHT_MAX),
+                batch
+        );
 
         lModeTitle = new Label("", skin, "large_white");
         lModeTitle.setAlignment(Align.center);
@@ -185,7 +188,8 @@ public class GameSelectScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
+        stage.getViewport().update(width, height, true);
+        game.getBackground().resize((int)stage.getViewport().getWorldWidth(), (int)stage.getViewport().getWorldHeight());
     }
 
     @Override

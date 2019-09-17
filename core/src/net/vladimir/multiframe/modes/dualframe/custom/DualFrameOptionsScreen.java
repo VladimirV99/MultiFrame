@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import net.vladimir.multiframe.MultiFrame;
 import net.vladimir.multiframe.assets.AssetDescriptors;
@@ -39,17 +39,18 @@ public class DualFrameOptionsScreen implements Screen {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(References.MENU_WIDTH,  References.MENU_HEIGHT), batch);
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
+
+        stage = new Stage(
+                new ExtendViewport(References.MENU_WIDTH, References.MENU_HEIGHT, References.MENU_WIDTH_MAX, References.MENU_HEIGHT_MAX),
+                batch
+        );
 
         options.clear();
 
         Table table = new Table();
         Table optionsTable = new Table();
         ScrollPane optionsScroll = new ScrollPane(optionsTable, skin);
-
-//        table.setDebug(true);
-//        optionsTable.setDebug(true);
 
         addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_SWITCH, DualFrameSettings.get(EnumDualFrameSettings.PLAYER_SWITCH));
         addNumberOption(optionsTable, EnumDualFrameSettings.PLAYER_SPEED, DualFrameSettings.get(EnumDualFrameSettings.PLAYER_SPEED));
@@ -124,7 +125,8 @@ public class DualFrameOptionsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
+        stage.getViewport().update(width, height, true);
+        game.getBackground().resize((int)stage.getViewport().getWorldWidth(), (int)stage.getViewport().getWorldHeight());
     }
 
     @Override
