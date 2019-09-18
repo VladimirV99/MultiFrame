@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.vladimir.multiframe.MultiFrame;
@@ -83,8 +83,8 @@ public class GameScreen implements Screen, IGameListener {
         playerExplode = assetManager.get(AssetDescriptors.SOUND_PLAYER_EXPLODE);
         playerScore = assetManager.get(AssetDescriptors.SOUND_PLAYER_SCORE);
 
-        viewport = new FitViewport(References.SCREEN_WIDTH, References.SCREEN_HEIGHT);
-        uiViewport = new FitViewport(References.MENU_WIDTH, References.MENU_HEIGHT);
+        viewport = new ExtendViewport(References.SCREEN_WIDTH, References.SCREEN_HEIGHT, References.SCREEN_WIDTH_MAX, References.SCREEN_HEIGHT_MAX);
+        uiViewport = new ExtendViewport(References.MENU_WIDTH, References.MENU_HEIGHT, References.MENU_WIDTH_MAX, References.MENU_HEIGHT_MAX);
 
         stage = new Stage(uiViewport);
 
@@ -266,7 +266,7 @@ public class GameScreen implements Screen, IGameListener {
         frameOrchestrator.render(delta);
 
         glyphLayout.setText(fontLarge, score+"");
-        fontLarge.draw(batch, score+"", -References.SCREEN_WIDTH/4-glyphLayout.width/2, References.SCREEN_HEIGHT/2-glyphLayout.height-10);
+        fontLarge.draw(batch, score+"", -References.SCREEN_WIDTH/4-glyphLayout.width/2, viewport.getWorldHeight()/2-glyphLayout.height);
 
         batch.end();
 
@@ -303,7 +303,9 @@ public class GameScreen implements Screen, IGameListener {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-        stage.getViewport().update(width, height);
+        stage.getViewport().update(width, height, true);
+        background.resize((int)viewport.getWorldWidth(), (int)viewport.getWorldHeight());
+        frameOrchestrator.resize((int)viewport.getWorldWidth(), (int)viewport.getWorldHeight());
     }
 
     @Override

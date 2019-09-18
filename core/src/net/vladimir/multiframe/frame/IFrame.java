@@ -30,6 +30,8 @@ public interface IFrame {
 
     void onEvent(Event event);
 
+    void setPadding(int left, int top, int right, int bottom);
+
     int getId();
 
     int getX();

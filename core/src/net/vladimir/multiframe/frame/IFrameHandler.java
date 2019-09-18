@@ -15,6 +15,8 @@ public interface IFrameHandler {
 
     void reset();
 
+    void resize(int width, int height);
+
     void handle(Event event);
 
     String getId();

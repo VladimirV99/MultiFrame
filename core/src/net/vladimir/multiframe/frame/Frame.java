@@ -6,6 +6,7 @@ import net.vladimir.multiframe.entity.EntityObstacle;
 import net.vladimir.multiframe.entity.EntityPlayer;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
+import net.vladimir.multiframe.utils.Padding;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,6 +23,8 @@ public abstract class Frame implements IFrame{
     private int width;
     private int height;
 
+    protected Padding padding;
+
     private boolean inFocus;
 
     private List<EntityPlayer> players;
@@ -33,6 +36,8 @@ public abstract class Frame implements IFrame{
         this.y = y;
         this.width = width;
         this.height = height;
+
+        this.padding = new Padding();
 
         this.inFocus = false;
 
@@ -124,6 +129,11 @@ public abstract class Frame implements IFrame{
             this.getOrchestrator().getObstaclePool().free(obstacle);
         }
         obstacles.clear();
+    }
+
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
+        this.padding.set(left, top, right, bottom);
     }
 
     @Override

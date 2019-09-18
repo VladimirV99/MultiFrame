@@ -38,10 +38,10 @@ public class DualFrame extends Frame {
     @Override
     public void render(SpriteBatch batch, float delta) {
         super.render(batch, delta);
-        wallLeftTexture.draw(batch, getX(), getY(), data.wallWidth, getHeight());
-        wallRightTexture.draw(batch, getX()+getWidth()-data.wallWidth, getY(), data.wallWidth, getHeight());
+        wallLeftTexture.draw(batch, getX()-padding.getLeft()-1, getY()-padding.getBottom()-1, data.wallWidth+padding.getLeft()+1, getHeight()+padding.getBottom()+padding.getTop()+2);
+        wallRightTexture.draw(batch, getX()+getWidth()-data.wallWidth, getY()-padding.getBottom()-1, data.wallWidth+padding.getRight()+1, getHeight()+padding.getBottom()+padding.getTop()+2);
         if(isInFocus()) {
-            batch.draw(selectorTexture, getX(), getY()+getHeight()-20, getWidth(), 20);
+            batch.draw(selectorTexture, getX(), getY()+getHeight()+padding.getTop()-selectorTexture.getRegionHeight(), getWidth(), selectorTexture.getRegionHeight());
         }
     }
 

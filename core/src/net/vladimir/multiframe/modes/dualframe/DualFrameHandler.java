@@ -14,6 +14,7 @@ import net.vladimir.multiframe.entity.EntityHorizontalPlayer;
 import net.vladimir.multiframe.event.Event;
 import net.vladimir.multiframe.event.EventType;
 import net.vladimir.multiframe.frame.FrameOrchestrator;
+import net.vladimir.multiframe.frame.IFrame;
 import net.vladimir.multiframe.frame.IFrameHandler;
 import net.vladimir.multiframe.references.References;
 
@@ -103,6 +104,20 @@ public class DualFrameHandler implements IFrameHandler {
         obstacleFrame = 0;
         spawnedObstacles = 0;
         lastObstacle = null;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if(width == References.SCREEN_WIDTH) {
+            int dy = (height - References.SCREEN_HEIGHT) / 2;
+            for(IFrame frame : orchestrator.getFrames()) {
+                frame.setPadding(0, dy, 0, dy);
+            }
+        } else if(height == References.SCREEN_HEIGHT) {
+            int dx = (width - References.SCREEN_WIDTH) / 2;
+            orchestrator.getFrame(0).setPadding(dx, 0, 0, 0);
+            orchestrator.getFrame(1).setPadding(0, 0, dx, 0);
+        }
     }
 
     @Override

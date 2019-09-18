@@ -14,18 +14,26 @@ public class ScrollingBackground implements IBackground{
     private int x;
     private int y;
 
-    private final int screentTop = References.SCREEN_HEIGHT / 2;
-    private final int screenBottom = -References.SCREEN_HEIGHT / 2;
-    private final int screenLeft = -References.SCREEN_WIDTH / 2;
-    private final int screenRight = References.SCREEN_WIDTH / 2;
+    private int viewportX;
+    private int viewportY;
+
+    private int screenTop;
+    private int screenBottom;
+    private int screenLeft;
+    private int screenRight;
 
     public ScrollingBackground(TextureRegion texture, Direction direction, int speed) {
         this.texture = texture;
         this.direction = direction;
         this.speed = speed;
 
+        resize(References.SCREEN_WIDTH, References.SCREEN_HEIGHT);
+
+        this.viewportX = screenLeft;
+        this.viewportY = screenBottom;
+
         this.x = screenLeft;
-        this.y = screenBottom;
+        this.y = screenTop - texture.getRegionHeight();
     }
 
     @Override
@@ -33,23 +41,23 @@ public class ScrollingBackground implements IBackground{
         switch (direction) {
             case UP:
                 y += speed * delta;
-                if(y >= screentTop)
-                    y -= References.SCREEN_HEIGHT;
+                if(y >= screenTop)
+                    y -= texture.getRegionHeight();
                 break;
             case DOWN:
                 y -= speed * delta;
-                if(y <= screenBottom - References.SCREEN_HEIGHT)
-                    y += References.SCREEN_HEIGHT;
+                if(y <= screenBottom - texture.getRegionHeight())
+                    y += texture.getRegionHeight();
                 break;
             case LEFT:
                 x -= speed * delta;
-                if(x <= screenLeft - References.SCREEN_WIDTH)
-                    x -= References.SCREEN_WIDTH;
+                if(x <= screenLeft - texture.getRegionWidth())
+                    x -= texture.getRegionWidth();
                 break;
             case RIGHT:
                 x += speed * delta;
                 if(x >= screenRight)
-                    x -= References.SCREEN_WIDTH;
+                    x -= texture.getRegionWidth();
                 break;
         }
     }
@@ -58,27 +66,34 @@ public class ScrollingBackground implements IBackground{
     public void render(SpriteBatch batch, float delta) {
         switch (direction) {
             case UP:
-                batch.draw(texture, screenLeft, y);
-                batch.draw(texture, screenLeft, y-texture.getRegionHeight());
+                for(int cy = y; cy >= screenBottom - texture.getRegionHeight(); cy -= texture.getRegionHeight()) {
+                    batch.draw(texture, viewportX, cy);
+                }
                 break;
             case DOWN:
-                batch.draw(texture, screenLeft, y);
-                batch.draw(texture, screenLeft, y+texture.getRegionHeight());
+                for(int cy = y; cy <= screenTop; cy += texture.getRegionHeight()) {
+                    batch.draw(texture, viewportX, cy);
+                }
                 break;
             case LEFT:
-                batch.draw(texture, x, screenBottom);
-                batch.draw(texture, x+texture.getRegionWidth(), screenBottom);
+                for(int cx = x; cx <= screenRight - texture.getRegionWidth(); cx += texture.getRegionWidth()) {
+                    batch.draw(texture, cx, viewportY);
+                }
                 break;
             case RIGHT:
-                batch.draw(texture, x, screenBottom);
-                batch.draw(texture, x-texture.getRegionWidth(), screenBottom);
+                for(int cx = x; cx >= screenLeft; cx -= texture.getRegionWidth()) {
+                    batch.draw(texture, cx, viewportY);
+                }
                 break;
         }
     }
 
     @Override
     public void resize(int width, int height) {
-
+        this.screenTop = height / 2;
+        this.screenBottom = -height / 2;
+        this.screenLeft = -width / 2;
+        this.screenRight = width / 2;
     }
 
     public enum Direction {

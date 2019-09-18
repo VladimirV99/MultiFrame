@@ -88,6 +88,10 @@ public class FrameOrchestrator {
         }
     }
 
+    public void resize(int width, int height) {
+        frameHandler.resize(width, height);
+    }
+
     public void pause() {
         running = false;
     }
