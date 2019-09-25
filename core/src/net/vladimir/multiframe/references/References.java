@@ -2,7 +2,7 @@ package net.vladimir.multiframe.references;
 
 public class References {
 
-    public static final String VERSION = "Alpha 29";
+    public static final String VERSION = "Alpha 30";
 
     public static final int MENU_WIDTH = 1280;
     public static final int MENU_HEIGHT = 720;

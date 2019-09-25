@@ -115,4 +115,8 @@ public abstract class EntityPlayer extends Entity {
         this.dirY = dirY;
     }
 
+    public boolean isDead() {
+        return dead;
+    }
+
 }
