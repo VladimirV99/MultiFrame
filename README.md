@@ -20,7 +20,7 @@ All game modes have multiple difficulties for players to choose from:
 
 - **Easy** - Controls switch every 10 points. Obstacles are slower and more distant
 - **Medium** - Controls switch every point. This is the default dual frame mode
-- **Hard** - Controls switch randomly each received point. Distance between obstacles is shorter
+- **Hard** - Controls switch randomly each received point. Distance between obstacles is longer to compensate
 - **Custom** - You can manually configure all mode options to make the game difficult as you like. Note that not all possible configurations are playable
 
 ## Programming

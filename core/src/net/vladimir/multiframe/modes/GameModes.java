@@ -15,7 +15,7 @@ public enum GameModes {
     DUALFRAME_NORMAL(
             1,
             "Dual Frame Normal",
-            "Controls switch every point. This is the default dual frame mode",
+            "Controls switch every point. This is the default dual frame mode.",
             new DualFrameHandler("dualframe_normal", DualFrameSettings.normalModeData)
     ),
     DUALFRAME_HARD(
